@@ -5,6 +5,7 @@
 		<title>15 Puzzle Generator</title>
 		<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="styles.css">
+		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 	</head>
   <body>
 
@@ -16,21 +17,50 @@
     <main>
 
       <div id="inputs">
-        <label>Width: <input type="text"/></label>
-        <label>Height: <input type="text"/></label>
+        <label>Image Width in pixels: <input type="text"/></label>
+        <label>Image Height in pixels: <input type="text"/></label>
+				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each square will be the same size with no remainder pixels.</p>
+				<p>Puzzle Dimensions:</p>
+				<label>Width in tiles:
+					<select>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+					</select>
+				</label>
 
+				<label>Height in tiles:
+					<select>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+					</select>
+				</label>
 
+				<p id="error"></p>
+				<button id="submit">Submit</button>
       </div>
 
-      <div id="code">
-        <div id="buttons">
-          <button class="selected">HTML</button>
-          <button>CSS</button>
-          <button>JS</button>
-        </div>
+			<!-- <div> -->
+				<div id="buttons">
+					<button class="selected">HTML</button>
+					<button>CSS</button>
+					<button>JS</button>
+				</div>
 
-      </div>
+	      <div id="code">
+					<code>this is code</code>
 
+	      </div>
+			<!-- </div> -->
     </main>
 
 
