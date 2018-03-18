@@ -33,7 +33,7 @@ main{
   justify-content: space-around;
   align-items: center;
   margin: 1em 0;
-  height: 1500px;
+  height: 3500px;
 }
 
 #inputs{
@@ -79,13 +79,15 @@ main{
 
 #code{
   background-color: #000;
-  height: 200px;
+  min-height: 500px;
   width: 80%;
   padding: 5px;
 }
 
-code{
+pre{
 	color: #fff;
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 
 #buttons{
