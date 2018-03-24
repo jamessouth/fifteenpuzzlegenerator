@@ -20,6 +20,7 @@ h1{
   text-align: center;
 	font-family: 'uppereastsideregular';
 	font-size: 48px;
+  letter-spacing: 6px;
 }
 
 p{
@@ -33,7 +34,7 @@ main{
   justify-content: space-around;
   align-items: center;
   margin: 1em 0;
-  height: 3500px;
+  /* height: 3500px; */
 }
 
 #inputs{
@@ -53,12 +54,16 @@ main{
 	margin-bottom: 1em;
 }
 
+#form{
+  width: 35%;
+}
+
 #error{
 	color: red;
 }
 
 #submit{
-	width: 35%;
+	width: 100%;
 	padding: 3px 5px;
 	font-family: 'uppereastsideregular';
 	font-size: 38px;
@@ -82,12 +87,17 @@ main{
   min-height: 500px;
   width: 80%;
   padding: 5px;
+  margin-top: 50px;
 }
 
-pre{
-	color: #fff;
+pre span,
+pre code{
+  color: #fff;
   font-family: monospace;
-  white-space: pre-wrap;
+}
+
+pre code{
+  white-space: pre-line;
 }
 
 #buttons{
@@ -95,7 +105,7 @@ pre{
   display: flex;
   justify-content: center;
   width: 80%;
-  top: 31px;
+  top: 48px;
 }
 
 

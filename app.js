@@ -1,19 +1,22 @@
 const buttons = document.querySelectorAll('#buttons button');
-const code = document.querySelector('pre');
+const html = document.querySelector('#html');
 const submit = document.querySelector('#submit');
-let info;
+// let info;
 
 
 function handleButtons(){
   [...this.parentNode.children].forEach(b => b.classList.remove('selected'));
   this.classList.add('selected');
-  if(info){
+  // if(info){
     if(this.textContent === 'HTML'){
-      code.textContent = `<canvas width="${info[0]}" height="${info[1]}">\n  Your browser does not support canvas.\n</canvas>`;
+
+
     } else if(this.textContent === 'CSS'){
+
       code.textContent = `canvas{\n  background-color: lightblue;\n  min-width: ${info[0]}px;\n}`;
     } else {
       let tileSize = info[0] / info[2];
+
       code.textContent = `const canvas = document.querySelector('canvas');\nlet ctx = canvas.getContext('2d');\nlet canvArray = [], contact = new Image();\ncontact.src = '[path to your image]';\nfor(let i = 0; i < ${info[3]}; i++){\n  for(let j = 0; j < ${info[2]}; j++){\n    canvArray.push([j * ${tileSize}, i * ${tileSize}]);\n  }\n}\n`;
 
       let code2 = document.createElement('pre');
@@ -40,33 +43,51 @@ function handleButtons(){
 
       [code2, code3, code4, code5, code6, code7].forEach(j => code.parentNode.appendChild(j));
     }
-  }
+  // }
 }
 
 
-buttons.forEach(b => b.addEventListener('click', handleButtons));
+// buttons.forEach(b => b.addEventListener('click', handleButtons));
 
 
 function testVals(arr){
+  console.log(arr);
+  // console.log(typeof arr[0]);
   const error = document.querySelector('#error');
-  if(!(arr[0] % arr[2] === 0 && arr[1] % arr[3] === 0)){
-    error.textContent = 'The number of tiles must divide evenly into the size in pixels in the given dimension.';
+  if(isNaN(arr[0]) && isNaN(arr[1])){
+    error.textContent = 'Please enter numbers for width and height.'
     return false;
   } else if(!(arr[0] / arr[2] === arr[1] / arr[3])){
-    error.textContent = 'This arrangement would result in tiles that are not square. The image does not have to be a square, but the ratio of width to height in pixels and in tiles must be equal.';
+    error.textContent = 'This arrangement would result in tiles that are not square. The image does not have to be square, but the ratio of width to height in pixels and in tiles must be equal.';
     return false;
+  } else if(!(arr[0] % arr[2] === 0 && arr[1] % arr[3] === 0)){
+
+    error.textContent = 'The number of tiles must divide evenly into the size in pixels in the given dimension.';
+    return false;
+  } else {
+    error.textContent = 'Your code is ready. Please click the tabs below.';
+    return true;
   }
-  error.textContent = '';
-  return true;
+
+}
+
+
+
+function popHTML(info){
+  const spans = html.querySelectorAll('span');
+  spans.forEach((s,i) => s.textContent = info[i]);
 }
 
 
 
 submit.addEventListener('click', function (e) {
   // console.log(e);
+  e.preventDefault();
   const inputs = document.querySelectorAll('input');
   const selects = document.querySelectorAll('select');
-  info = [...inputs, ...selects].map(i => parseInt(i.value, 10));
-  console.log(testVals(info));
+  let info = [...inputs, ...selects].map(i => parseInt(i.value, 10));
+  if(testVals(info)){
+    popHTML(info);
+  }
 
 });
