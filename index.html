@@ -17,9 +17,9 @@
     <main>
 
       <div id="inputs">
-        <label>Image Width in pixels: <input type="text"/></label>
-        <label>Image Height in pixels: <input type="text"/></label>
-				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each square will be the same size with no remainder pixels.</p>
+        <label>Image Width in pixels: <input form="form" placeholder="Enter a number" min="0" type="number"/></label>
+        <label>Image Height in pixels: <input form="form" placeholder="Enter a number" min="0" type="number"/></label>
+				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
 				<p>Puzzle Dimensions:</p>
 				<label>Width in tiles:
 					<select>
@@ -46,7 +46,9 @@
 				</label>
 
 				<p id="error"></p>
-				<button id="submit">Submit</button>
+				<form id="form">
+					<button id="submit">Submit</button>
+				</form>
       </div>
 
 			<!-- <div> -->
@@ -57,7 +59,10 @@
 				</div>
 
 	      <div id="code">
-					<pre>this is code</pre>
+					<pre id="html"><code>&lt;canvas width="</code><span>*</span><code>" height="</code><span>*</span><code>"&gt;
+						&nbsp;&nbsp;Your browser does not support canvas.
+						&lt;/canvas&gt;</code>
+					</pre>
 
 	      </div>
 			<!-- </div> -->
