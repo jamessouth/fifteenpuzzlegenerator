@@ -34,20 +34,28 @@ main{
   justify-content: space-around;
   align-items: center;
   margin: 1em 0;
-  /* height: 3500px; */
 }
+
+
 
 #inputs{
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
-
 }
 
 #inputs input{
   display: block;
   margin-bottom: 1em;
+}
+
+#inputs input[type="color"]{
+  width: 100px;
+  border: none;
+  background-color: transparent;
+  margin: 4px auto;
+  height: 30px;
 }
 
 #inputs select{

@@ -66,7 +66,19 @@ function popCSS(info){
   css.querySelector('span').textContent = info[0];
 }
 
-function popJS(info){
+function popJS(info, path){
+  console.log(path);
+  const pathSpan = document.querySelector('#path');
+
+  if(!!path){
+    pathSpan.textContent = `"${path}"`;
+    pathSpan.style.backgroundColor = 'transparent';
+  } else {
+    pathSpan.textContent = '[path to your image]';
+    pathSpan.style.backgroundColor = 'red';
+    document.querySelector('#error').textContent += ' Be sure to update the src attribute of the Image with your path. It is highlighted in red.';
+  }
+
   let tileSize = info[0] / info[2];
   const info2Spans = js.querySelectorAll('span.info2');
   js.querySelector('span.info3').textContent = info[3];
@@ -97,13 +109,14 @@ function popJS(info){
 submit.addEventListener('click', function (e) {
   // console.log(e);
   e.preventDefault();
-  const inputs = document.querySelectorAll('input');
+  const pathInput = document.querySelector('input[type="text"]');
+  const inputs = document.querySelectorAll('input.num');
   const selects = document.querySelectorAll('select');
   let info = [...inputs, ...selects].map(i => parseInt(i.value, 10));
   if(testVals(info)){
     popHTML(info);
     popCSS(info);
-    popJS(info);
+    popJS(info, pathInput.value);
   }
 
 });

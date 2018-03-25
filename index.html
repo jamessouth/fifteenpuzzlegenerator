@@ -17,8 +17,10 @@
     <main>
 
       <div id="inputs">
-        <label>Image Width in pixels: <input form="form" placeholder="Enter a number" min="0" type="number"/></label>
-        <label>Image Height in pixels: <input form="form" placeholder="Enter a number" min="0" type="number"/></label>
+				<label>Color for the blank tile: <input type="color" value="#add8e6"></label>
+				<label>Path to your image: <input placeholder="Optional" type="text"/></label>
+        <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
+        <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
 				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
 				<p>Puzzle Dimensions:</p>
 				<label>Width in tiles:
@@ -73,7 +75,6 @@
 					<pre id="js"><code>const canvas = document.querySelector('canvas');
 						let ctx = canvas.getContext('2d');
 						let canvArray = [], contact = new Image();
-						contact.src = '[path to your image]';
 						for(let i = 0; i < </code><span class="info3">%</span><code>; i++){
 						&nbsp;&nbsp;for(let j = 0; j < </code><span class="info2">%</span><code>; j++){
 						&nbsp;&nbsp;&nbsp;&nbsp;canvArray.push([j * </code><span class="tileSize">%</span><code>, i * </code><span class="tileSize">%</span><code>]);
@@ -117,9 +118,13 @@
 						}
 						let boardOrder = doable[0].slice();
 
-						for(let i = 0; i < canvArray.length - 1; i++){
-						&nbsp;&nbsp;ctx.drawImage(contact, canvArray[i][0], canvArray[i][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						contact.onload = () => {
+						&nbsp;&nbsp;for(let i = 0; i < canvArray.length - 1; i++){
+						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(contact, canvArray[i][0], canvArray[i][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						&nbsp;&nbsp;}
 						}
+
+						contact.src = <span id="path">'[path to your image]'</span>;
 
 						<span class="func">function</span> swapTiles(x, y){
 						&nbsp;&nbsp;if(canvArray.length === 0){return;}
@@ -144,6 +149,7 @@
 						&nbsp;&nbsp;}
 						&nbsp;&nbsp;if(finalCheck){
 						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(contact, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						&nbsp;&nbsp;&nbsp;&nbsp;canvArray = [];
 						&nbsp;&nbsp;}
 						}
 
