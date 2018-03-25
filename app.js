@@ -1,53 +1,37 @@
 const buttons = document.querySelectorAll('#buttons button');
 const html = document.querySelector('#html');
+const css = document.querySelector('#css');
+const js = document.querySelector('#js');
 const submit = document.querySelector('#submit');
-// let info;
+
 
 
 function handleButtons(){
   [...this.parentNode.children].forEach(b => b.classList.remove('selected'));
   this.classList.add('selected');
-  // if(info){
-    if(this.textContent === 'HTML'){
+
+  if(this.textContent === 'HTML'){
+    css.style.display = 'none';
+    js.style.display = 'none';
+    html.style.display = 'block';
+
+  } else if(this.textContent === 'CSS'){
+    html.style.display = 'none';
+    js.style.display = 'none';
+    css.style.display = 'block';
+
+  } else {
+    html.style.display = 'none';
+    css.style.display = 'none';
+    js.style.display = 'block';
 
 
-    } else if(this.textContent === 'CSS'){
+  }
 
-      code.textContent = `canvas{\n  background-color: lightblue;\n  min-width: ${info[0]}px;\n}`;
-    } else {
-      let tileSize = info[0] / info[2];
-
-      code.textContent = `const canvas = document.querySelector('canvas');\nlet ctx = canvas.getContext('2d');\nlet canvArray = [], contact = new Image();\ncontact.src = '[path to your image]';\nfor(let i = 0; i < ${info[3]}; i++){\n  for(let j = 0; j < ${info[2]}; j++){\n    canvArray.push([j * ${tileSize}, i * ${tileSize}]);\n  }\n}\n`;
-
-      let code2 = document.createElement('pre');
-      code2.textContent = `function getRands(amt){\n  let nums = new Set();\n  while(nums.size < amt){\n    let n = Math.floor(Math.random() * amt);\n    nums.add(n);\n  }\n  return [...nums];\n}\nfunction getInversions(arr){\n  let inversions = 0;\n  for(let i = 0; i < arr.length; i++){\n    if(arr[i] == null){continue;}\n    for(let j = 0; j < arr.length; j++){\n      if(arr[i] > arr[j + i]){\n        inversions++;\n      }\n    }\n  }\n  return inversions;\n}\n`;
-
-      let code3 = document.createElement('pre');
-      code3.textContent = `function checkBoard(){\n  let randos = getRands(canvArray.length - 1);\n  let solArray = [];\n  randos.forEach((x,i) => {\n    solArray[x] = i;\n  });\n  return [solArray.concat([${(info[2] * info[3]) - 1}]), randos.concat([${(info[2] * info[3]) - 1}])];\n}\nlet doable = checkBoard();\nwhile(getInversions(doable[0]) % 2 !== 0){\n  doable = checkBoard();\n}\nlet boardOrder = doable[0].slice();\n`;
-
-      let code4 = document.createElement('pre');
-      code4.textContent = `for(let i = 0; i < canvArray.length-1; i++){\n  ctx.drawImage(contact, canvArray[i][0], canvArray[i][1], ${tileSize}, ${tileSize}, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], ${tileSize}, ${tileSize});\n}\n`;
-
-      let code5 = document.createElement('pre');
-      code5.textContent = `function swapTiles(x, y){\n  if(canvArray.length === 0){return;}\n  let tileClicked = (Math.floor(y / ${tileSize}) * ${info[2]}) + Math.floor(x / ${tileSize});\n  let blank = boardOrder.indexOf(canvArray.length - 1);\n  let finalCheck;\n  let brdInd = boardOrder[tileClicked];\n  if(![1, ${info[2]}].includes(Math.abs(tileClicked - blank))){\n    return;\n  }\n  ctx.clearRect(canvArray[tileClicked][0], canvArray[tileClicked][1], ${tileSize}, ${tileSize});\n  ctx.drawImage(contact, canvArray[brdInd][0], canvArray[brdInd][1], ${tileSize}, ${tileSize}, canvArray[blank][0], canvArray[blank][1], ${tileSize}, ${tileSize});\n`;
-
-      let code6 = document.createElement('pre');
-      code6.textContent = `  [boardOrder[tileClicked], boardOrder[blank]] = [boardOrder[blank], boardOrder[tileClicked]];\n  if(boardOrder[0] === 0 && boardOrder[${info[2] - 1}] === ${info[2] - 1} && boardOrder[${info[2] * (info[3] - 1) - 1}] === ${info[2] * (info[3] - 1) - 1} && boardOrder[${info[2] * info[2] - 2}] === ${info[2] * info[2] - 2}){\n    finalCheck = true;\n    for(let f = 0; f < boardOrder.length; f++){\n      if(boardOrder[f] !== f){\n        finalCheck = false;\n        break;\n      }\n    }\n  }\n  if(finalCheck){\n    ctx.drawImage(contact, ${(info[2] - 1) * `${tileSize}`}, ${(info[3] - 1) * `${tileSize}`}, ${tileSize}, ${tileSize}, ${(info[2] - 1) * `${tileSize}`}, ${(info[3] - 1) * `${tileSize}`}, ${tileSize}, ${tileSize});\n  }\n}\n`;
-
-      let code7 = document.createElement('pre');
-      code7.textContent = `canvas.addEventListener('click', function(e){\n  let x = e.offsetX;\n  let y = e.offsetY;\n  swapTiles(x,y);\n});\n`;
-      //
-      // let code8 = document.createElement('pre');
-      // code8.textContent = ``;
-
-
-      [code2, code3, code4, code5, code6, code7].forEach(j => code.parentNode.appendChild(j));
-    }
-  // }
 }
 
 
-// buttons.forEach(b => b.addEventListener('click', handleButtons));
+buttons.forEach(b => b.addEventListener('click', handleButtons));
 
 
 function testVals(arr){
@@ -78,6 +62,36 @@ function popHTML(info){
   spans.forEach((s,i) => s.textContent = info[i]);
 }
 
+function popCSS(info){
+  css.querySelector('span').textContent = info[0];
+}
+
+function popJS(info){
+  let tileSize = info[0] / info[2];
+  const info2Spans = js.querySelectorAll('span.info2');
+  js.querySelector('span.info3').textContent = info[3];
+  const tileSizeSpans = js.querySelectorAll('span.tileSize');
+  const info2m1Spans = js.querySelectorAll('span.info2-1');
+  const info2x3m1m1Spans = js.querySelectorAll('span.info2xinfo3-1-1');
+  const info2x2m2Spans = js.querySelectorAll('span.info2xinfo2-2');
+  const info2m1xtsSpans = js.querySelectorAll('span.info2-1xtileSize');
+  const info3m1xtsSpans = js.querySelectorAll('span.info3-1xtileSize');
+
+  // console.log([...info2Spans, info3Span, ...tileSizeSpans, ...info2m1Spans, ...info2x3m1m1Spans, ...info2x2m2Spans, ...info2m1xtsSpans, ...info3m1xtsSpans].reduce((a,n) => {a=a+1; return a;}, 0));
+  // spans.forEach((s,i) => s.textContent = info[i]);
+
+  info2Spans.forEach(x => x.textContent = info[2]);
+  tileSizeSpans.forEach(t => t.textContent = tileSize);
+  info2m1Spans.forEach(z => z.textContent = info[2] - 1);
+  info2x3m1m1Spans.forEach(b => b.textContent = info[2] * (info[3] - 1) - 1);
+  info2x2m2Spans.forEach(u => u.textContent = info[2] * info[2] - 2);
+  info2m1xtsSpans.forEach(q => q.textContent = (info[2] - 1) * tileSize);
+  info3m1xtsSpans.forEach(k => k.textContent = (info[3] - 1) * tileSize);
+
+
+
+}
+
 
 
 submit.addEventListener('click', function (e) {
@@ -88,6 +102,8 @@ submit.addEventListener('click', function (e) {
   let info = [...inputs, ...selects].map(i => parseInt(i.value, 10));
   if(testVals(info)){
     popHTML(info);
+    popCSS(info);
+    popJS(info);
   }
 
 });
