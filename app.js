@@ -1,9 +1,25 @@
-const buttons = document.querySelectorAll('#buttons button');
+const buttons = document.querySelectorAll('#buttons > button');
 const html = document.querySelector('#html');
 const css = document.querySelector('#css');
 const js = document.querySelector('#js');
 const submit = document.querySelector('#submit');
+const copyBtn = document.querySelector('#copy');
+const codeBox = document.querySelector('#code');
 
+copyBtn.addEventListener('click', e => {
+  const cpu = document.querySelector('#copiedPopup');
+  let range = document.createRange();
+  range.selectNode(codeBox);
+  window.getSelection().addRange(range);
+
+  document.execCommand('copy');
+  window.getSelection().removeRange(range);
+  cpu.style.display = 'block';
+  cpu.style.animation = '1s 3s ease-out fadeOut forwards';
+  cpu.addEventListener('animationend', e => {
+    cpu.style.display = 'none';
+  });
+});
 
 
 function handleButtons(){
@@ -20,7 +36,7 @@ function handleButtons(){
     js.style.display = 'none';
     css.style.display = 'block';
 
-  } else {
+  } else if(this.textContent === 'JS'){
     html.style.display = 'none';
     css.style.display = 'none';
     js.style.display = 'block';
@@ -63,7 +79,10 @@ function popHTML(info){
 }
 
 function popCSS(info){
-  css.querySelector('span').textContent = info[0];
+  const spans = css.querySelectorAll('span');
+  const colorInput = document.querySelector('input[type="color"]');
+  spans[0].textContent = colorInput.value;
+  spans[1].textContent = info[0];
 }
 
 function popJS(info, path){
@@ -76,7 +95,7 @@ function popJS(info, path){
   } else {
     pathSpan.textContent = '[path to your image]';
     pathSpan.style.backgroundColor = 'red';
-    document.querySelector('#error').textContent += ' Be sure to update the src attribute of the Image with your path. It is highlighted in red.';
+    document.querySelector('#error').textContent += ' Be sure to update the src attribute of the Image with your path. It is highlighted in red in the JS.';
   }
 
   let tileSize = info[0] / info[2];
