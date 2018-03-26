@@ -43,6 +43,7 @@ main{
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
+  position: relative;
 }
 
 #inputs input{
@@ -126,7 +127,7 @@ pre code{
 
 
 
-#buttons button{
+#buttons > button{
 	position: relative;
   padding: 3px 13px;
   border: 1px solid #aaa;
@@ -145,17 +146,17 @@ button:focus{
 	outline: none;
 }
 
-#buttons button.selected{
+#buttons > button.selected{
   background: #fff;
 	z-index: 2;
 	border-bottom-color: #fff;
 }
 
-#buttons button.selected::before{
+#buttons > button.selected::before{
 	box-shadow: 2px 2px 0 #fff;
 }
 
-#buttons button.selected::after{
+#buttons > button.selected::after{
 	box-shadow: -2px 2px 0 #fff;
 }
 
@@ -173,8 +174,8 @@ button:focus{
 	z-index: 1;
 }
 
-#buttons button::before,
-#buttons button::after{
+#buttons > button::before,
+#buttons > button::after{
 	position: absolute;
 	bottom: -1px;
 	width: 7px;
@@ -182,32 +183,116 @@ button:focus{
 	content: " ";
 }
 
-#buttons button::before,
-#buttons button::after{
+#buttons > button::before,
+#buttons > button::after{
 	border: 1px solid #aaa;
 }
 
-#buttons button::before{
+#buttons > button::before{
 	left: -8px;
 	border-bottom-right-radius: 8px;
 	border-width: 0 1px 1px 0;
 	box-shadow: 2px 2px 0 #ececec;
 }
 
-#buttons button::after{
+#buttons > button::after{
 	right: -8px;
 	border-bottom-left-radius: 8px;
 	border-width: 0 0 1px 1px;
 	box-shadow: -2px 2px 0 #ececec;
 }
 
+#icons{
+  position: absolute;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  width: 80px;
+  top: 33px;
+  right: 8px;
+}
 
+#icons button{
 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  transform: scale(1.5);
+  height: 24px;
+  width: 24px;
+}
 
+#copy{
+  background-image: url('./copy.png');
+}
 
+#email{
+  background-image: url('./email.png');
+}
 
+#copy:active,
+#email:active{
+  transform: scale(1.3);
+}
 
+#copy:hover::after{
+  position: absolute;
+  content: 'copy to clipboard';
+  font-family: monospace;
+  line-height: 2;
+  top: 22px;
+  right: -20px;
+  text-align: center;
+  font-size: 8px;
+  color: white;
+  border-radius: 3px;
+  width: 90px;
+  height: 16px;
+  background-color: black;
+}
 
+#email:hover::after{
+  position: absolute;
+  content: 'send via email';
+  font-family: monospace;
+  line-height: 2;
+  top: 22px;
+  right: -20px;
+  text-align: center;
+  font-size: 8px;
+  color: white;
+  border-radius: 3px;
+  width: 90px;
+  height: 16px;
+  background-color: black;
+}
+
+@keyframes fadeOut{
+  0%{opacity: 1;}
+	100%{opacity: 0;}
+}
+
+#copiedPopup{
+  display: none;
+  margin: 1em auto 0;
+  background: #3d601c;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  height: 77px;
+  position: absolute;
+  bottom: -113px;
+  width: 200px;
+  cursor: default;
+  text-align: center;
+  z-index: 8;
+  line-height: 1;
+  border-radius: 11px;
+  color: whitesmoke;
+  font-size: 72px;
+  font-family: uppereastsideregular;
+}
 
 
 
