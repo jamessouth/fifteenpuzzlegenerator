@@ -206,10 +206,10 @@ button:focus{
   position: absolute;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-around;
-  width: 80px;
-  top: 33px;
-  right: 8px;
+  justify-content: space-between;
+  width: 75px;
+  top: 37px;
+  right: 6px;
 }
 
 #icons button{
@@ -270,8 +270,8 @@ button:focus{
 }
 
 @keyframes fadeOut{
-  0%{opacity: 1;}
-	100%{opacity: 0;}
+  0% {opacity: 1;}
+	100% {opacity: 0;}
 }
 
 #copiedPopup{
