@@ -6,21 +6,56 @@ const submit = document.querySelector('#submit');
 const copyBtn = document.querySelector('#copy');
 const codeBox = document.querySelector('#code');
 
-copyBtn.addEventListener('click', e => {
-  const cpu = document.querySelector('#copiedPopup');
-  let range = document.createRange();
-  range.selectNode(codeBox);
-  window.getSelection().addRange(range);
 
-  document.execCommand('copy');
-  window.getSelection().removeRange(range);
-  cpu.style.display = 'block';
-  cpu.style.animation = '1s 3s ease-out fadeOut forwards';
-  cpu.addEventListener('animationend', e => {
-    cpu.style.display = 'none';
-  });
+const clipboard = new ClipboardJS('#copy', {
+  target: function() {
+            return codeBox;
+          },
+  text: function() {
+          let visibleCode = [...codeBox.children].filter(c => c.offsetParent !== null)[0];
+          visibleCode.style.color = 'black';
+          return visibleCode.textContent.replace(/	+/g, '');
+        }
+
 });
 
+
+clipboard.on('success', function(e) {
+    console.info('Action:', e.action);
+    console.info('Text:', e.text);
+    console.info('Trigger:', e.trigger);
+
+    e.clearSelection();
+});
+
+clipboard.on('error', function(e) {
+    console.error('Action:', e.action);
+    console.error('Trigger:', e.trigger);
+});
+
+
+
+// copyBtn.addEventListener('click', e => {
+//   const cpu = document.querySelector('#copiedPopup');
+//   let range = document.createRange();
+//   range.selectNode(codeBox);
+//   window.getSelection().addRange(range);
+//   let gg = document.execCommand('copy');
+//   console.log(gg);
+//   window.getSelection().removeRange(range);
+//   cpu.style.display = 'block';
+//   cpu.style.animation = '1s 2.2s ease-out fadeOut forwards';
+//   cpu.addEventListener('animationend', e => {
+//     cpu.style.display = 'none';
+//   });
+// });
+
+// document.addEventListener('copy', e => {
+//   let copiedText = window.getSelection();
+//   console.log(copiedText);
+//   e.clipboardData.setData('text/plain', copiedText);
+//   e.preventDefault();
+// });
 
 function handleButtons(){
   [...this.parentNode.children].forEach(b => b.classList.remove('selected'));
@@ -74,7 +109,7 @@ function testVals(arr){
 
 
 function popHTML(info){
-  const spans = html.querySelectorAll('span');
+  const spans = html.querySelectorAll('span.red');
   spans.forEach((s,i) => s.textContent = info[i]);
 }
 

@@ -12,7 +12,7 @@
     <h1>15 Puzzle Generator</h1>
 
 
-    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based 15 puzzle. At least, that is the idea.</p>
+    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based 15 puzzle.</p>
 
     <main>
 
@@ -22,7 +22,7 @@
         <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
         <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
 				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
-				<p>Puzzle Dimensions:</p>
+				<p id="puzz">Puzzle Dimensions:</p>
 				<label>Width in tiles:
 					<select>
 						<option>2</option>
@@ -54,7 +54,7 @@
 				<div id="copiedPopup">copied!</div>
       </div>
 
-
+<!-- data-clipboard-target="#code" -->
 
 			<!-- <div> -->
 				<div id="buttons">
@@ -68,16 +68,14 @@
 				</div>
 
 	      <div id="code">
-					<pre id="html"><code>&lt;canvas width="</code><span>%</span><code>" height="</code><span>%</span><code>"&gt;
+					<pre id="html"><code>&lt;<span class="gy">canvas</span> <span class="blue">width</span>="</code><span class="red">%</span><code>" <span class="blue">height</span>="</code><span class="red">%</span><code>"&gt;
 						&nbsp;&nbsp;Your browser does not support canvas.
-						&lt;/canvas&gt;</code>
-					</pre>
+						&lt;/<span class="gy">canvas</span>&gt;</code></pre>
 
 					<pre id="css"><code>canvas{
 						&nbsp;&nbsp;background-color: <span>lightblue</span>;
 						&nbsp;&nbsp;min-width: </code><span>%</span><code>px;
-						}</code>
-					</pre>
+						}</code></pre>
 
 					<pre id="js"><code>const canvas = document.querySelector('canvas');
 						let ctx = canvas.getContext('2d');
@@ -88,7 +86,7 @@
 						&nbsp;&nbsp;}
 						}
 
-						<span class="func">function</span> getRands(amt){
+						<span class="peach">function</span> getRands(amt){
 						&nbsp;&nbsp;let nums = new Set();
 						&nbsp;&nbsp;while(nums.size < amt){
 						&nbsp;&nbsp;&nbsp;&nbsp;let n = Math.floor(Math.random() * amt);
@@ -97,7 +95,7 @@
 						&nbsp;&nbsp;return [...nums];
 						}
 
-						<span class="func">function</span> getInversions(arr){
+						<span class="peach">function</span> getInversions(arr){
 						&nbsp;&nbsp;let inversions = 0;
 						&nbsp;&nbsp;for(let i = 0; i < arr.length; i++){
 						&nbsp;&nbsp;&nbsp;&nbsp;if(arr[i] == null){continue;}
@@ -110,7 +108,7 @@
 						&nbsp;&nbsp;return inversions;
 						}
 
-						<span class="func">function</span> checkBoard(){
+						<span class="peach">function</span> checkBoard(){
 						&nbsp;&nbsp;let randos = getRands(canvArray.length - 1);
 						&nbsp;&nbsp;let solArray = [];
 						&nbsp;&nbsp;randos.forEach((x,i) => {
@@ -133,7 +131,7 @@
 
 						contact.src = <span id="path">'[path to your image]'</span>;
 
-						<span class="func">function</span> swapTiles(x, y){
+						<span class="peach">function</span> swapTiles(x, y){
 						&nbsp;&nbsp;if(canvArray.length === 0){return;}
 						&nbsp;&nbsp;let tileClicked = (Math.floor(y / </code><span class="tileSize">%</span><code>) * </code><span class="info2">%</span><code>) + Math.floor(x / </code><span class="tileSize">%</span><code>);
 						&nbsp;&nbsp;let blank = boardOrder.indexOf(canvArray.length - 1);
@@ -164,11 +162,7 @@
 						&nbsp;&nbsp;let x = e.offsetX;
 						&nbsp;&nbsp;let y = e.offsetY;
 						&nbsp;&nbsp;swapTiles(x,y);
-						});
-
-
-						</code>
-					</pre>
+						});</code></pre>
 
 
 
@@ -179,8 +173,8 @@
 			<!-- </div> -->
     </main>
 
-
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+		<!-- <script src="clipboard.min.js"></script> -->
     <script src="app.js"></script>
   </body>
 </html>
