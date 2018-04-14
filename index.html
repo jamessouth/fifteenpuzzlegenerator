@@ -12,13 +12,13 @@
     <h1>15 Puzzle Generator</h1>
 
 
-    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based 15 puzzle.</p>
+    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based 15 puzzle.  Demo <a href="demo.html">here</a>.</p>
 
     <main>
 
       <div id="inputs">
-				<label>Color for the blank tile: <input type="color" value="#add8e6"></label>
-				<label>Path to your image: <input placeholder="Optional" type="text"/></label>
+				<label>Color for the blank tile: <input placeholder="Enter hex color" type="color" value="#add8e6"></label>
+				<label>Relative path to your image: <input placeholder="Optional" type="text"/></label>
         <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
         <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
 				<p>The canvas will have the same dimensions as the image you use. Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
@@ -79,7 +79,7 @@
 
 					<pre id="js"><code>const canvas = document.querySelector('canvas');
 						let ctx = canvas.getContext('2d');
-						let canvArray = [], contact = new Image();
+						let canvArray = [], pic = new Image();
 						for(let i = 0; i < </code><span class="info3">%</span><code>; i++){
 						&nbsp;&nbsp;for(let j = 0; j < </code><span class="info2">%</span><code>; j++){
 						&nbsp;&nbsp;&nbsp;&nbsp;canvArray.push([j * </code><span class="tileSize">%</span><code>, i * </code><span class="tileSize">%</span><code>]);
@@ -123,13 +123,13 @@
 						}
 						let boardOrder = doable[0].slice();
 
-						contact.onload = () => {
+						pic.onload = () => {
 						&nbsp;&nbsp;for(let i = 0; i < canvArray.length - 1; i++){
-						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(contact, canvArray[i][0], canvArray[i][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, canvArray[i][0], canvArray[i][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
 						&nbsp;&nbsp;}
 						}
 
-						contact.src = <span id="path">'[path to your image]'</span>;
+						pic.src = <span id="path">'[path to your image]'</span>;
 
 						<span class="peach">function</span> swapTiles(x, y){
 						&nbsp;&nbsp;if(canvArray.length === 0){return;}
@@ -141,9 +141,9 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;return;
 						&nbsp;&nbsp;}
 						&nbsp;&nbsp;ctx.clearRect(canvArray[tileClicked][0], canvArray[tileClicked][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;ctx.drawImage(contact, canvArray[brdInd][0], canvArray[brdInd][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[blank][0], canvArray[blank][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						&nbsp;&nbsp;ctx.drawImage(pic, canvArray[brdInd][0], canvArray[brdInd][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[blank][0], canvArray[blank][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
 						&nbsp;&nbsp;[boardOrder[tileClicked], boardOrder[blank]] = [boardOrder[blank], boardOrder[tileClicked]];
-						&nbsp;&nbsp;if(boardOrder[0] === 0 && boardOrder[</code><span class="info2-1">%</span><code>] === </code><span class="info2-1">%</span><code> && boardOrder[</code><span class="info2xinfo3-1-1">%</span><code>] === </code><span class="info2xinfo3-1-1">%</span><code> && boardOrder[</code><span class="info2xinfo2-2">%</span><code>] === </code><span class="info2xinfo2-2">%</span><code>){
+						&nbsp;&nbsp;if(boardOrder[0] === 0 && boardOrder[</code><span class="info2-1">%</span><code>] === </code><span class="info2-1">%</span><code> && boardOrder[</code><span class="info2xinfo3-1-1">%</span><code>] === </code><span class="info2xinfo3-1-1">%</span><code> && boardOrder[</code><span class="info2xinfo3-2">%</span><code>] === </code><span class="info2xinfo3-2">%</span><code>){
 						&nbsp;&nbsp;&nbsp;&nbsp;finalCheck = true;
 						&nbsp;&nbsp;&nbsp;&nbsp;for(let f = 0; f < boardOrder.length; f++){
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(boardOrder[f] !== f){
@@ -153,7 +153,7 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;}
 						&nbsp;&nbsp;}
 						&nbsp;&nbsp;if(finalCheck){
-						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(contact, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
+						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
 						&nbsp;&nbsp;&nbsp;&nbsp;canvArray = [];
 						&nbsp;&nbsp;}
 						}
