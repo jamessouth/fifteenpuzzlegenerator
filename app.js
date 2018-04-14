@@ -139,7 +139,7 @@ function popJS(info, path){
   const tileSizeSpans = js.querySelectorAll('span.tileSize');
   const info2m1Spans = js.querySelectorAll('span.info2-1');
   const info2x3m1m1Spans = js.querySelectorAll('span.info2xinfo3-1-1');
-  const info2x2m2Spans = js.querySelectorAll('span.info2xinfo2-2');
+  const info2x3m2Spans = js.querySelectorAll('span.info2xinfo3-2');
   const info2m1xtsSpans = js.querySelectorAll('span.info2-1xtileSize');
   const info3m1xtsSpans = js.querySelectorAll('span.info3-1xtileSize');
 
@@ -150,7 +150,7 @@ function popJS(info, path){
   tileSizeSpans.forEach(t => t.textContent = tileSize);
   info2m1Spans.forEach(z => z.textContent = info[2] - 1);
   info2x3m1m1Spans.forEach(b => b.textContent = info[2] * (info[3] - 1) - 1);
-  info2x2m2Spans.forEach(u => u.textContent = info[2] * info[2] - 2);
+  info2x3m2Spans.forEach(u => u.textContent = info[2] * info[3] - 2);
   info2m1xtsSpans.forEach(q => q.textContent = (info[2] - 1) * tileSize);
   info3m1xtsSpans.forEach(k => k.textContent = (info[3] - 1) * tileSize);
 

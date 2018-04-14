@@ -15,6 +15,17 @@
 	font-family: 'Mallanna', sans-serif;
 }
 
+body{
+  background-color: #fbfbfb;
+}
+
+canvas{
+  display: block;
+  margin: 0 auto 2em;
+  background-color: #0f318c;
+  min-width: 410px;
+}
+
 h1{
   margin: 1.5em auto 1.5em;
   text-align: center;
@@ -47,10 +58,18 @@ main{
   position: relative;
 }
 
+label:nth-of-type(2){
+  margin-top: .5em;
+}
+
 #inputs input{
   display: block;
   margin-bottom: 1em;
   width: 148px;
+}
+
+#inputs input[type="text"]{
+  margin: 0 auto 1em;
 }
 
 #inputs input[type="color"]{
