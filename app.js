@@ -5,7 +5,12 @@ const js = document.querySelector('#js');
 const submit = document.querySelector('#submit');
 const copyBtn = document.querySelector('#copy');
 const codeBox = document.querySelector('#code');
+const header = document.querySelector('header');
 
+
+
+// header.style.backgroundPositionX = '50%';
+// header.style.backgroundPositionY = '50%';
 
 const clipboard = new ClipboardJS('#copy', {
   target: function() {
@@ -174,3 +179,35 @@ submit.addEventListener('click', function (e) {
   }
 
 });
+
+
+document.body.addEventListener('mousemove', function (e) {
+  if((this.offsetWidth < 751)||(this.offsetWidth < 1063 && window.scrollY > 110)||(window.scrollY > 160)){
+    return;
+  }
+  // else if{
+  //   return;
+  // } else if{
+  //   return;
+  // }
+
+
+
+  else {
+    // console.log(header.style.backgroundPositionX);
+    
+
+
+  }
+});
+
+
+
+
+
+
+
+
+
+
+// k
