@@ -367,12 +367,17 @@ button:focus{
 
 
 @media screen and (min-width: 768px) {
+  body:before{
+    content: '.';
+    color: transparent;
+  }
+
   #mainh1{
     display: none;
   }
 
   header{
-    margin: 2em 0;
+    margin: 2em 0 3em;
     height: 5em;
     background: url("bgsmall2.jpg") no-repeat;
     background-position-x: var(--bgx);
