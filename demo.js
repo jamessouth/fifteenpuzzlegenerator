@@ -50,7 +50,7 @@ pic.onload = () => {
   }
 }
 
-pic.src = "mucha.jpg";
+pic.src = "images/mucha.jpg";
 
 function swapTiles(x, y){
   if(canvArray.length === 0){return;}

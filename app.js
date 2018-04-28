@@ -8,9 +8,69 @@ const codeBox = document.querySelector('#code');
 const header = document.querySelector('header');
 
 
+const mediaQLarge = window.matchMedia("(min-width: 1080px)");
+const mediaQSmall = window.matchMedia("(min-width: 768px) and (max-width: 1079px)");
+const mediaQNone = window.matchMedia("(max-width: 767px)");
 
-// header.style.backgroundPositionX = '50%';
-// header.style.backgroundPositionY = '50%';
+function handleLargeMQ(evt){
+  console.log('mq: ', evt.media, evt.matches);
+  if(evt.matches){
+    console.log('big', window.innerWidth);
+    loadBG('big');
+  }
+}
+
+function handleSmallMQ(evt){
+  console.log('mq: ', evt.media, evt.matches);
+  if(evt.matches){
+    console.log('small', window.innerWidth);
+    loadBG('small');
+  }
+}
+
+function handleNoneMQ(evt){
+  console.log('mq: ', evt.media, evt.matches);
+  if(evt.matches){
+    console.log('none', window.innerWidth);
+    header.style.backgroundImage = `none`;
+  }
+}
+
+
+mediaQLarge.addListener(handleLargeMQ);
+handleLargeMQ(mediaQLarge);
+
+mediaQSmall.addListener(handleSmallMQ);
+handleSmallMQ(mediaQSmall);
+
+mediaQNone.addListener(handleNoneMQ);
+handleNoneMQ(mediaQNone);
+
+
+
+async function loadBG(size){
+  let imgNo = Math.ceil(Math.random() * 2), pic, urlImg;
+  try{
+    pic = await fetch(`images/bg${size}${imgNo}.jpg`);
+    pic = await pic.blob();
+    urlImg = URL.createObjectURL(pic);
+    header.style.backgroundImage = `url(${urlImg})`;
+    if(size === 'big'){
+      header.style.backgroundPosition = `50% ${Math.floor(Math.random() * 261) - 80}%`;
+    } else {
+      header.style.backgroundPosition = `${Math.floor(Math.random() * 21) + 40}% ${Math.floor(Math.random() * 181) - 40}%`;
+    }
+  }
+  catch(err){
+    console.error(err);
+  }
+
+};
+
+
+
+
+
 
 const clipboard = new ClipboardJS('#copy', {
   target: function() {
@@ -178,55 +238,6 @@ submit.addEventListener('click', function (e) {
     popJS(info, pathInput.value);
   }
 
-});
-
-
-
-// const mediaQList = window.matchMedia("(min-width: 1080px)");
-
-
-// let ctr;
-// function hmqc(evt){
-//
-//   if(evt.matches){
-//     console.log('big', 'w', window.innerWidth);
-//   } else {
-//     console.log('med', 'w', window.innerWidth);
-//   }
-// }
-// mediaQList.addListener(hmqc);
-// hmqc(mediaQList);
-
-
-let yDist;
-
-
-let ppp = document.createElement('p');
-header.appendChild(ppp);
-document.body.addEventListener('mousemove', function (e) {
-  if((this.offsetWidth < 751)||(this.offsetWidth < 1063 && window.scrollY > 137)||(window.scrollY > 187)){
-    return;
-  }
-  // else if{
-  //   return;
-  // } else if{
-  //   return;
-  // }
-
-
-
-  else {
-    // ctr = [Math.round(header.offsetWidth / 2), (29 + 32 + header.offsetHeight / 2)];
-    // console.log(e.x, e.y, ctr);
-    // Math.round(Math.sqrt(Math.pow(Math.abs(cubeZeroCtr.x - xStart),2) + Math.pow(Math.abs(cubeZeroCtr.y - yStart),2)));
-    xDist = Math.round(((1 - (e.x / document.body.offsetWidth)) * 200) - 50);
-    yDist = Math.round(((e.y / window.innerHeight) * 200) - 50);
-
-    ppp.textContent = `${xDist}, ${yDist}`;
-    document.documentElement.style.setProperty('--bgx', xDist + '%');
-    document.documentElement.style.setProperty('--bgy', yDist + '%');
-
-  }
 });
 
 

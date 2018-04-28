@@ -21,9 +21,15 @@ body{
 
 canvas{
   display: block;
-  margin: 0 auto 2em;
+  margin: 0 auto 4em;
   background-color: #154a6a;
   min-width: 410px;
+}
+
+#help{
+  background-color: red;
+  width: 90%;
+  transition: height 2s;
 }
 
 p > a{
@@ -39,16 +45,23 @@ p > a:hover{
   background-color: #700080;
 }
 
+footer p > a{
+  letter-spacing: 4px;
+}
+
 #source{
   margin-bottom: 1em;
 }
 
-
+img[alt="demo"]{
+  margin: 6em auto 4em;
+  display: block;
+}
 
 h1{
   margin: 2em auto 1.5em;
   font-family: 'uppereastsideregular';
-	font-size: 48px;
+	font-size: 52px;
   letter-spacing: 6px;
   text-align: center;
   width: 95%;
@@ -288,11 +301,11 @@ button:focus{
 }
 
 #copy{
-  background-image: url('./copy.png');
+  background-image: url('images/copy.png');
 }
 
 #email{
-  background-image: url('./email.png');
+  background-image: url('images/email.png');
 }
 
 #copy:active,
@@ -358,30 +371,18 @@ button:focus{
 }
 
 
-:root{
-  --bgx: 50%;
-  --bgy: 50%;
-}
-
-
-
 
 @media screen and (min-width: 768px) {
-  body:before{
-    content: '.';
-    color: transparent;
-  }
-
   #mainh1{
     display: none;
   }
 
   header{
-    margin: 2em 0 3em;
+    margin: 3em 0;
     height: 5em;
-    background: url("bgsmall2.jpg") no-repeat;
-    background-position-x: var(--bgx);
-    background-position-y: var(--bgy);
+    /* background: url("bgsmall2.jpg") 50% no-repeat; */
+    /* background-position: center; */
+    background-repeat: no-repeat;
   }
 
   header:before{
@@ -400,24 +401,14 @@ button:focus{
 
 @media screen and (min-width: 1080px) {
   header{
-    /* margin: 1em 0 2em; */
     height: 9em;
-    background: url("bgbig2.jpg") no-repeat;
-    background-position-x: var(--bgx);
-    background-position-y: var(--bgy);
+    /* background: url("bgbig2.jpg") 50% no-repeat; */
+    /* background-position: 50% -50%; */
   }
 
   header:before{
-    /* display: block;
-    font-family: 'uppereastsideregular'; */
     font-size: 160px;
     line-height: 152px;
-    /* letter-spacing: 6px;
-    text-align: center; */
-    /* content: "15 Puzzle Generator";
-    background: #fbfbfb; */
-    /* color: #000; */
-    /* mix-blend-mode: lighten; */
   }
 }
 
