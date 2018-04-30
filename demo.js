@@ -88,8 +88,8 @@ canvas.addEventListener('click', e => {
 
 const helpButton = document.querySelector('#showHelp');
 const helpImg = document.querySelector('#help');
-const demoHold = document.querySelector('#demoHolder');
-const helpDiv = document.querySelector('#demoHolder > div');
+const demoHold = document.querySelector('.demoHolder');
+const helpDiv = document.querySelector('.demoHolder > div');
 
 let evenodd = 2;
 
@@ -98,14 +98,14 @@ helpButton.addEventListener('click', function(e){
     helpImg.style.display = 'block';
     this.children[0].src = 'images/hide.png';
     this.style.marginBottom = '0';
-    helpDiv.style.height = '400px';
-    demoHold.style.height = '1300px';
+    helpDiv.style.height = '380px';
+    demoHold.classList.add('htAdj');
   } else {
     helpImg.style.display = 'none';
     this.children[0].src = 'images/help.png';
     this.style.marginBottom = '3em';
     helpDiv.style.height = 'auto';
-    demoHold.style.height = '1000px';
+    demoHold.classList.remove('htAdj');
   }
   evenodd++;
 });

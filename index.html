@@ -4,12 +4,12 @@
 		<meta charset="utf-8">
 		<title>15 Puzzle Generator</title>
 		<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="css/styles.css">
 		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 	</head>
   <body>
 		<header>
-			<!-- <a href="https://jamessouth.github.io/Project-12/"><img src="port.jpg" alt="portfolio"/></a> -->
+
     	<h1 id="mainh1">15 Puzzle Generator</h1>
 		</header>
 
@@ -17,48 +17,56 @@
 
     <main>
 
-      <div id="inputs">
-				<label>Color for the blank tile: <input type="color" value="#0f8000"></label>
-				<label>Relative path to your image: <input placeholder="Optional" type="text"/></label>
-        <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-        <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-				<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
-				<p id="puzz">Puzzle Dimensions:</p>
-				<label>Width in tiles:
-					<select>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
-						<option>6</option>
-						<option>7</option>
-						<option>8</option>
-					</select>
-				</label>
+			<form>
+				<div>
+					<fieldset id="basics">
+						<legend>Basic Puzzle</legend>
+						<label>Color for the blank tile: <input type="color" value="#0f8000"></label>
+		        <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
+		        <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
+						<p id="puzz">Puzzle Dimensions:</p>
+						<label>Width in tiles:
+							<select>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+							</select>
+						</label>
 
-				<label>Height in tiles:
-					<select>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
-						<option>6</option>
-						<option>7</option>
-						<option>8</option>
-					</select>
-				</label>
-
+						<label>Height in tiles:
+							<select>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+							</select>
+						</label>
+						<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
+					</fieldset>
+					<hr>
+					<fieldset id="extras">
+						<legend>Additional Features</legend>
+						<label>Relative path to your image: <input placeholder="Optional" type="text"/></label>
+					</fieldset>
+				</div>
 				<p id="error"></p>
-				<form id="form">
-					<button id="submit">Submit</button>
-				</form>
-				<div id="copiedPopup">copied!</div>
-      </div>
+
+				<button id="submit">Submit</button>
+			</form>
+
 
 <!-- data-clipboard-target="#code" -->
 
 			<!-- <div> -->
 				<div id="buttons">
+					<div id="copiedPopup">copied!</div>
 					<button class="selected">HTML</button>
 					<button>CSS</button>
 					<button>JS</button>
@@ -164,10 +172,6 @@
 						&nbsp;&nbsp;let y = e.offsetY;
 						&nbsp;&nbsp;swapTiles(x,y);
 						});</code></pre>
-
-
-
-
 
 
 	      </div>
