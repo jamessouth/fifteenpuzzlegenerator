@@ -54,6 +54,8 @@
 					<fieldset id="extras">
 						<legend>Additional Features</legend>
 						<label>Relative path to your image: <input placeholder="Optional" type="text"/></label>
+						<label>Add helper image: <input type="checkbox" name="help" value="image"/></label>
+
 					</fieldset>
 				</div>
 				<p id="error"></p>
@@ -80,6 +82,10 @@
 					<pre id="html"><code>&lt;<span class="gy">canvas</span> <span class="blue">width</span>="</code><span class="red">%</span><code>" <span class="blue">height</span>="</code><span class="red">%</span><code>"&gt;
 						&nbsp;&nbsp;Your browser does not support canvas.
 						&lt;/<span class="gy">canvas</span>&gt;</code></pre>
+
+
+					<pre id="help"><code>&lt;<span class="gy">img</span> <span class="blue">src</span>="</code><span class="path">[path to your image]</span><code>" <span class="blue">alt</span>=""/&gt;</code></pre>
+
 
 					<pre id="css"><code>canvas{
 						&nbsp;&nbsp;background-color: <span>lightblue</span>;
@@ -138,7 +144,7 @@
 						&nbsp;&nbsp;}
 						}
 
-						pic.src = <span id="path">'[path to your image]'</span>;
+						pic.src = <span class="path">'[path to your image]'</span>;
 
 						<span class="peach">function</span> swapTiles(x, y){
 						&nbsp;&nbsp;if(canvArray.length === 0){return;}

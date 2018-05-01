@@ -120,6 +120,7 @@ fieldset:nth-of-type(2){
 }
 
 legend{
+  width: 100%;
   text-align: center;
   font-size: 20px;
   text-decoration: underline;
@@ -143,6 +144,38 @@ fieldset input[type="color"]{
 fieldset select{
 	margin-bottom: 1em;
 }
+
+
+input[type="checkbox"]{
+  display: inline-block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  width: 20px;
+  margin: 0 0 0 10px;
+}
+
+input[type="checkbox"]:after{
+  content: "x";
+  position: relative;
+  display: block;
+  top: 4px;
+  width: 20px;
+  text-align: center;
+  font-size: 39px;
+  line-height: 8px;
+  color: #fbfbfb;
+  background-color: #80000f;
+  height: 17px;
+}
+
+input[type="checkbox"]:checked:after{
+  content: "\2713";
+  font-size: 26px;
+  line-height: 17px;
+  background-color: #0f8000;
+}
+
 
 
 
@@ -176,7 +209,7 @@ fieldset select{
 
 
 
-#submit:active, #showHelp:active{
+#submit:active{
 	border-color: transparent;
 }
 
@@ -412,6 +445,10 @@ button:focus{
 
   fieldset{
     flex: 1;
+  }
+
+  legend{
+    margin-bottom: 1em;
   }
 
   fieldset:nth-of-type(1){

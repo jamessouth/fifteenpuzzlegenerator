@@ -6,7 +6,7 @@ const submit = document.querySelector('#submit');
 const copyBtn = document.querySelector('#copy');
 const codeBox = document.querySelector('#code');
 const header = document.querySelector('header');
-
+const help = document.querySelector('input[name="help"]');
 
 const mediaQLarge = window.matchMedia("(min-width: 1080px)");
 const mediaQSmall = window.matchMedia("(min-width: 768px) and (max-width: 1079px)");
@@ -187,15 +187,19 @@ function popCSS(info){
 
 function popJS(info, path){
   console.log(path);
-  const pathSpan = document.querySelector('#path');
+  const pathSpans = document.querySelectorAll('.path');
 
   if(!!path){
-    pathSpan.textContent = `"${path}"`;
-    pathSpan.style.backgroundColor = 'transparent';
+    pathSpans[0].textContent = `"${path}"`;
+    pathSpans[1].textContent = `"${path}"`;
+    pathSpans[0].style.backgroundColor = 'transparent';
+    pathSpans[1].style.backgroundColor = 'transparent';
   } else {
-    pathSpan.textContent = '[path to your image]';
-    pathSpan.style.backgroundColor = 'red';
-    document.querySelector('#error').textContent += ' Be sure to update the src attribute of the Image with your path. It is highlighted in red in the JS.';
+    pathSpans[0].textContent = '[path to your image]';
+    pathSpans[1].textContent = '[path to your image]';
+    pathSpans[0].style.backgroundColor = 'red';
+    pathSpans[1].style.backgroundColor = 'red';
+    document.querySelector('#error').textContent += ' Be sure to update the src attribute of the Image with your path. It is highlighted in red in the JS and in the HTML if you selected the helper image.';
   }
 
   let tileSize = info[0] / info[2];
