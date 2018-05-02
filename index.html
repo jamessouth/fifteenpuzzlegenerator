@@ -81,14 +81,11 @@
 	      <div id="code">
 					<pre id="html"><code>&lt;<span class="gy">canvas</span> <span class="blue">width</span>="</code><span class="red">%</span><code>" <span class="blue">height</span>="</code><span class="red">%</span><code>"&gt;
 						&nbsp;&nbsp;Your browser does not support canvas.
-						&lt;/<span class="gy">canvas</span>&gt;</code></pre>
-
-
-					<pre id="help"><code>&lt;<span class="gy">img</span> <span class="blue">src</span>="</code><span class="path">[path to your image]</span><code>" <span class="blue">alt</span>=""/&gt;</code></pre>
+						&lt;/<span class="gy">canvas</span>&gt;</code><pre id="helphtml"><code >&lt;<span class="gy">img</span> <span class="blue">src</span>="</code><span class="pathhtml">[path to your image]</span><code >" <span class="blue">alt</span>=""/&gt;</code></pre></pre>
 
 
 					<pre id="css"><code>canvas{
-						&nbsp;&nbsp;background-color: <span>lightblue</span>;
+						&nbsp;&nbsp;background-color: <span>%</span>;
 						&nbsp;&nbsp;min-width: </code><span>%</span><code>px;
 						}</code></pre>
 
@@ -144,7 +141,7 @@
 						&nbsp;&nbsp;}
 						}
 
-						pic.src = <span class="path">'[path to your image]'</span>;
+						pic.src = '<span class="pathjs">[path to your image]</span>';
 
 						<span class="peach">function</span> swapTiles(x, y){
 						&nbsp;&nbsp;if(canvArray.length === 0){return;}
