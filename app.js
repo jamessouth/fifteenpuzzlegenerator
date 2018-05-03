@@ -131,25 +131,15 @@ function handleButtons(){
     css.style.display = 'none';
     js.style.display = 'none';
     html.style.display = 'block';
-    // if(helpcb.checked){
-    //   helphtml.style.display = 'block';
-    // } else {
-    //   helphtml.style.display = 'none';
-    // }
-
   } else if(this.textContent === 'CSS'){
     html.style.display = 'none';
-    // helphtml.style.display = 'none';
     js.style.display = 'none';
     css.style.display = 'block';
 
   } else if(this.textContent === 'JS'){
     html.style.display = 'none';
-    // helphtml.style.display = 'none';
     css.style.display = 'none';
     js.style.display = 'block';
-
-
   }
 
 }
@@ -192,16 +182,24 @@ function popHTML(info){
     helphtml.style.display = 'block';
     handlePath(info.imagePath, pathSpanHTML);
   } else {
-
+    helphtml.style.display = 'none';
   }
 
 }
 
 function popCSS(info){
   const spans = css.querySelectorAll('span');
-  const colorInput = document.querySelector('input[type="color"]');
-  spans[0].textContent = colorInput.value;
+  const helpcss = document.querySelector('#helpcss');
+  const helpSpanCSS = document.querySelector('.halfwidth');
+  spans[0].textContent = info.color;
   spans[1].textContent = info.imageWidth;
+
+  if(info.helpImage){
+    helpcss.style.display = 'block';
+    helpSpanCSS.textContent = `${Math.round(info.imageWidth / 2)}px`;
+  } else {
+    helpcss.style.display = 'none';
+  }
 }
 
 function handlePath(path, el){
@@ -255,6 +253,7 @@ submit.addEventListener('click', function (e) {
   const helpcb = document.querySelector('input[name="help"]');
   const inputs = document.querySelectorAll('input.num');
   const selects = document.querySelectorAll('select');
+  const colorInput = document.querySelector('input[type="color"]');
   let prcs = [...inputs, ...selects].map(i => parseInt(i.value, 10));
 
   let info = {
@@ -262,6 +261,7 @@ submit.addEventListener('click', function (e) {
     imageHeight: prcs[1],
     tilesWide: prcs[2],
     tilesHigh: prcs[3],
+    color: colorInput.value,
     imagePath: pathInput.value,
     helpImage: helpcb.checked
   }
