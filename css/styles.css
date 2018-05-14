@@ -89,6 +89,7 @@ form{
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 5em;
 }
 
 form div{
@@ -217,16 +218,16 @@ input[type="checkbox"]:checked:after{
 
 
 #code{
-  background-color: #2b2833;
+  background-color: #eee;
   min-height: 500px;
-  width: 80%;
+  /* width: 80%; */
   padding: 5px;
-  margin-top: 50px;
+  /* margin-top: 50px; */
 }
 
 pre span,
 pre code{
-  color: #fff;
+  color: #80000f;
   font-family: monospace;
 }
 
@@ -234,19 +235,9 @@ pre code{
   white-space: pre-line;
 }
 
-.peach{
-  color: peachpuff;
-}
 
-.gy{
-  color: greenyellow;
-}
 
-.blue{
-  color: #3ec0ff;
-}
-
-#css, #js, #helphtml, #helpcss{
+#css, #js, #helpcss{
   display: none;
 }
 
