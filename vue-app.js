@@ -13,9 +13,9 @@ Vue.component('input-sel', {
       nums: [2,3,4,5,6,7,8]
     }
   },
-  props: ['label'],
+  props: ['label', 'value'],
   template: `<label>{{label}}
-            <select>
+            <select v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
               <option v-for="num in nums">{{num}}</option>
             </select>
           </label>`
@@ -24,13 +24,13 @@ Vue.component('input-sel', {
 
 
 
-Vue.component('app-tabs', {
-  props: ['labels'],
-  template: `<div id="buttons">
-    <button v-for="label in labels">{{label}}</button>
-    <a href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button>Email</button></a>
-  </div>`
-});
+// Vue.component('app-tabs', {
+//   props: ['labels'],
+//   template: `<div id="buttons">
+//     <button v-for="label in labels">{{label}}</button>
+//     <a href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button>Email</button></a>
+//   </div>`
+// });
 
 
 
@@ -57,7 +57,9 @@ const app = new Vue({
   data: {
     basic: {
       imageWidth: null,
-      imageHeight: null
+      imageHeight: null,
+      widthTiles: 2,
+      heightTiles: 2
     },
     additional: {
       helperImage: false
