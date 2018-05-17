@@ -235,7 +235,12 @@ pre code{
   white-space: pre-line;
 }
 
-
+#lang-select{
+  width: 90%;
+  height: 109px;
+  margin-bottom: 3em;
+  background: url('../images/med.jpg') no-repeat center;
+}
 
 #css, #js, #helpcss{
   display: none;
@@ -330,8 +335,8 @@ button:focus{
 #copy-email{
   /* position: absolute; */
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   height: 50px;
   width: 105px;
@@ -340,7 +345,7 @@ button:focus{
   right: 6px; */
 }
 
-#copy-email > button{
+#copy-email button{
 
   background-repeat: no-repeat;
   background-position: center;
@@ -352,7 +357,7 @@ button:focus{
   width: 24px;
 }
 
-#icons a{
+#copy-email a{
   display: inherit;
 }
 
