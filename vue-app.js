@@ -27,9 +27,9 @@ Vue.component('input-sel', {
 // Vue.component('app-tabs', {
 //   props: ['labels'],
 //   template: `<div id="buttons">
-//     <button v-for="label in labels">{{label}}</button>
-//     <a href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button>Email</button></a>
-//   </div>`
+//      <button v-for="label in labels">{{label}}</button>
+//
+//    </div>`
 // });
 
 
@@ -50,7 +50,7 @@ Vue.component('code-html-helper-image', {
 // <app-tabs :labels="['HTML', 'CSS', 'JS', 'Copy']"></app-tabs>
 
 
-
+// const codeBox = document.querySelector('#code');
 
 const app = new Vue({
   el: '#app',
@@ -64,7 +64,16 @@ const app = new Vue({
     additional: {
       helperImage: false
     }
-
-
+  },
+  methods: {
+    doCopy: function () {
+      this.$copyText(this.$el.children[1].children[2].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
+        alert('Copied');
+        console.log(e);
+      }, function (e) {
+        alert('Can not copy');
+        console.log(e);
+      });
+    }
   }
 });
