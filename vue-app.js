@@ -63,10 +63,12 @@ const app = new Vue({
     },
     additional: {
       helperImage: false
-    }
+    },
+    languages: ['HTML', 'CSS', 'JS'],
+    currentLang: 0
   },
   methods: {
-    doCopy: function () {
+    doCopy: function(){
       this.$copyText(this.$el.children[1].children[2].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
         alert('Copied');
         console.log(e);
@@ -74,6 +76,16 @@ const app = new Vue({
         alert('Can not copy');
         console.log(e);
       });
+    },
+    changeLang: function(dir){
+      if(dir === 'up'){
+        this.currentLang += 1;
+      } else {
+        this.currentLang -= 1;
+        if(this.currentLang < 0){
+          this.currentLang = this.languages.length - 1;
+        }
+      }
     }
   }
 });
