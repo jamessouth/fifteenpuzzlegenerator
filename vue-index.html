@@ -6,6 +6,7 @@
 		<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="css/vue-styles.css">
 		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Limelight" rel="stylesheet">
 	</head>
   <body>
     <div id="app">
@@ -43,7 +44,13 @@
 					</div>
 
 				</form>
-				<div id="lang-select"></div>
+
+				
+				<div id="lang-select">
+					<button @click="changeLang('down')"></button>
+					<span>{{languages[currentLang % languages.length]}}</span>
+					<button @click="changeLang('up')"></button>
+				</div>
 
 				<div id="copy-email">
 					<button	@click="doCopy"	id="copy"></button>
