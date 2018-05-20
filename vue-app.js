@@ -1,3 +1,7 @@
+
+
+
+
 Vue.component('app-header', {
   template: `<header>
     <h1 id="mainh1">15 Puzzle Generator</h1>
@@ -65,7 +69,15 @@ const app = new Vue({
       helperImage: false
     },
     languages: ['HTML', 'CSS', 'JS'],
-    currentLang: 0
+    currentLangInd: 0,
+    breakpoints: {
+      JSBreakpoint: window.matchMedia("(min-width: 510px)"),
+      H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
+      // H1BackgroundMedium: window.matchMedia("(min-width: 468px) and (max-width: 1079px)"),
+      // H1BackgroundSmall: window.matchMedia("(max-width: 467px)")
+    }
+
+
   },
   methods: {
     doCopy: function(){
@@ -77,15 +89,68 @@ const app = new Vue({
         console.log(e);
       });
     },
-    changeLang: function(dir){
+    changeLangInd: function(dir){
       if(dir === 'up'){
-        this.currentLang += 1;
+        this.currentLangInd += 1;
       } else {
-        this.currentLang -= 1;
-        if(this.currentLang < 0){
-          this.currentLang = this.languages.length - 1;
+        this.currentLangInd -= 1;
+        if(this.currentLangInd < 0){
+          this.currentLangInd = this.languages.length - 1;
         }
       }
+    },
+    handleJSExpand: function(evt){
+      if(evt.matches){
+        this.$set(this.languages, 2, 'JavaScript');
+      } else {
+        this.$set(this.languages, 2, 'JS');
+      }
+    },
+    handleBGLargeMQ: function(evt){
+      console.log('mq: ', evt.media, evt.matches);
+      let rando = Math.floor(Math.random() * 2) + 1;
+      // console.log(document.documentElement.style.setProperty());
+      console.log(rando);
+      if(evt.matches){
+        console.log('big', window.innerWidth);
+        // loadBG('big');
+      }
+    }
+    // handleBGMediumMQ: function(evt){
+    //   console.log('mq: ', evt.media, evt.matches);
+    //   if(evt.matches){
+    //     console.log('med', window.innerWidth);
+    //     // loadBG('small');
+    //   }
+    // },
+    // handleBGSmallMQ: function(evt){
+    //   console.log('mq: ', evt.media, evt.matches);
+    //   if(evt.matches){
+    //     console.log('small', window.innerWidth);
+    //     // header.style.backgroundImage = `none`;
+    //   }
+    // },
+
+
+
+  },
+  created: function(){
+    this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
+    this.handleJSExpand(this.breakpoints.JSBreakpoint);
+
+
+    this.breakpoints.H1BackgroundLarge.addListener(this.handleBGLargeMQ);
+    this.handleBGLargeMQ(this.breakpoints.H1BackgroundLarge);
+    //
+    // this.breakpoints.H1BackgroundMedium.addListener(this.handleBGMediumMQ);
+    // this.handleBGMediumMQ(this.breakpoints.H1BackgroundMedium);
+    //
+    // this.breakpoints.H1BackgroundSmall.addListener(this.handleBGSmallMQ);
+    // this.handleBGSmallMQ(this.breakpoints.H1BackgroundSmall);
+  },
+  computed: {
+    currentLang: function(){
+      return this.languages[this.currentLangInd % this.languages.length];
     }
   }
 });

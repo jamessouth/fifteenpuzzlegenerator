@@ -45,11 +45,11 @@
 
 				</form>
 
-				
+
 				<div id="lang-select">
-					<button @click="changeLang('down')"></button>
-					<span>{{languages[currentLang % languages.length]}}</span>
-					<button @click="changeLang('up')"></button>
+					<button @click="changeLangInd('down')"></button>
+					<span>{{currentLang}}</span>
+					<button @click="changeLangInd('up')"></button>
 				</div>
 
 				<div id="copy-email">
