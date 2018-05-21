@@ -17,7 +17,7 @@
 					<div>
 						<fieldset id="basics">
 							<legend>Basic Puzzle</legend>
-							<label>Color for the blank tile: <input type="color" value="#0f8000"></label>
+							<label>Color for the blank tile: <input v-model="basic.color" type="color" value="#0f8000"></label>
 
 
 							<label>Image Width in pixels: <input v-model.number="basic.imageWidth" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
@@ -48,7 +48,9 @@
 
 				<div id="lang-select">
 					<button @click="changeLangInd('down')"></button>
-					<span>{{currentLang}}</span>
+					<transition name="fade" mode="out-in">
+						<span :key="currentLang">{{currentLang}}</span>
+					</transition>
 					<button @click="changeLangInd('up')"></button>
 				</div>
 
@@ -60,17 +62,19 @@
 
 	      <div id="code">
 
-	        <code-html :image-width="basic.imageWidth" :image-height="basic.imageHeight"></code-html>
+					<template v-if="currentLang === 'HTML'">
+	        	<code-html :image-width="basic.imageWidth" :image-height="basic.imageHeight"></code-html>
 
-					<code-html-helper-image v-if="additional.helperImage"></code-html-helper-image>
+						<code-html-helper-image v-if="additional.helperImage"></code-html-helper-image>
+					</template>
 
 
-	        <pre id="css"><code>canvas{
-	          &nbsp;&nbsp;background-color: <span>%</span>;
-	          &nbsp;&nbsp;min-width: </code><span>%</span><code>px;
-	          }</code><pre id="helpcss"><code>img{
-	            &nbsp;&nbsp;width: <span class="halfwidth">%</span>;
-	            }</code></pre></pre>
+					<template v-if="currentLang === 'CSS'">
+						<code-css :color="basic.color" :image-width="basic.imageWidth"></code-css>
+
+						<code-css-helper-image :helper-image-width="helperImageWidth" v-if="additional.helperImage"></code-css-helper-image>
+
+					</template>
 
 	        <pre id="js"><code>const canvas = document.querySelector('canvas');
 	          let ctx = canvas.getContext('2d');
