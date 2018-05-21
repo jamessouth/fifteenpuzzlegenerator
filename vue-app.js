@@ -39,11 +39,28 @@ Vue.component('input-sel', {
 
 
 
+
+Vue.component('code-css-helper-image', {
+  props: ['helperImageWidth'],
+  template: `<pre><code>img{
+    &nbsp;&nbsp;width: {{helperImageWidth}}px;
+    }</code></pre>`
+});
+
+
 Vue.component('code-html', {
   props: ['imageWidth', 'imageHeight'],
   template: `<pre><code>&lt;canvas width="{{imageWidth}}" height="{{imageHeight}}"&gt;
             &nbsp;&nbsp;Your browser does not support canvas.
             &lt;/canvas&gt;</code></pre>`
+});
+
+Vue.component('code-css', {
+  props: ['imageWidth', 'color'],
+  template: `<pre><code>canvas{
+  	          &nbsp;&nbsp;background-color: {{color}};
+  	          &nbsp;&nbsp;min-width: {{imageWidth}}px;
+            }</code></pre>`
 });
 
 
@@ -60,6 +77,7 @@ const app = new Vue({
   el: '#app',
   data: {
     basic: {
+      color: '#0f8000',
       imageWidth: null,
       imageHeight: null,
       widthTiles: 2,
@@ -73,11 +91,7 @@ const app = new Vue({
     breakpoints: {
       JSBreakpoint: window.matchMedia("(min-width: 510px)"),
       H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
-      // H1BackgroundMedium: window.matchMedia("(min-width: 468px) and (max-width: 1079px)"),
-      // H1BackgroundSmall: window.matchMedia("(max-width: 467px)")
     }
-
-
   },
   methods: {
     doCopy: function(){
@@ -106,51 +120,30 @@ const app = new Vue({
         this.$set(this.languages, 2, 'JS');
       }
     },
-    handleBGLargeMQ: function(evt){
-      console.log('mq: ', evt.media, evt.matches);
-      let rando = Math.floor(Math.random() * 2) + 1;
-      // console.log(document.documentElement.style.setProperty());
-      console.log(rando);
+    getRandomNo: function(){
+      return Math.floor(Math.random() * 2) + 1;
+    },
+    handleH1BG: function(evt){
       if(evt.matches){
-        console.log('big', window.innerWidth);
-        // loadBG('big');
+        let medfile = `../images/bgmed${this.getRandomNo()}.jpg`;
+        let bigfile = `../images/bgbig${this.getRandomNo()}.jpg`;
+        document.documentElement.style.setProperty('--medFileName', `url(${medfile})`);
+        document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
       }
     }
-    // handleBGMediumMQ: function(evt){
-    //   console.log('mq: ', evt.media, evt.matches);
-    //   if(evt.matches){
-    //     console.log('med', window.innerWidth);
-    //     // loadBG('small');
-    //   }
-    // },
-    // handleBGSmallMQ: function(evt){
-    //   console.log('mq: ', evt.media, evt.matches);
-    //   if(evt.matches){
-    //     console.log('small', window.innerWidth);
-    //     // header.style.backgroundImage = `none`;
-    //   }
-    // },
-
-
-
   },
   created: function(){
     this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
     this.handleJSExpand(this.breakpoints.JSBreakpoint);
-
-
-    this.breakpoints.H1BackgroundLarge.addListener(this.handleBGLargeMQ);
-    this.handleBGLargeMQ(this.breakpoints.H1BackgroundLarge);
-    //
-    // this.breakpoints.H1BackgroundMedium.addListener(this.handleBGMediumMQ);
-    // this.handleBGMediumMQ(this.breakpoints.H1BackgroundMedium);
-    //
-    // this.breakpoints.H1BackgroundSmall.addListener(this.handleBGSmallMQ);
-    // this.handleBGSmallMQ(this.breakpoints.H1BackgroundSmall);
+    this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
+    this.handleH1BG(this.breakpoints.H1BackgroundLarge);
   },
   computed: {
     currentLang: function(){
       return this.languages[this.currentLangInd % this.languages.length];
+    },
+    helperImageWidth: function(){
+      return Math.round(this.basic.imageWidth / 2) || '';
     }
   }
 });
