@@ -265,8 +265,9 @@ pre code{
   width: 90%;
   height: 109px;
   margin-bottom: 3em;
-  max-width: 641px;
-  background: url('../images/medlangbanner.jpg') no-repeat center;
+  background: url('../images/langbanner.jpg') no-repeat center;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 
@@ -430,8 +431,6 @@ button:hover{
     margin-bottom: 13.5em;
     height: 3em;
     background: var(--smallFileName) 50% no-repeat;
-    /* background-position: center;
-    background-repeat: no-repeat; */
   }
 
   header:before{
@@ -476,36 +475,19 @@ button:hover{
     margin-bottom: 1em;
   }
 
-  fieldset:nth-of-type(1){
-    /* border-bottom: none; */
-  }
   fieldset:nth-of-type(2){
     margin-top: 0;
     border-left: 1px solid #000;
   }
 
-
-
-
   header{
-    /* margin: 3em 0; */
     height: 5em;
     background: var(--medFileName) 50% no-repeat;
-    /* background-position: center;
-    background-repeat: no-repeat; */
   }
 
   header:before{
-    /* display: block;
-    font-family: 'uppereastsideregular'; */
     font-size: 96px;
-    /* letter-spacing: 6px;
-    text-align: center;
-    content: "15 Puzzle Generator";
-    background: #fbfbfb; */
     line-height: 88px;
-    /* color: #000;
-    mix-blend-mode: lighten; */
     margin-bottom: .5em;
   }
 }
@@ -513,16 +495,10 @@ button:hover{
 
 
 @media screen and (min-width: 1080px) {
-  #lang-select{
-    max-width: 1282px;
-    background: url('../images/biglangbanner.jpg') no-repeat center;
-  }
-
 
   header{
     height: 9em;
     background: var(--bigFileName) 50% no-repeat;
-    /* background-position: 50% -50%; */
   }
 
   header:before{

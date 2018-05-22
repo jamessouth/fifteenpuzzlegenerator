@@ -9,6 +9,12 @@ Vue.component('app-header', {
   </header>`
 });
 
+Vue.component('app-footer', {
+  template: `<footer>
+  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a></p>
+  </footer>`
+});
+
 
 
 Vue.component('input-sel', {
