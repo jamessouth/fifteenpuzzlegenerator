@@ -34,16 +34,6 @@ Vue.component('input-sel', {
 
 
 
-// Vue.component('app-tabs', {
-//   props: ['labels'],
-//   template: `<div id="buttons">
-//      <button v-for="label in labels">{{label}}</button>
-//
-//    </div>`
-// });
-
-
-
 
 
 Vue.component('code-css-helper-image', {
@@ -71,13 +61,103 @@ Vue.component('code-css', {
 
 
 Vue.component('code-html-helper-image', {
-  template: `<pre><code>&lt;img src="[path to your image]" alt=""/&gt;</code></pre>`
+  props: ['path'],
+  template: `<pre><code>&lt;img src="<span :class="{ greenBackground: !path }">{{path || '[path to your image]'}}</span>" alt=""/&gt;</code></pre>`
 });
 
-// <app-tabs :labels="['HTML', 'CSS', 'JS', 'Copy']"></app-tabs>
+
+Vue.component('code-js', {
+  props: ['tilesHigh', 'tilesWide', 'tileSize', 'path'],
+  template: `<pre><code>const canvas = document.querySelector('canvas');
+  	          let ctx = canvas.getContext('2d');
+  	          let canvArray = [], pic = new Image();
+  	          for(let i = 0; i < {{tilesHigh}}; i++){
+  	          &nbsp;&nbsp;for(let j = 0; j < {{tilesWide}}; j++){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;canvArray.push([j * {{tileSize}}, i * {{tileSize}}]);
+  	          &nbsp;&nbsp;}
+  	          }
+
+  	          function getRands(amt){
+  	          &nbsp;&nbsp;let nums = new Set();
+  	          &nbsp;&nbsp;while(nums.size < amt){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;let n = Math.floor(Math.random() * amt);
+  	          &nbsp;&nbsp;&nbsp;&nbsp;nums.add(n);
+  	          &nbsp;&nbsp;}
+  	          &nbsp;&nbsp;return [...nums];
+  	          }
+
+  	          function getInversions(arr){
+  	          &nbsp;&nbsp;let inversions = 0;
+  	          &nbsp;&nbsp;for(let i = 0; i < arr.length; i++){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;if(arr[i] == null){continue;}
+  	          &nbsp;&nbsp;&nbsp;&nbsp;for(let j = 0; j < arr.length; j++){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(arr[i] > arr[j + i]){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inversions++;
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+  	          &nbsp;&nbsp;&nbsp;&nbsp;}
+  	          &nbsp;&nbsp;}
+  	          &nbsp;&nbsp;return inversions;
+  	          }
+
+  	          function checkBoard(){
+  	          &nbsp;&nbsp;let randos = getRands(canvArray.length - 1);
+  	          &nbsp;&nbsp;let solArray = [];
+  	          &nbsp;&nbsp;randos.forEach((x,i) => {
+  	          &nbsp;&nbsp;&nbsp;&nbsp;solArray[x] = i;
+  	          &nbsp;&nbsp;});
+  	          &nbsp;&nbsp;return [solArray.concat([canvArray.length - 1]), randos.concat([canvArray.length - 1])];
+  	          }
+
+  	          let doable = checkBoard();
+  	          while(getInversions(doable[0]) % 2 !== 0){
+  	          &nbsp;&nbsp;doable = checkBoard();
+  	          }
+  	          let boardOrder = doable[0].slice();
+
+  	          pic.onload = () => {
+  	          &nbsp;&nbsp;for(let i = 0; i < canvArray.length - 1; i++){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, canvArray[i][0], canvArray[i][1], {{tileSize}}, {{tileSize}}, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], {{tileSize}}, {{tileSize}});
+  	          &nbsp;&nbsp;}
+  	          }
+
+  	          pic.src = '<span :class="{ greenBackground: !path }">{{path || '[path to your image]'}}</span>';
+
+  	          function swapTiles(x, y){
+  	          &nbsp;&nbsp;if(canvArray.length === 0){return;}
+  	          &nbsp;&nbsp;let tileClicked = (Math.floor(y / {{tileSize}}) * {{tilesWide}}) + Math.floor(x / {{tileSize}});
+  	          &nbsp;&nbsp;let blank = boardOrder.indexOf(canvArray.length - 1);
+  	          &nbsp;&nbsp;let finalCheck;
+  	          &nbsp;&nbsp;let brdInd = boardOrder[tileClicked];
+  	          &nbsp;&nbsp;if(![1, {{tilesWide}}].includes(Math.abs(tileClicked - blank))){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;return;
+  	          &nbsp;&nbsp;}
+  	          &nbsp;&nbsp;ctx.clearRect(canvArray[tileClicked][0], canvArray[tileClicked][1], {{tileSize}}, {{tileSize}});
+  	          &nbsp;&nbsp;ctx.drawImage(pic, canvArray[brdInd][0], canvArray[brdInd][1], {{tileSize}}, {{tileSize}}, canvArray[blank][0], canvArray[blank][1], {{tileSize}}, {{tileSize}});
+  	          &nbsp;&nbsp;[boardOrder[tileClicked], boardOrder[blank]] = [boardOrder[blank], boardOrder[tileClicked]];
+  	          &nbsp;&nbsp;if(boardOrder[0] === 0 && boardOrder[{{tilesWide - 1}}] === {{tilesWide - 1}} && boardOrder[{{tilesWide * (tilesHigh - 1) - 1}}] === {{tilesWide * (tilesHigh - 1) - 1}} && boardOrder[{{tilesWide * tilesHigh - 2}}] === {{tilesWide * tilesHigh - 2}}){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;finalCheck = true;
+  	          &nbsp;&nbsp;&nbsp;&nbsp;for(let f = 0; f < boardOrder.length; f++){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(boardOrder[f] !== f){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finalCheck = false;
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+  	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+  	          &nbsp;&nbsp;&nbsp;&nbsp;}
+  	          &nbsp;&nbsp;}
+  	          &nbsp;&nbsp;if(finalCheck){
+  	          &nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, {{(tilesWide - 1) * tileSize}}, {{(tilesHigh - 1) * tileSize}}, {{tileSize}}, {{tileSize}}, {{(tilesWide - 1) * tileSize}}, {{(tilesHigh - 1) * tileSize}}, {{tileSize}}, {{tileSize}});
+  	          &nbsp;&nbsp;&nbsp;&nbsp;canvArray = [];
+  	          &nbsp;&nbsp;}
+  	          }
+
+  	          canvas.addEventListener('click', e => {
+  	          &nbsp;&nbsp;let x = e.offsetX;
+  	          &nbsp;&nbsp;let y = e.offsetY;
+  	          &nbsp;&nbsp;swapTiles(x,y);
+  	          });</code></pre>`
+});
 
 
-// const codeBox = document.querySelector('#code');
+
 
 const app = new Vue({
   el: '#app',
@@ -90,6 +170,7 @@ const app = new Vue({
       heightTiles: 2
     },
     additional: {
+      path: null,
       helperImage: false
     },
     languages: ['HTML', 'CSS', 'JS'],
@@ -150,6 +231,24 @@ const app = new Vue({
     },
     helperImageWidth: function(){
       return Math.round(this.basic.imageWidth / 2) || '';
+    },
+    tileSize: function(){
+      return this.basic.imageWidth / this.basic.widthTiles;
+    },
+    imageDimensionsNotEntered: function(){
+      return !(this.basic.imageWidth > 0 && this.basic.imageHeight > 0);
+    },
+    heightRatio: function(){
+      return this.basic.imageHeight / this.basic.heightTiles;
+    },
+    tilesAreNotSquare: function(){
+      return !(this.tileSize === this.heightRatio);
+    },
+    hasRemainderPixels: function(){
+      return !(this.basic.imageWidth % this.basic.widthTiles === 0 && this.basic.imageHeight % this.basic.heightTiles === 0);
+    },
+    codeReady: function(){
+      return !this.imageDimensionsNotEntered && !this.tilesAreNotSquare && !this.hasRemainderPixels;
     }
   }
 });
