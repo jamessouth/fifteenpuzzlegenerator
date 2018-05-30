@@ -55,11 +55,12 @@
 						<span :key="currentLang">{{currentLang}}</span>
 					</transition>
 					<button @click="changeLangInd('up')"></button>
+					<button	v-show="codeReady" @click="doCopy"	id="copy"></button>
+					<a v-show="codeReady" href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button id="email"></button></a>
 				</div>
 
 				<div :class="{ codeOverlay: !codeReady }" id="copy-email">
-					<button	@click="doCopy"	id="copy"></button>
-					<a href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button id="email"></button></a>
+
 				</div>
 
 

@@ -148,6 +148,7 @@ legend{
   text-align: center;
   font-size: 30px;
   text-decoration: underline;
+  margin-bottom: .5em;
 }
 
 fieldset input{
@@ -248,6 +249,10 @@ input[type="checkbox"]:checked:after{
 
 .blurry{
   filter: blur(4px);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 
@@ -263,20 +268,17 @@ pre code{
 }
 
 #lang-select{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+
+  grid: "larrow ctext rarrow" 60% "lcopy . remail" 40% / 52px auto 52px;
+  place-items: center;
   width: 90%;
-  height: 109px;
-  margin-bottom: 3em;
+  height: 160px;
+  margin-bottom: 4em;
   background: url('../images/langbanner.jpg') no-repeat center;
   background-attachment: fixed;
   background-size: cover;
 }
-
-
-
-
 
 button:focus{
 	outline: none;
@@ -284,23 +286,30 @@ button:focus{
 
 #copy-email{
   position: relative;
-  display: flex;
+  /* display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   height: 50px;
   width: 105px;
-  background-color: #2b2833;
+  background-color: #2b2833; */
 }
 
 .codeOverlay:after{
-  display: block;
+  /* display: block; */
   position: absolute;
-  background-color: #222;
-  color: #eee;
-  content: 'hello';
-  width: 100%;
-  height: 44px;
+  top: 100px;
+  z-index: 2;
+  font-family: 'Limelight', cursive;
+  font-size: 33px;
+  text-align: center;
+  /* background-color: #222; */
+  color: #80000f;
+  content: 'Please clear the validation errors above';
+  width: calc(100vw - 70px);
+  /* height: 44px; */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 button{
@@ -314,7 +323,7 @@ button{
 
 }
 
-button:hover{
+#lang-select button:hover{
   filter: brightness(110%) drop-shadow(0px 0px 7px #fff);
 }
 
@@ -325,6 +334,7 @@ button:hover{
   font-size: 57px;
   color: #fbfbfb;
   filter: drop-shadow(0px 0px 3px #fff);
+  grid-area: ctext;
 }
 
 /* #lang-select:after{
@@ -338,31 +348,41 @@ button:hover{
   filter: drop-shadow(0px 0px 7px #fff);
 }
 
-#lang-select button{
+#lang-select > button:not(:last-of-type){
   background-image: url('../images/arrow.png');
   width: 50px;
   height: 64px;
 }
 
-#lang-select button:first-of-type{
-  margin-left: 2%;
-
+#lang-select > button:first-of-type{
+  /* margin-left: 2%; */
+  grid-area: larrow;
 }
 
-#lang-select button:last-of-type{
-  margin-right: 2%;
+#lang-select > button:nth-of-type(2){
+  /* margin-right: 2%; */
   transform: rotateZ(180deg);
+  grid-area: rarrow;
 }
 
-#copy-email a{
+/* #lang-select > a{
   display: inherit;
+} */
+
+#copy, #email{
+  transform: scale(1.5);
+  height: 24px;
+  width: 24px;
 }
 
 #copy{
   background-image: url('../images/copy.png');
-  transform: scale(1.5);
-  height: 24px;
-  width: 24px;
+  grid-area: lcopy;
+}
+
+#lang-select > a{
+  display: flex;
+  grid-area: remail;
 }
 
 #email{
@@ -374,13 +394,11 @@ button:hover{
   transform: scale(1.3);
 }
 
-#copy:hover::after{
+#copy:hover::after, #email:hover::after{
   position: absolute;
-  content: 'copy to clipboard';
   font-family: monospace;
   line-height: 2;
-  top: 22px;
-  right: -20px;
+  top: 26px;
   text-align: center;
   font-size: 8px;
   color: white;
@@ -390,20 +408,14 @@ button:hover{
   background-color: black;
 }
 
+#copy:hover::after{
+  content: 'copy to clipboard';
+  left: 0;
+}
+
 #email:hover::after{
-  position: absolute;
   content: 'send via email';
-  font-family: monospace;
-  line-height: 2;
-  top: 22px;
-  right: -20px;
-  text-align: center;
-  font-size: 8px;
-  color: white;
-  border-radius: 3px;
-  width: 90px;
-  height: 16px;
-  background-color: black;
+  right: 0;
 }
 
 @keyframes fadeOut{
@@ -473,6 +485,10 @@ button:hover{
 
 
 @media screen and (min-width: 768px) {
+
+  #lang-select{
+    grid: ". larrow ctext ctext rarrow ." 60% ". . lcopy remail . ." 40% / 10% 52px 1fr 1fr 52px 10%;
+  }
 
   hr{
     display: none;
