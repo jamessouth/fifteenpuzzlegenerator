@@ -182,7 +182,9 @@ const app = new Vue({
   },
   methods: {
     doCopy: function(){
-      this.$copyText(this.$el.children[1].children[2].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
+      // if(!this.codeReady){return;}
+      // this.$el is the Vue instance, children[1] is the <main> element, children[3] is the #code div that has the text we want to copy
+      this.$copyText(this.$el.children[1].children[3].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
         alert('Copied');
         console.log(e);
       }, function (e) {
