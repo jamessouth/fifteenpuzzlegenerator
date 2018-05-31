@@ -2,13 +2,6 @@
 
 
 
-Vue.component('app-header', {
-  template: `<header>
-    <h1 id="mainh1">15 Puzzle Generator</h1>
-    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <a href="demo.html">here</a>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
-  </header>`
-});
-
 Vue.component('app-footer', {
   template: `<footer>
   	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a></p>
@@ -175,6 +168,10 @@ const app = new Vue({
     },
     languages: ['HTML', 'CSS', 'JS'],
     currentLangInd: 0,
+    showLocBtn: true,
+    showLocPara: true,
+    geoAccuracy: null,
+    geoPlace: '[place]',
     breakpoints: {
       JSBreakpoint: window.matchMedia("(min-width: 510px)"),
       H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
@@ -182,7 +179,6 @@ const app = new Vue({
   },
   methods: {
     doCopy: function(){
-      // if(!this.codeReady){return;}
       // this.$el is the Vue instance, children[1] is the <main> element, children[3] is the #code div that has the text we want to copy
       this.$copyText(this.$el.children[1].children[3].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
         alert('Copied');
@@ -219,6 +215,60 @@ const app = new Vue({
         document.documentElement.style.setProperty('--medFileName', `url(${medfile})`);
         document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
       }
+    },
+    getLocation: function(){
+      navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
+        enableHighAccuracy: false,
+        maximumAge: 120000,
+        timeout: 10000
+      });
+      this.showLocBtn = false;
+    },
+    checkForGeoLocSupport: function(){
+      if(navigator.geolocation){
+        console.log('geoloc supported');
+      } else {
+        console.log('geoloc NOT supported');
+        this.showLocPara = false;
+      }
+    },
+    geoSuccess: function(pos){
+      this.geoAccuracy = pos.coords.accuracy;
+
+      try{
+
+        fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
+          console.log(res);
+          if(res.error){
+            this.geoError({code: res.error.code, message: res.error.description});
+            return;
+          }
+          let cntry = ' ' + res.country;
+          if(res.country && res.region && Object.keys(res.region).length !== 0){
+            if(res.region.includes(res.country)){
+              this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
+            } else {
+              this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+            }
+
+
+          } else if(res.country && res.region){
+            this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+          } else {
+            this.geoPlace = res.city.trim().toUpperCase();
+          }
+
+          console.log(this.geoAccuracy, this.geoPlace);
+        }).catch(err => this.geoError(err));
+
+      } catch(e){
+        this.geoError(e);
+      }
+
+    },
+    geoError: function(err){
+      alert(`There was an error (code ${err.code}): ${err.message}`);
+      this.showLocPara = false;
     }
   },
   created: function(){
@@ -226,6 +276,8 @@ const app = new Vue({
     this.handleJSExpand(this.breakpoints.JSBreakpoint);
     this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
     this.handleH1BG(this.breakpoints.H1BackgroundLarge);
+    this.checkForGeoLocSupport();
+
   },
   computed: {
     currentLang: function(){
