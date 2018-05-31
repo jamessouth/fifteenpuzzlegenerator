@@ -10,7 +10,19 @@
 	</head>
   <body>
     <div id="app">
-      <app-header></app-header>
+
+			<aside v-if="showLocPara">
+				<p id="loc">It's a [weather] [day/night] here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+			</aside>
+
+			<header>
+
+		    <h1 id="mainh1">15 Puzzle Generator</h1>
+		    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <a href="demo.html">here</a>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
+		  </header>
+
+
+
 			<main>
 
 				<form>

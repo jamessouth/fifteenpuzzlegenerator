@@ -61,6 +61,10 @@ footer p > a{
 
 
 
+#loc a{
+  cursor: pointer;
+}
+
 
 
 header{
