@@ -55,7 +55,7 @@ p > a:hover{
   background-color: #700080;
 }
 
-footer p > a{
+footer p > a:first-of-type{
   letter-spacing: 4px;
 }
 
