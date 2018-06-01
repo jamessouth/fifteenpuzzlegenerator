@@ -4,7 +4,7 @@
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a></p>
+  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://sunrise-sunset.org/api">Sunrise/sunset info</a></p>
   </footer>`
 });
 
@@ -168,6 +168,7 @@ const app = new Vue({
     },
     languages: ['HTML', 'CSS', 'JS'],
     currentLangInd: 0,
+    dayOrNight: '[time]',
     showLocBtn: true,
     showLocPara: true,
     geoAccuracy: null,
@@ -236,9 +237,31 @@ const app = new Vue({
       this.geoAccuracy = pos.coords.accuracy;
 
       try{
+        let sdate;
+        let day = new Date();
+        if(pos.coords.longitude < 0){
+          sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+        } else {
+          sdate = 'today';
+        }
+        console.log(day, sdate);
+
+        fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
+          console.log(res);
+          let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
+          console.log(sunrise, sunset);
+          console.log(moment.utc().isBetween(sunrise, sunset));
+          if(moment.utc().isBetween(sunrise, sunset)){
+            this.dayOrNight = 'day';
+          } else {
+            this.dayOrNight = 'night';
+          }
+
+        });
+
 
         fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
-          console.log(res);
+          console.log(res, Date.now());
           if(res.error){
             this.geoError({code: res.error.code, message: res.error.description});
             return;
