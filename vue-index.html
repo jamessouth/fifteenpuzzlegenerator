@@ -11,106 +11,10 @@
 	</head>
   <body>
     <div id="app">
-
-			<aside v-if="showLocPara">
-				<p id="loc">It's a nice {{dayOrNight}} here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
-			</aside>
-
-			<header>
-
-		    <h1 id="mainh1">15 Puzzle Generator</h1>
-		    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <a href="demo.html">here</a>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
-		  </header>
-
-
-
-			<main>
-
-				<form>
-					<div>
-						<fieldset id="basics">
-							<legend>Basic Puzzle</legend>
-							<label>Color for the blank tile: <input v-model="basic.color" type="color" value="#0f8000"></label>
-
-
-							<label>Image Width in pixels: <input v-model.number="basic.imageWidth" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-
-							<label>Image Height in pixels: <input v-model.number="basic.imageHeight" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-
-							<p :style="{ color: 'red' }" v-show="imageDimensionsNotEntered">Please enter numbers for width and height.</p>
-
-							<p id="puzz">Puzzle Dimensions:</p>
-
-							<input-sel v-model.number="basic.widthTiles" label="Width in tiles:"></input-sel>
-							<input-sel v-model.number="basic.heightTiles" label="Height in tiles:"></input-sel>
-
-							<p :style="{ color: 'red' }" v-show="tilesAreNotSquare">For the tiles to be square, the ratios of pixels to tiles for width and height must be equal.&nbsp;&nbsp;Current ratios:&nbsp;&nbsp;Width: {{tileSize.toFixed(2)}}, Height: {{heightRatio.toFixed(2)}}</p>
-
-							<p :style="{ color: 'red' }" v-show="hasRemainderPixels">The number of tiles must divide evenly into the size in pixels in the given dimension.&nbsp;&nbsp;Trim the image or use a different number of tiles.</p>
-
-							<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
-						</fieldset>
-						<hr>
-						<fieldset id="extras">
-							<legend>Additional Features</legend>
-							<label>Relative path to your image: <input v-model="additional.path" placeholder="Optional" type="text"/></label>
-							<label>Add helper image: <input v-model="additional.helperImage" type="checkbox" name="help" value="image"/></label>
-
-						</fieldset>
-					</div>
-
-				</form>
-
-
-				<div id="lang-select">
-					<button @click="changeLangInd('down')"></button>
-					<transition name="fade" mode="out-in">
-						<span :key="currentLang">{{currentLang}}</span>
-					</transition>
-					<button @click="changeLangInd('up')"></button>
-					<button	v-show="codeReady" @click="doCopy"	id="copy"></button>
-					<a v-show="codeReady" href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button id="email"></button></a>
-				</div>
-
-				<div :class="{ codeOverlay: !codeReady }" id="copy-email">
-
-				</div>
-
-
-	      <div :class="{ blurry: !codeReady }" id="code">
-
-					<template v-if="currentLang === 'HTML'">
-	        	<code-html :image-width="basic.imageWidth" :image-height="basic.imageHeight"></code-html>
-
-						<code-html-helper-image :path="additional.path" v-if="additional.helperImage"></code-html-helper-image>
-					</template>
-
-
-					<template v-if="currentLang === 'CSS'">
-						<code-css :color="basic.color" :image-width="basic.imageWidth"></code-css>
-
-						<code-css-helper-image :helper-image-width="helperImageWidth" v-if="additional.helperImage"></code-css-helper-image>
-
-					</template>
-
-					<template v-if="currentLang.includes('J')">
-						<code-js
-						:path="additional.path"
-						:tiles-wide="basic.widthTiles"
-						:tiles-high="basic.heightTiles"
-						:tile-size="tileSize"
-						></code-js>
-
-					</template>
-
-
-	      </div>
-		  </main>
-
-			<app-footer></app-footer>
-
+			<router-view></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 		<script src="vue-clipboard.min.js"></script>
     <script src="vue-app.js"></script>
   </body>

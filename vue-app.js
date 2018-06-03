@@ -1,5 +1,455 @@
 
 
+const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
+	  <div :style="holderStyles" class="demoHolder">
+      <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
+        Your browser does not support canvas.
+      </canvas>
+
+			<div :style="innerDivStyles">
+				<button @click="helpBtnHandler" :style="helpBtnStyles" id="showHelp"><img alt="help" src="images/help.png"/></button>
+
+				<img :style="helpImgStyles" id="help" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
+			</div>
+		</div>
+		</div>`,
+	data: function(){
+		return {
+			demoH1Styles: {
+				margin: '6em auto 2em',
+				display: 'block'
+			},
+			holderStyles: {
+				display: 'flex',
+				height: '800px',
+				flexDirection: 'column',
+				justifyContent: 'space-around',
+				alignItems: 'center'
+			},
+			canvasStyles: {
+				backgroundColor: '#154a6a',
+				minWidth: '410px'
+			},
+			innerDivStyles: {
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				alignItems: 'center'
+			},
+			helpBtnStyles: {
+				width: '200px',
+				height: '54px',
+				marginBottom: '3em',
+				background: 'linear-gradient(to bottom, #f6a87a 0%, #a54121 100%)',
+				border: '2px solid #aaa',
+				cursor: 'pointer'
+			},
+			helpImgStyles: {
+				display: 'none',
+				width: '205px'
+			},
+			gameOver: false
+
+		}
+	},
+	methods: {
+
+		helpBtnHandler: function(){
+
+		},
+
+		getRands: function(amt){
+			let nums = new Set();
+			while(nums.size < amt){
+				let n = Math.floor(Math.random() * amt);
+				nums.add(n);
+			}
+			return [...nums];
+		},
+
+		getInversions: function(arr){
+			let inversions = 0;
+			for(let i = 0; i < arr.length; i++){
+				if(arr[i] == null){continue;}
+				for(let j = 0; j < arr.length; j++){
+					if(arr[i] > arr[j + i]){
+						inversions++;
+					}
+				}
+			}
+			return inversions;
+		},
+
+		checkBoard: function(){
+			let randos = this.getRands(this.canvArray.length - 1);
+			let solArray = [];
+			randos.forEach((x,i) => {
+				solArray[x] = i;
+			});
+			return [solArray.concat([this.canvArray.length - 1]), randos.concat([this.canvArray.length - 1])];
+		},
+
+		swapTiles: function(e){
+			if(this.gameOver){return;}
+			let x = e.offsetX;
+			let y = e.offsetY;
+			let tileClicked = (Math.floor(y / 82) * 5) + Math.floor(x / 82);
+			let blank = this.boardOrder.indexOf(this.canvArray.length - 1);
+			let finalCheck;
+			let brdInd = this.boardOrder[tileClicked];
+			if(![1, 5].includes(Math.abs(tileClicked - blank))){
+				return;
+			}
+			this.ctx.clearRect(this.canvArray[tileClicked][0], this.canvArray[tileClicked][1], 82, 82);
+			this.ctx.drawImage(this.pic, this.canvArray[brdInd][0], this.canvArray[brdInd][1], 82, 82, this.canvArray[blank][0], this.canvArray[blank][1], 82, 82);
+			[this.boardOrder[tileClicked], this.boardOrder[blank]] = [this.boardOrder[blank], this.boardOrder[tileClicked]];
+			if(this.boardOrder[0] === 0 && this.boardOrder[4] === 4 && this.boardOrder[29] === 29 && this.boardOrder[33] === 33){
+				finalCheck = true;
+				for(let f = 0; f < this.boardOrder.length; f++){
+					if(this.boardOrder[f] !== f){
+						finalCheck = false;
+						break;
+					}
+				}
+			}
+			if(finalCheck){
+				this.ctx.drawImage(this.pic, 328, 492, 82, 82, 328, 492, 82, 82);
+				this.gameOver = true;
+			}
+		},
+
+		useCanvas: function(){
+
+			this.pic.onload = () => {
+			  for(let i = 0; i < this.canvArray.length - 1; i++){
+			    this.ctx.drawImage(this.pic, this.canvArray[i][0], this.canvArray[i][1], 82, 82, this.canvArray[this.doable[1][i]][0], this.canvArray[this.doable[1][i]][1], 82, 82);
+			  }
+			}
+
+			this.pic.src = "images/mucha.jpg";
+
+		}
+	},
+	computed: {
+		pic: function(){
+			return new Image();
+		},
+
+		ctx: function(){
+			return this.$refs.cnvs.getContext('2d');
+		},
+		canvArray: function(){
+			let arr = [];
+			for(let i = 0; i < 7; i++){
+				for(let j = 0; j < 5; j++){
+					arr.push([j * 82, i * 82]);
+				}
+			}
+			return arr;
+		},
+		doable: function(){
+
+			let brd = this.checkBoard();
+			while(this.getInversions(brd[0]) % 2 !== 0){
+				brd = this.checkBoard();
+			}
+			return brd;
+		},
+
+
+		boardOrder: function(){
+			return this.doable[0].slice();
+		}
+
+
+	},
+	mounted: function(){
+		this.useCanvas();
+	}
+}
+
+const Home = {
+	template: `<div><aside v-if="showLocPara">
+					<p id="loc">It's a nice {{dayOrNight}} here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+				</aside>
+
+				<header>
+					<h1 id="mainh1">15 Puzzle Generator</h1>
+					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
+				</header>
+
+
+				<main>
+
+					<form>
+						<div>
+							<fieldset id="basics">
+								<legend>Basic Puzzle</legend>
+								<label>Color for the blank tile: <input v-model="basic.color" type="color" value="#0f8000"></label>
+
+
+								<label>Image Width in pixels: <input v-model.number="basic.imageWidth" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
+
+								<label>Image Height in pixels: <input v-model.number="basic.imageHeight" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
+
+								<p :style="{ color: 'red' }" v-show="imageDimensionsNotEntered">Please enter numbers for width and height.</p>
+
+								<p id="puzz">Puzzle Dimensions:</p>
+
+								<input-sel v-model.number="basic.widthTiles" label="Width in tiles:"></input-sel>
+								<input-sel v-model.number="basic.heightTiles" label="Height in tiles:"></input-sel>
+
+								<p :style="{ color: 'red' }" v-show="tilesAreNotSquare">For the tiles to be square, the ratios of pixels to tiles for width and height must be equal.&nbsp;&nbsp;Current ratios:&nbsp;&nbsp;Width: {{tileSize.toFixed(2)}}, Height: {{heightRatio.toFixed(2)}}</p>
+
+								<p :style="{ color: 'red' }" v-show="hasRemainderPixels">The number of tiles must divide evenly into the size in pixels in the given dimension.&nbsp;&nbsp;Trim the image or use a different number of tiles.</p>
+
+								<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
+							</fieldset>
+							<hr>
+							<fieldset id="extras">
+								<legend>Additional Features</legend>
+								<label>Relative path to your image: <input v-model="additional.path" placeholder="Optional" type="text"/></label>
+								<label>Add helper image: <input v-model="additional.helperImage" type="checkbox" name="help" value="image"/></label>
+
+							</fieldset>
+						</div>
+
+					</form>
+
+
+					<div id="lang-select">
+						<button @click="changeLangInd('down')"></button>
+						<transition name="fade" mode="out-in">
+							<span :key="currentLang">{{currentLang}}</span>
+						</transition>
+						<button @click="changeLangInd('up')"></button>
+						<button	v-show="codeReady" @click="doCopy"	id="copy"></button>
+						<a v-show="codeReady" href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button id="email"></button></a>
+					</div>
+
+					<div :class="{ codeOverlay: !codeReady }" id="copy-email">
+
+					</div>
+
+
+					<div :class="{ blurry: !codeReady }" id="code">
+
+						<template v-if="currentLang === 'HTML'">
+							<code-html :image-width="basic.imageWidth" :image-height="basic.imageHeight"></code-html>
+
+							<code-html-helper-image :path="additional.path" v-if="additional.helperImage"></code-html-helper-image>
+						</template>
+
+
+						<template v-if="currentLang === 'CSS'">
+							<code-css :color="basic.color" :image-width="basic.imageWidth"></code-css>
+
+							<code-css-helper-image :helper-image-width="helperImageWidth" v-if="additional.helperImage"></code-css-helper-image>
+
+						</template>
+
+						<template v-if="currentLang.includes('J')">
+							<code-js
+							:path="additional.path"
+							:tiles-wide="basic.widthTiles"
+							:tiles-high="basic.heightTiles"
+							:tile-size="tileSize"
+							></code-js>
+
+						</template>
+
+
+					</div>
+				</main>
+				<app-footer></app-footer>
+				</div>`,
+  data: function(){
+    return {
+			basic: {
+				color: '#0f8000',
+				imageWidth: null,
+				imageHeight: null,
+				widthTiles: 2,
+				heightTiles: 2
+			},
+			additional: {
+				path: null,
+				helperImage: false
+			},
+			languages: ['HTML', 'CSS', 'JS'],
+			currentLangInd: 0,
+			geoAccuracy: null,
+			breakpoints: {
+				JSBreakpoint: window.matchMedia("(min-width: 510px)"),
+				H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
+			},
+			showLocBtn: true,
+			geoPlace: '[place]',
+			dayOrNight: '[time]',
+      showLocPara: true
+    }
+  },
+	methods: {
+		checkForGeoLocSupport: function(){
+			if(navigator.geolocation){
+				console.log('geoloc supported');
+			} else {
+				console.log('geoloc NOT supported');
+				this.showLocPara = false;
+			}
+		},
+		doCopy: function(){
+			// this.$el is the Vue instance, children[1] is the <main> element, children[3] is the #code div that has the text we want to copy
+			this.$copyText(this.$el.children[1].children[3].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
+				alert('Copied');
+				console.log(e);
+			}, function (e) {
+				alert('Can not copy');
+				console.log(e);
+			});
+		},
+		changeLangInd: function(dir){
+			if(dir === 'up'){
+				this.currentLangInd += 1;
+			} else {
+				this.currentLangInd -= 1;
+				if(this.currentLangInd < 0){
+					this.currentLangInd = this.languages.length - 1;
+				}
+			}
+		},
+		handleJSExpand: function(evt){
+			if(evt.matches){
+				this.$set(this.languages, 2, 'JavaScript');
+			} else {
+				this.$set(this.languages, 2, 'JS');
+			}
+		},
+		getRandomNo: function(){
+			return Math.floor(Math.random() * 2) + 1;
+		},
+		handleH1BG: function(evt){
+			if(evt.matches){
+				let medfile = `../images/bgmed${this.getRandomNo()}.jpg`;
+				let bigfile = `../images/bgbig${this.getRandomNo()}.jpg`;
+				document.documentElement.style.setProperty('--medFileName', `url(${medfile})`);
+				document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
+			}
+		},
+		getLocation: function(){
+			navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
+				enableHighAccuracy: false,
+				maximumAge: 120000,
+				timeout: 15000
+			});
+			this.showLocBtn = false;
+		},
+		geoSuccess: function(pos){
+			this.geoAccuracy = pos.coords.accuracy;
+
+			try{
+				let sdate;
+				let day = new Date();
+				if(pos.coords.longitude < 0){
+					sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+				} else {
+					sdate = 'today';
+				}
+				console.log(day, sdate);
+
+				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
+					console.log(res);
+					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
+					console.log(sunrise, sunset);
+					console.log(moment.utc().isBetween(sunrise, sunset));
+					if(moment.utc().isBetween(sunrise, sunset)){
+						this.dayOrNight = 'day';
+					} else {
+						this.dayOrNight = 'night';
+					}
+
+				});
+
+
+				fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
+					console.log(res, Date.now());
+					if(res.error){
+						this.geoError({code: res.error.code, message: res.error.description});
+						return;
+					}
+					let cntry = ' ' + res.country;
+					if(res.country && res.region && Object.keys(res.region).length !== 0){
+						if(res.region.includes(res.country)){
+							this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
+						} else {
+							this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+						}
+
+
+					} else if(res.country && res.region){
+						this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+					} else {
+						this.geoPlace = res.city.trim().toUpperCase();
+					}
+
+					console.log(this.geoAccuracy, this.geoPlace);
+				}).catch(err => this.geoError(err));
+
+			} catch(e){
+				this.geoError(e);
+			}
+
+		},
+		geoError: function(err){
+			alert(`There was an error (code ${err.code}): ${err.message}`);
+			this.showLocPara = false;
+		}
+	},
+	computed: {
+		currentLang: function(){
+			return this.languages[this.currentLangInd % this.languages.length];
+		},
+		helperImageWidth: function(){
+			return Math.round(this.basic.imageWidth / 2) || '';
+		},
+		tileSize: function(){
+			return this.basic.imageWidth / this.basic.widthTiles;
+		},
+		imageDimensionsNotEntered: function(){
+			return !(this.basic.imageWidth > 0 && this.basic.imageHeight > 0);
+		},
+		heightRatio: function(){
+			return this.basic.imageHeight / this.basic.heightTiles;
+		},
+		tilesAreNotSquare: function(){
+			return !(this.tileSize === this.heightRatio);
+		},
+		hasRemainderPixels: function(){
+			return !(this.basic.imageWidth % this.basic.widthTiles === 0 && this.basic.imageHeight % this.basic.heightTiles === 0);
+		},
+		codeReady: function(){
+			return !this.imageDimensionsNotEntered && !this.tilesAreNotSquare && !this.hasRemainderPixels;
+		}
+	},
+	created: function(){
+		this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
+		this.handleJSExpand(this.breakpoints.JSBreakpoint);
+		this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
+		this.handleH1BG(this.breakpoints.H1BackgroundLarge);
+		this.checkForGeoLocSupport();
+	}
+}
+
+const routes = [
+  { path: '/demo', component: Demo },
+  { path: '/', component: Home }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+
 
 
 Vue.component('app-footer', {
@@ -23,10 +473,6 @@ Vue.component('input-sel', {
             </select>
           </label>`
 });
-
-
-
-
 
 
 Vue.component('code-css-helper-image', {
@@ -154,178 +600,5 @@ Vue.component('code-js', {
 
 const app = new Vue({
   el: '#app',
-  data: {
-    basic: {
-      color: '#0f8000',
-      imageWidth: null,
-      imageHeight: null,
-      widthTiles: 2,
-      heightTiles: 2
-    },
-    additional: {
-      path: null,
-      helperImage: false
-    },
-    languages: ['HTML', 'CSS', 'JS'],
-    currentLangInd: 0,
-    dayOrNight: '[time]',
-    showLocBtn: true,
-    showLocPara: true,
-    geoAccuracy: null,
-    geoPlace: '[place]',
-    breakpoints: {
-      JSBreakpoint: window.matchMedia("(min-width: 510px)"),
-      H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
-    }
-  },
-  methods: {
-    doCopy: function(){
-      // this.$el is the Vue instance, children[1] is the <main> element, children[3] is the #code div that has the text we want to copy
-      this.$copyText(this.$el.children[1].children[3].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
-        alert('Copied');
-        console.log(e);
-      }, function (e) {
-        alert('Can not copy');
-        console.log(e);
-      });
-    },
-    changeLangInd: function(dir){
-      if(dir === 'up'){
-        this.currentLangInd += 1;
-      } else {
-        this.currentLangInd -= 1;
-        if(this.currentLangInd < 0){
-          this.currentLangInd = this.languages.length - 1;
-        }
-      }
-    },
-    handleJSExpand: function(evt){
-      if(evt.matches){
-        this.$set(this.languages, 2, 'JavaScript');
-      } else {
-        this.$set(this.languages, 2, 'JS');
-      }
-    },
-    getRandomNo: function(){
-      return Math.floor(Math.random() * 2) + 1;
-    },
-    handleH1BG: function(evt){
-      if(evt.matches){
-        let medfile = `../images/bgmed${this.getRandomNo()}.jpg`;
-        let bigfile = `../images/bgbig${this.getRandomNo()}.jpg`;
-        document.documentElement.style.setProperty('--medFileName', `url(${medfile})`);
-        document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
-      }
-    },
-    getLocation: function(){
-      navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
-        enableHighAccuracy: false,
-        maximumAge: 120000,
-        timeout: 10000
-      });
-      this.showLocBtn = false;
-    },
-    checkForGeoLocSupport: function(){
-      if(navigator.geolocation){
-        console.log('geoloc supported');
-      } else {
-        console.log('geoloc NOT supported');
-        this.showLocPara = false;
-      }
-    },
-    geoSuccess: function(pos){
-      this.geoAccuracy = pos.coords.accuracy;
-
-      try{
-        let sdate;
-        let day = new Date();
-        if(pos.coords.longitude < 0){
-          sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
-        } else {
-          sdate = 'today';
-        }
-        console.log(day, sdate);
-
-        fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
-          console.log(res);
-          let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
-          console.log(sunrise, sunset);
-          console.log(moment.utc().isBetween(sunrise, sunset));
-          if(moment.utc().isBetween(sunrise, sunset)){
-            this.dayOrNight = 'day';
-          } else {
-            this.dayOrNight = 'night';
-          }
-
-        });
-
-
-        fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
-          console.log(res, Date.now());
-          if(res.error){
-            this.geoError({code: res.error.code, message: res.error.description});
-            return;
-          }
-          let cntry = ' ' + res.country;
-          if(res.country && res.region && Object.keys(res.region).length !== 0){
-            if(res.region.includes(res.country)){
-              this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
-            } else {
-              this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-            }
-
-
-          } else if(res.country && res.region){
-            this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-          } else {
-            this.geoPlace = res.city.trim().toUpperCase();
-          }
-
-          console.log(this.geoAccuracy, this.geoPlace);
-        }).catch(err => this.geoError(err));
-
-      } catch(e){
-        this.geoError(e);
-      }
-
-    },
-    geoError: function(err){
-      alert(`There was an error (code ${err.code}): ${err.message}`);
-      this.showLocPara = false;
-    }
-  },
-  created: function(){
-    this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
-    this.handleJSExpand(this.breakpoints.JSBreakpoint);
-    this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
-    this.handleH1BG(this.breakpoints.H1BackgroundLarge);
-    this.checkForGeoLocSupport();
-
-  },
-  computed: {
-    currentLang: function(){
-      return this.languages[this.currentLangInd % this.languages.length];
-    },
-    helperImageWidth: function(){
-      return Math.round(this.basic.imageWidth / 2) || '';
-    },
-    tileSize: function(){
-      return this.basic.imageWidth / this.basic.widthTiles;
-    },
-    imageDimensionsNotEntered: function(){
-      return !(this.basic.imageWidth > 0 && this.basic.imageHeight > 0);
-    },
-    heightRatio: function(){
-      return this.basic.imageHeight / this.basic.heightTiles;
-    },
-    tilesAreNotSquare: function(){
-      return !(this.tileSize === this.heightRatio);
-    },
-    hasRemainderPixels: function(){
-      return !(this.basic.imageWidth % this.basic.widthTiles === 0 && this.basic.imageHeight % this.basic.heightTiles === 0);
-    },
-    codeReady: function(){
-      return !this.imageDimensionsNotEntered && !this.tilesAreNotSquare && !this.hasRemainderPixels;
-    }
-  }
+  router
 });
