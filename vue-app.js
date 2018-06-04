@@ -1,61 +1,82 @@
 
 
 const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
-	  <div :style="holderStyles" class="demoHolder">
+	  <div :style="[holderStylesC, holderStylesD]">
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
         Your browser does not support canvas.
       </canvas>
 
 			<div :style="innerDivStyles">
-				<button @click="helpBtnHandler" :style="helpBtnStyles" id="showHelp"><img alt="help" src="images/help.png"/></button>
+				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
 
-				<img :style="helpImgStyles" id="help" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
+				<img :style="helpImgStyles" v-show="helpOpen" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
 			</div>
 		</div>
 		</div>`,
 	data: function(){
 		return {
-			demoH1Styles: {
-				margin: '6em auto 2em',
-				display: 'block'
-			},
-			holderStyles: {
+			isFocused: false,
+			isActive: false,
+			holderStylesD: {
 				display: 'flex',
-				height: '800px',
 				flexDirection: 'column',
 				justifyContent: 'space-around',
 				alignItems: 'center'
 			},
+			tabMQ: window.matchMedia("(min-width: 768px)"),
+			tabMQOn: null,
+			demoH1Styles: {
+				marginLeft: 'auto',
+				marginRight: 'auto',
+				marginTop: '6em',
+				marginBottom: '2em',
+				display: 'block'
+			},
+
 			canvasStyles: {
 				backgroundColor: '#154a6a',
 				minWidth: '410px'
 			},
-			innerDivStyles: {
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'space-between',
-				alignItems: 'center'
-			},
-			helpBtnStyles: {
-				width: '200px',
-				height: '54px',
-				marginBottom: '3em',
-				background: 'linear-gradient(to bottom, #f6a87a 0%, #a54121 100%)',
-				border: '2px solid #aaa',
-				cursor: 'pointer'
-			},
+
+
 			helpImgStyles: {
 				display: 'none',
 				width: '205px'
 			},
-			gameOver: false
+			gameOver: false,
+			helpOpen: false
 
 		}
 	},
 	methods: {
 
-		helpBtnHandler: function(){
+		activeHandler: function(){
+			this.isActive = !this.isActive;
+		},
 
+		focusHandler: function(){
+			this.isFocused = !this.isFocused;
+		},
+
+		handleTabMQ: function(evt){
+			if(evt.matches){
+				this.tabMQOn = true;
+				// console.log(evt);
+				this.demoH1Styles.marginBottom = '5em';
+				// this.holderStylesC.height = this.helpOpen ? '650px' : '650px';
+				this.holderStylesD.flexDirection = 'row';
+				this.holderStylesD.alignItems = 'flex-start';
+			} else {
+				this.tabMQOn = false;
+				this.demoH1Styles.marginBottom = '2em';
+				// this.holderStylesC.height = this.helpOpen ? '1100px' : '800px';
+				this.holderStylesD.flexDirection = 'column';
+				this.holderStylesD.alignItems = 'center';
+			}
+		},
+
+		helpBtnHandler: function(){
+			this.helpOpen = !this.helpOpen;
 		},
 
 		getRands: function(amt){
@@ -131,6 +152,58 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 		}
 	},
 	computed: {
+
+
+
+		holderStylesC: function(){
+				if(this.tabMQOn){
+					return { height: '650px' }
+				} else {
+					return { height: this.helpOpen ? '1100px' : '800px' }
+				}
+		},
+
+		innerDivStyles: function(){
+			let ht = this.helpOpen ? '380px' : 'auto';
+			return {
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				alignItems: 'center',
+				height: ht
+			}
+		},
+
+		helpBtnStyles: function(){
+			let bordCol;
+			if(!this.isFocused && !this.isActive){
+				bordCol = '#aaa';
+			} else if(this.isFocused && !this.isActive){
+				bordCol = '#154a6a';
+			} else if(this.isFocused && this.isActive){
+				bordCol = 'transparent';
+			} else {
+				bordCol = 'transparent';
+			}
+
+
+			return {
+				width: '200px',
+				height: '54px',
+				marginBottom: this.helpOpen ? '0' : '3em',
+				background: 'linear-gradient(to bottom, #f6a87a 0%, #a54121 100%)',
+				border: '2px solid',
+
+				borderColor: bordCol,
+
+				cursor: 'pointer'
+			}
+		},
+
+		btnImg: function(){
+			return this.helpOpen ? 'images/hide.png' : 'images/help.png';
+		},
+
 		pic: function(){
 			return new Image();
 		},
@@ -161,6 +234,11 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			return this.doable[0].slice();
 		}
 
+
+	},
+	created: function(){
+		this.tabMQ.addListener(this.handleTabMQ);
+		this.handleTabMQ(this.tabMQ);
 
 	},
 	mounted: function(){
