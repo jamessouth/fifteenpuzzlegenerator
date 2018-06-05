@@ -1,14 +1,28 @@
 
 
-const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
+const Attributions = {
+	template: `<div>
+							 <ul>
+							   <li v-for="art in artwork"><img :src="art.src" :alt="art.alt"/></li>
+							 </ul>
+						 </div>`,
+	data: function(){
+		return {
+			artwork: [{src: "images/biscuits.jpg", alt: "Alfons Mucha - 1896 - Biscuits Lefèvre-Utile"}, {src: "images/bouquet.jpg", alt: "Alfons Mucha - 1900 - The Seasons: Spring (detail)"}]
+		}
+	}
+}
+
+
+
+const Demo = {
+	template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
 	  <div :style="[holderStylesC, holderStylesD]">
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
         Your browser does not support canvas.
       </canvas>
-
 			<div :style="innerDivStyles">
 				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
-
 				<img :style="helpImgStyles" v-show="helpOpen" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
 			</div>
 		</div>
@@ -32,53 +46,41 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 				marginBottom: '2em',
 				display: 'block'
 			},
-
 			canvasStyles: {
 				backgroundColor: '#154a6a',
 				minWidth: '410px'
 			},
-
-
 			helpImgStyles: {
 				display: 'none',
 				width: '205px'
 			},
 			gameOver: false,
 			helpOpen: false
-
 		}
 	},
 	methods: {
-
 		activeHandler: function(){
 			this.isActive = !this.isActive;
 		},
-
 		focusHandler: function(){
 			this.isFocused = !this.isFocused;
 		},
-
 		handleTabMQ: function(evt){
 			if(evt.matches){
 				this.tabMQOn = true;
-				// console.log(evt);
 				this.demoH1Styles.marginBottom = '5em';
-				// this.holderStylesC.height = this.helpOpen ? '650px' : '650px';
 				this.holderStylesD.flexDirection = 'row';
 				this.holderStylesD.alignItems = 'flex-start';
 			} else {
 				this.tabMQOn = false;
 				this.demoH1Styles.marginBottom = '2em';
-				// this.holderStylesC.height = this.helpOpen ? '1100px' : '800px';
 				this.holderStylesD.flexDirection = 'column';
 				this.holderStylesD.alignItems = 'center';
 			}
 		},
-
 		helpBtnHandler: function(){
 			this.helpOpen = !this.helpOpen;
 		},
-
 		getRands: function(amt){
 			let nums = new Set();
 			while(nums.size < amt){
@@ -87,7 +89,6 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			}
 			return [...nums];
 		},
-
 		getInversions: function(arr){
 			let inversions = 0;
 			for(let i = 0; i < arr.length; i++){
@@ -100,7 +101,6 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			}
 			return inversions;
 		},
-
 		checkBoard: function(){
 			let randos = this.getRands(this.canvArray.length - 1);
 			let solArray = [];
@@ -109,7 +109,6 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			});
 			return [solArray.concat([this.canvArray.length - 1]), randos.concat([this.canvArray.length - 1])];
 		},
-
 		swapTiles: function(e){
 			if(this.gameOver){return;}
 			let x = e.offsetX;
@@ -138,23 +137,16 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 				this.gameOver = true;
 			}
 		},
-
 		useCanvas: function(){
-
 			this.pic.onload = () => {
 			  for(let i = 0; i < this.canvArray.length - 1; i++){
 			    this.ctx.drawImage(this.pic, this.canvArray[i][0], this.canvArray[i][1], 82, 82, this.canvArray[this.doable[1][i]][0], this.canvArray[this.doable[1][i]][1], 82, 82);
 			  }
 			}
-
 			this.pic.src = "images/mucha.jpg";
-
 		}
 	},
 	computed: {
-
-
-
 		holderStylesC: function(){
 				if(this.tabMQOn){
 					return { height: '650px' }
@@ -162,7 +154,6 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 					return { height: this.helpOpen ? '1100px' : '800px' }
 				}
 		},
-
 		innerDivStyles: function(){
 			let ht = this.helpOpen ? '380px' : 'auto';
 			return {
@@ -173,7 +164,6 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 				height: ht
 			}
 		},
-
 		helpBtnStyles: function(){
 			let bordCol;
 			if(!this.isFocused && !this.isActive){
@@ -185,29 +175,23 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			} else {
 				bordCol = 'transparent';
 			}
-
-
 			return {
 				width: '200px',
 				height: '54px',
 				marginBottom: this.helpOpen ? '0' : '3em',
 				background: 'linear-gradient(to bottom, #f6a87a 0%, #a54121 100%)',
 				border: '2px solid',
-
+				filter: 'none',
 				borderColor: bordCol,
-
 				cursor: 'pointer'
 			}
 		},
-
 		btnImg: function(){
 			return this.helpOpen ? 'images/hide.png' : 'images/help.png';
 		},
-
 		pic: function(){
 			return new Image();
 		},
-
 		ctx: function(){
 			return this.$refs.cnvs.getContext('2d');
 		},
@@ -221,25 +205,19 @@ const Demo = { template: `<div><img :style="demoH1Styles" alt="demo" src="images
 			return arr;
 		},
 		doable: function(){
-
 			let brd = this.checkBoard();
 			while(this.getInversions(brd[0]) % 2 !== 0){
 				brd = this.checkBoard();
 			}
 			return brd;
 		},
-
-
 		boardOrder: function(){
 			return this.doable[0].slice();
 		}
-
-
 	},
 	created: function(){
 		this.tabMQ.addListener(this.handleTabMQ);
 		this.handleTabMQ(this.tabMQ);
-
 	},
 	mounted: function(){
 		this.useCanvas();
@@ -270,16 +248,16 @@ const Home = {
 
 								<label>Image Height in pixels: <input v-model.number="basic.imageHeight" class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
 
-								<p :style="{ color: 'red' }" v-show="imageDimensionsNotEntered">Please enter numbers for width and height.</p>
+								<p class="warning" v-show="imageDimensionsNotEntered">Please enter numbers for width and height.</p>
 
 								<p id="puzz">Puzzle Dimensions:</p>
 
 								<input-sel v-model.number="basic.widthTiles" label="Width in tiles:"></input-sel>
 								<input-sel v-model.number="basic.heightTiles" label="Height in tiles:"></input-sel>
 
-								<p :style="{ color: 'red' }" v-show="tilesAreNotSquare">For the tiles to be square, the ratios of pixels to tiles for width and height must be equal.&nbsp;&nbsp;Current ratios:&nbsp;&nbsp;Width: {{tileSize.toFixed(2)}}, Height: {{heightRatio.toFixed(2)}}</p>
+								<p class="warning" v-show="tilesAreNotSquare">For the tiles to be square, the ratios of pixels to tiles for width and height must be equal.&nbsp;&nbsp;Current ratios:&nbsp;&nbsp;Width: {{tileSize.toFixed(2)}}, Height: {{heightRatio.toFixed(2)}}</p>
 
-								<p :style="{ color: 'red' }" v-show="hasRemainderPixels">The number of tiles must divide evenly into the size in pixels in the given dimension.&nbsp;&nbsp;Trim the image or use a different number of tiles.</p>
+								<p class="warning" v-show="hasRemainderPixels">The number of tiles must divide evenly into the size in pixels in the given dimension.&nbsp;&nbsp;Trim the image or use a different number of tiles.</p>
 
 								<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
 							</fieldset>
@@ -310,7 +288,7 @@ const Home = {
 					</div>
 
 
-					<div :class="{ blurry: !codeReady }" id="code">
+					<div :class="{ blurry: !codeReady }" ref="code" id="code">
 
 						<template v-if="currentLang === 'HTML'">
 							<code-html :image-width="basic.imageWidth" :image-height="basic.imageHeight"></code-html>
@@ -377,8 +355,7 @@ const Home = {
 			}
 		},
 		doCopy: function(){
-			// this.$el is the Vue instance, children[1] is the <main> element, children[3] is the #code div that has the text we want to copy
-			this.$copyText(this.$el.children[1].children[3].textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
+			this.$copyText(this.$refs.code.textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
 				alert('Copied');
 				console.log(e);
 			}, function (e) {
@@ -437,6 +414,10 @@ const Home = {
 
 				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
 					console.log(res);
+					if(res.status !== 'OK'){
+						this.geoError({code: '', message: res.status});
+						return;
+					}
 					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
 					console.log(sunrise, sunset);
 					console.log(moment.utc().isBetween(sunrise, sunset));
@@ -446,7 +427,7 @@ const Home = {
 						this.dayOrNight = 'night';
 					}
 
-				});
+				}).catch(err => this.geoError(err));
 
 
 				fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
@@ -519,6 +500,7 @@ const Home = {
 }
 
 const routes = [
+	{ path: '/attributions', component: Attributions },
   { path: '/demo', component: Demo },
   { path: '/', component: Home }
 ]
@@ -527,12 +509,13 @@ const router = new VueRouter({
   routes
 })
 
+// <a href="https://sunrise-sunset.org/api">Sunrise/sunset info</a>
 
 
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://sunrise-sunset.org/api">Sunrise/sunset info</a></p>
+  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a>&nbsp;&nbsp;|&nbsp;&nbsp;<router-link to="/attributions">Attributions</router-link></p>
   </footer>`
 });
 
