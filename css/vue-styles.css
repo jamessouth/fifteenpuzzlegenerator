@@ -59,6 +59,11 @@ footer p > a:first-of-type{
   letter-spacing: 4px;
 }
 
+.warning{
+  color: #e1e1e1;
+  background-color: #80000f;
+  border: 1px dashed #f5d76e;
+}
 
 #loc a{
   cursor: pointer;
@@ -148,6 +153,7 @@ fieldset:nth-of-type(2){
 legend{
   font-family: 'Limelight', cursive;
   width: 100%;
+  color: #3a3a3a;
   text-align: center;
   font-size: 30px;
   text-decoration: underline;
