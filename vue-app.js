@@ -1,14 +1,31 @@
 
 
-const Attributions = {
+const Sunset = {
+	template: `<div>hello</div>`
+}
+
+
+
+const Artwork = {
 	template: `<div>
+							 <h1 :style="{ marginTop: '2em' }">ARTWORK</h1>
+							 <h2 :style="{ textAlign: 'center', color: '#3a3a3a' }">All art by <a :style="{ fontSize: '20px' }" href="https://en.wikipedia.org/wiki/Alphonse_Mucha">Alfons Mucha</a></h2>
+							 <h3>All works are public domain, via <a :style="{ fontSize: '16px' }" href="https://commons.wikimedia.org/wiki/Main_Page">Wikimedia Commons</a></h3>
 							 <ul>
-							   <li v-for="art in artwork"><img :src="art.src" :alt="art.alt"/></li>
+							   <li v-for="art in artwork"><img :src="art.src" :alt="art.alt"/><span>{{art.title}}</span> {{art.year}}</li>
 							 </ul>
 						 </div>`,
 	data: function(){
 		return {
-			artwork: [{src: "images/biscuits.jpg", alt: "Alfons Mucha - 1896 - Biscuits Lefèvre-Utile"}, {src: "images/bouquet.jpg", alt: "Alfons Mucha - 1900 - The Seasons: Spring (detail)"}]
+			artwork: [
+				{src: "images/biscuits.jpg", alt: "Alfons Mucha - 1896 - Biscuits Lefèvre-Utile", title: "Poster for Biscuits Lefèvre-Utile", year: "(1896)"},
+				{src: "images/champenois.jpg", alt: "Alfons Mucha - 1898 - Rêverie (F. Champenois Calendar 1898)", title: "Rêverie (F. Champenois Calendar 1898)", year: "(1898)"},
+				{src: "images/bouquet.jpg", alt: "Alfons Mucha - 1900 - The Seasons: Spring (detail)", title: "The Seasons: Spring (detail)", year: "(1900)"},
+				{src: "images/four_seasons.jpg", alt: "Alfons Mucha - 1897 - The Seasons (detail)", title: "The Seasons (detail)", year: "(1897)"},
+				{src: "images/fruit.jpg", alt: "Alfons Mucha - 1897 - Fruit", title: "Fruit", year: "(1897)"},
+				{src: "images/champagne.jpg", alt: "Alfons Mucha - 1896 - Biscuits Champagne Lefèvre-Utile", title: "Poster for Biscuits Champagne Lefèvre-Utile", year: "(1896)"},
+				{src: "images/trappistine.jpg", alt: "Alfons Mucha - 1897 - La Trappistine", title: "Poster for La Trappistine", year: "(1897)"}
+			]
 		}
 	}
 }
@@ -500,8 +517,9 @@ const Home = {
 }
 
 const routes = [
-	{ path: '/attributions', component: Attributions },
-  { path: '/demo', component: Demo },
+	{ path: '/artwork', component: Artwork },
+	{ path: '/sunset', component: Sunset },
+	{ path: '/demo', component: Demo },
   { path: '/', component: Home }
 ]
 
@@ -515,7 +533,7 @@ const router = new VueRouter({
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a>&nbsp;&nbsp;|&nbsp;&nbsp;<router-link to="/attributions">Attributions</router-link></p>
+  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunset info</router-link></p>
   </footer>`
 });
 
