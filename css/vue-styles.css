@@ -38,11 +38,16 @@ body{
 
 
 
+h3{
+  margin: 0 auto 4em;
+  text-align: center;
+  color: #3a3a3a;
+  max-width: 90%;
+}
 
 
 
-
-p > a{
+p > a, h2 a, h3 a{
   text-decoration: underline;
   font-family: sans-serif;
   font-size: 14px;
@@ -50,7 +55,7 @@ p > a{
   color: #700080;
 }
 
-p > a:hover{
+p > a:hover, h2 a:hover, h3 a:hover{
   color: #e1e1e1;
   background-color: #700080;
 }
@@ -84,6 +89,7 @@ h1{
   letter-spacing: 6px;
   text-align: center;
   width: 95%;
+  color: #3a3a3a;
 }
 
 p{
@@ -110,6 +116,32 @@ footer p{
   background-color: #0f8000;
 }
 
+ul{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+li{
+  display: flex;
+  flex-direction: column;
+  margin: 0 .5em 2em;
+  align-items: center;
+}
+
+li img{
+  margin-bottom: .75em;
+}
+
+li, li span{
+  font-family: 'Poiret One', cursive;
+  font-size: 26px;
+}
+
+li span{
+  font-style: italic;
+  margin-bottom: .5em;
+  text-align: center;
+}
 
 form{
   display: flex;
@@ -453,6 +485,16 @@ button{
 }
 
 @media screen and (min-width: 510px) {
+
+  ul{
+    grid-gap: 0 20px;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  li:last-of-type{
+    grid-column: 1 / -1;
+  }
 
   #code{
     max-width: 90%;
