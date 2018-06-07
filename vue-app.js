@@ -1,19 +1,22 @@
 
 
 const Sunset = {
-	template: `<div>hello</div>`
+	template: `<div :style="{ marginTop: '4em' }">
+							<p>The sunset and sunrise information that I use to determine whether it is day or night at the user's location is provided by the <a href="https://sunrise-sunset.org/api">sunset and sunrise times API</a>.</p>
+						 </div>`
 }
 
 
 
 const Artwork = {
 	template: `<div>
-							 <h1 :style="{ marginTop: '2em' }">ARTWORK</h1>
+							 <h1 class="topFlourish" :style="{ position: 'relative', marginTop: '2em' }">ARTWORK</h1>
 							 <h2 :style="{ textAlign: 'center', color: '#3a3a3a' }">All art by <a :style="{ fontSize: '20px' }" href="https://en.wikipedia.org/wiki/Alphonse_Mucha">Alfons Mucha</a></h2>
 							 <h3>All works are public domain, via <a :style="{ fontSize: '16px' }" href="https://commons.wikimedia.org/wiki/Main_Page">Wikimedia Commons</a></h3>
 							 <ul>
-							   <li v-for="art in artwork"><img :src="art.src" :alt="art.alt"/><span>{{art.title}}</span> {{art.year}}</li>
+							   <li v-for="(art, index) in artwork" :key="index"><img :src="art.src" :alt="art.alt"/><span>{{art.title}}</span> {{art.year}}</li>
 							 </ul>
+							 <h1 class="bottomFlourish" :style="{ position: 'relative' }"></h1>
 						 </div>`,
 	data: function(){
 		return {
@@ -242,9 +245,7 @@ const Demo = {
 }
 
 const Home = {
-	template: `<div><aside v-if="showLocPara">
-					<p id="loc">It's a nice {{dayOrNight}} here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
-				</aside>
+	template: `<div>
 
 				<header>
 					<h1 id="mainh1">15 Puzzle Generator</h1>
@@ -349,28 +350,17 @@ const Home = {
 				path: null,
 				helperImage: false
 			},
-			languages: ['HTML', 'CSS', 'JS'],
-			currentLangInd: 0,
-			geoAccuracy: null,
 			breakpoints: {
 				JSBreakpoint: window.matchMedia("(min-width: 510px)"),
 				H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
 			},
-			showLocBtn: true,
-			geoPlace: '[place]',
-			dayOrNight: '[time]',
-      showLocPara: true
+			languages: ['HTML', 'CSS', 'JS'],
+			currentLangInd: 0
+
     }
   },
 	methods: {
-		checkForGeoLocSupport: function(){
-			if(navigator.geolocation){
-				console.log('geoloc supported');
-			} else {
-				console.log('geoloc NOT supported');
-				this.showLocPara = false;
-			}
-		},
+
 		doCopy: function(){
 			this.$copyText(this.$refs.code.textContent.replace(/[ ]{2,}/g, '')).then(function (e) {
 				alert('Copied');
@@ -408,78 +398,8 @@ const Home = {
 				document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
 			}
 		},
-		getLocation: function(){
-			navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
-				enableHighAccuracy: false,
-				maximumAge: 120000,
-				timeout: 15000
-			});
-			this.showLocBtn = false;
-		},
-		geoSuccess: function(pos){
-			this.geoAccuracy = pos.coords.accuracy;
-
-			try{
-				let sdate;
-				let day = new Date();
-				if(pos.coords.longitude < 0){
-					sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
-				} else {
-					sdate = 'today';
-				}
-				console.log(day, sdate);
-
-				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
-					console.log(res);
-					if(res.status !== 'OK'){
-						this.geoError({code: '', message: res.status});
-						return;
-					}
-					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
-					console.log(sunrise, sunset);
-					console.log(moment.utc().isBetween(sunrise, sunset));
-					if(moment.utc().isBetween(sunrise, sunset)){
-						this.dayOrNight = 'day';
-					} else {
-						this.dayOrNight = 'night';
-					}
-
-				}).catch(err => this.geoError(err));
 
 
-				fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
-					console.log(res, Date.now());
-					if(res.error){
-						this.geoError({code: res.error.code, message: res.error.description});
-						return;
-					}
-					let cntry = ' ' + res.country;
-					if(res.country && res.region && Object.keys(res.region).length !== 0){
-						if(res.region.includes(res.country)){
-							this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
-						} else {
-							this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-						}
-
-
-					} else if(res.country && res.region){
-						this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-					} else {
-						this.geoPlace = res.city.trim().toUpperCase();
-					}
-
-					console.log(this.geoAccuracy, this.geoPlace);
-				}).catch(err => this.geoError(err));
-
-			} catch(e){
-				this.geoError(e);
-			}
-
-		},
-		geoError: function(err){
-			alert(`There was an error (code ${err.code}): ${err.message}`);
-			this.showLocPara = false;
-		}
 	},
 	computed: {
 		currentLang: function(){
@@ -512,7 +432,7 @@ const Home = {
 		this.handleJSExpand(this.breakpoints.JSBreakpoint);
 		this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
 		this.handleH1BG(this.breakpoints.H1BackgroundLarge);
-		this.checkForGeoLocSupport();
+
 	}
 }
 
@@ -527,7 +447,7 @@ const router = new VueRouter({
   routes
 })
 
-// <a href="https://sunrise-sunset.org/api">Sunrise/sunset info</a>
+
 
 
 
@@ -679,5 +599,104 @@ Vue.component('code-js', {
 
 const app = new Vue({
   el: '#app',
-  router
+  router,
+	created: function(){
+		this.checkForGeoLocSupport();
+	},
+	data: {
+		geoAccuracy: null,
+		userLatitude: null,
+		userLongitude: null,
+		showLocBtn: true,
+		geoPlace: '[place]',
+		dayOrNight: '[time]',
+		showLocPara: true
+	},
+	methods: {
+		checkForGeoLocSupport: function(){
+			if(navigator.geolocation){
+				console.log('geoloc supported');
+			} else {
+				console.log('geoloc NOT supported');
+				this.showLocPara = false;
+			}
+		},
+		getLocation: function(){
+			navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
+				enableHighAccuracy: false,
+				maximumAge: 120000,
+				timeout: 15000
+			});
+			this.showLocBtn = false;
+		},
+		geoSuccess: function(pos){
+			this.geoAccuracy = pos.coords.accuracy;
+			this.userLatitude = pos.coords.latitude;
+			this.userLongitude = pos.coords.longitude;
+
+			try{
+				let sdate;
+				let day = new Date();
+				if(pos.coords.longitude < 0){
+					sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+				} else {
+					sdate = 'today';
+				}
+				console.log(day, sdate);
+
+				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
+					console.log(res);
+					if(res.status !== 'OK'){
+						this.geoError({code: '', message: res.status});
+						return;
+					}
+					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
+					console.log(sunrise, sunset);
+					console.log(moment.utc().isBetween(sunrise, sunset));
+					if(moment.utc().isBetween(sunrise, sunset)){
+						this.dayOrNight = 'day';
+					} else {
+						this.dayOrNight = 'night';
+					}
+
+				}).catch(err => this.geoError(err));
+
+
+				fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
+					console.log(res, Date.now());
+					if(res.error){
+						this.geoError({code: res.error.code, message: res.error.description});
+						return;
+					}
+					let cntry = ' ' + res.country;
+					if(res.country && res.region && Object.keys(res.region).length !== 0){
+						if(res.region.includes(res.country)){
+							this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
+						} else {
+							this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+						}
+
+
+					} else if(res.country && res.region){
+						this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+					} else {
+						this.geoPlace = res.city.trim().toUpperCase();
+					}
+
+					console.log(this.geoAccuracy, this.geoPlace);
+				}).catch(err => this.geoError(err));
+
+			} catch(e){
+				this.geoError(e);
+			}
+
+		},
+		geoError: function(err){
+			alert(`There was an error (code ${err.code}): ${err.message}`);
+			this.showLocPara = false;
+		}
+
+
+
+	}
 });
