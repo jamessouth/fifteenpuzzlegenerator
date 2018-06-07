@@ -12,6 +12,12 @@
 	</head>
   <body>
     <div id="app">
+
+			<aside v-if="showLocPara">
+				<p id="loc">It's a nice {{dayOrNight}} here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+			</aside>
+
+
 			<router-view></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
