@@ -295,6 +295,14 @@ input[type="checkbox"]:checked:after{
   user-select: none;
 }
 
+.newwindow::after{
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: url('../images/newwindow.png') 0 0 no-repeat;
+}
+
 
 
 pre span,

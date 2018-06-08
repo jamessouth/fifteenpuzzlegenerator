@@ -1,8 +1,20 @@
 
 
 const Sunset = {
+	props: ['coords'],
+	computed: {
+		gMapsURL: function(){
+			return `https://www.google.com/maps/@${this.coords.lat},${this.coords.long},18z`;
+		},
+		showFull: function(){
+			return !!this.coords.sunset;
+		},
+	},
 	template: `<div :style="{ marginTop: '4em' }">
-							<p>The sunset and sunrise information that I use to determine whether it is day or night at the user's location is provided by the <a href="https://sunrise-sunset.org/api">sunset and sunrise times API</a>.</p>
+							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps) </a>.&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.</p>
+
+							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.</p>
+
 						 </div>`
 }
 
@@ -453,7 +465,7 @@ const router = new VueRouter({
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunset info</router-link></p>
+  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Sunset info</router-link></p>
   </footer>`
 });
 
@@ -607,6 +619,8 @@ const app = new Vue({
 		geoAccuracy: null,
 		userLatitude: null,
 		userLongitude: null,
+		userSunrise: null,
+		userSunset: null,
 		showLocBtn: true,
 		geoPlace: '[place]',
 		dayOrNight: '[time]',
@@ -631,8 +645,8 @@ const app = new Vue({
 		},
 		geoSuccess: function(pos){
 			this.geoAccuracy = pos.coords.accuracy;
-			this.userLatitude = pos.coords.latitude;
-			this.userLongitude = pos.coords.longitude;
+			this.userLatitude = pos.coords.latitude.toFixed(6);
+			this.userLongitude = pos.coords.longitude.toFixed(6);
 
 			try{
 				let sdate;
@@ -651,8 +665,14 @@ const app = new Vue({
 						return;
 					}
 					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
+
 					console.log(sunrise, sunset);
+
+					this.userSunrise = sunrise;
+					this.userSunset = sunset;
+
 					console.log(moment.utc().isBetween(sunrise, sunset));
+
 					if(moment.utc().isBetween(sunrise, sunset)){
 						this.dayOrNight = 'day';
 					} else {
@@ -695,8 +715,16 @@ const app = new Vue({
 			alert(`There was an error (code ${err.code}): ${err.message}`);
 			this.showLocPara = false;
 		}
-
-
-
+	},
+	computed: {
+		showAside: function(){
+			return this.$route.fullPath === '/';
+		},
+		showLocParaFinal: function(){
+			return this.showLocPara && this.showAside;
+		},
+		coords: function(){
+			return { lat: this.userLatitude, long: this.userLongitude, acc: this.geoAccuracy, sunrise: this.userSunrise, sunset: this.userSunset };
+		}
 	}
 });
