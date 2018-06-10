@@ -13,7 +13,7 @@
   <body>
     <div id="app">
 
-			<aside v-if="showLocParaFinal">
+			<aside v-cloak v-if="showLocParaFinal">
 				<p id="loc">It's a nice {{dayOrNight}} here in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
 			</aside>
 
