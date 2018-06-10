@@ -303,7 +303,9 @@ input[type="checkbox"]:checked:after{
   background: url('../images/newwindow.png') 0 0 no-repeat;
 }
 
-
+[v-cloak]{
+  display: none;
+}
 
 pre span,
 pre code{

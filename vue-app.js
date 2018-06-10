@@ -134,12 +134,17 @@ const Demo = {
 			return inversions;
 		},
 		checkBoard: function(){
+			console.log('check');
 			let randos = this.getRands(this.canvArray.length - 1);
 			let solArray = [];
 			randos.forEach((x,i) => {
 				solArray[x] = i;
 			});
 			return [solArray.concat([this.canvArray.length - 1]), randos.concat([this.canvArray.length - 1])];
+		},
+		saveGame: function(arr){
+			let savedGame = JSON.stringify(arr);
+			sessionStorage.setItem('boardOrder', savedGame);
 		},
 		swapTiles: function(e){
 			if(this.gameOver){return;}
@@ -169,10 +174,10 @@ const Demo = {
 				this.gameOver = true;
 			}
 		},
-		useCanvas: function(){
+		useCanvas: function(arr){
 			this.pic.onload = () => {
 			  for(let i = 0; i < this.canvArray.length - 1; i++){
-			    this.ctx.drawImage(this.pic, this.canvArray[i][0], this.canvArray[i][1], 82, 82, this.canvArray[this.doable[1][i]][0], this.canvArray[this.doable[1][i]][1], 82, 82);
+			    this.ctx.drawImage(this.pic, this.canvArray[i][0], this.canvArray[i][1], 82, 82, this.canvArray[arr[i]][0], this.canvArray[arr[i]][1], 82, 82);
 			  }
 			}
 			this.pic.src = "images/mucha.jpg";
@@ -237,6 +242,7 @@ const Demo = {
 			return arr;
 		},
 		doable: function(){
+			console.log('do');
 			let brd = this.checkBoard();
 			while(this.getInversions(brd[0]) % 2 !== 0){
 				brd = this.checkBoard();
@@ -244,15 +250,36 @@ const Demo = {
 			return brd;
 		},
 		boardOrder: function(){
+			console.log('order');
 			return this.doable[0].slice();
 		}
+	},
+	beforeDestroy: function(){
+		console.log('destroy');
+		this.saveGame(this.boardOrder);
 	},
 	created: function(){
 		this.tabMQ.addListener(this.handleTabMQ);
 		this.handleTabMQ(this.tabMQ);
 	},
 	mounted: function(){
-		this.useCanvas();
+		let savedGame = [];
+		arr.forEach((x,i) => {
+			savedGame[x] = i;
+		});
+
+		let savedGame;
+		if(sessionStorage.getItem('boardOrder')){
+			try{
+				savedGame = sessionStorage.getItem('boardOrder');
+				
+			}
+		}
+
+
+
+
+		this.useCanvas(this.doable[1]);
 	}
 }
 
@@ -456,7 +483,14 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+	scrollBehavior (to, from, savedPosition){
+		if(savedPosition){
+			return savedPosition
+		} else {
+			return { x: 0, y: 0 }
+		}
+	}
 })
 
 
