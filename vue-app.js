@@ -145,6 +145,7 @@ const Demo = {
 		saveGame: function(arr){
 			let savedGame = JSON.stringify(arr);
 			sessionStorage.setItem('boardOrder', savedGame);
+			// sessionStorage.setItem('gameOver', this.gameOver);
 		},
 		swapTiles: function(e){
 			if(this.gameOver){return;}
@@ -175,6 +176,7 @@ const Demo = {
 			}
 		},
 		useCanvas: function(arr){
+			console.log('hiiiiiiiiiiiiiiiii');
 			this.pic.onload = () => {
 			  for(let i = 0; i < this.canvArray.length - 1; i++){
 			    this.ctx.drawImage(this.pic, this.canvArray[i][0], this.canvArray[i][1], 82, 82, this.canvArray[arr[i]][0], this.canvArray[arr[i]][1], 82, 82);
@@ -251,7 +253,22 @@ const Demo = {
 		},
 		boardOrder: function(){
 			console.log('order');
-			return this.doable[0].slice();
+			if(this.getSavedGame){
+				return this.getSavedGame;
+			} else {
+				return this.doable[0].slice();
+			}
+		},
+		getSavedGame: function(){
+			let game;
+			if(sessionStorage.getItem('boardOrder')){
+				try{
+					game = JSON.parse(sessionStorage.getItem('boardOrder'));
+				} catch(e){
+					sessionStorage.removeItem('boardOrder');
+				}
+			}
+			return game;
 		}
 	},
 	beforeDestroy: function(){
@@ -263,23 +280,18 @@ const Demo = {
 		this.handleTabMQ(this.tabMQ);
 	},
 	mounted: function(){
-		let savedGame = [];
-		arr.forEach((x,i) => {
-			savedGame[x] = i;
-		});
 
-		let savedGame;
-		if(sessionStorage.getItem('boardOrder')){
-			try{
-				savedGame = sessionStorage.getItem('boardOrder');
-				
-			}
+		if(this.getSavedGame){
+			let drawOrder = [];
+			this.getSavedGame.forEach((x,i) => {
+				drawOrder[x] = i;
+			});
+			this.useCanvas(drawOrder);
+		} else {
+			this.useCanvas(this.doable[1]);
 		}
 
 
-
-
-		this.useCanvas(this.doable[1]);
 	}
 }
 
