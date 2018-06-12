@@ -511,7 +511,7 @@ const router = new VueRouter({
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Sunset info</router-link></p>
+  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Weather info</router-link></p>
   </footer>`
 });
 
@@ -668,6 +668,8 @@ const app = new Vue({
 		userSunrise: null,
 		userSunset: null,
 		showLocBtn: true,
+		weather: '[weather]',
+		temp: '[temp] and',
 		geoPlace: '[place]',
 		dayOrNight: '[time]',
 		showLocPara: true
@@ -695,6 +697,7 @@ const app = new Vue({
 			this.userLongitude = pos.coords.longitude.toFixed(6);
 
 			try{
+
 				let sdate;
 				let day = new Date();
 				if(pos.coords.longitude < 0){
@@ -703,6 +706,42 @@ const app = new Vue({
 					sdate = 'today';
 				}
 				console.log(day, sdate);
+
+				// error test
+				fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
+					console.log(res);
+					if(res.error){
+						this.geoError({code: '2', message: res.error.description});
+						return;
+					}
+					if(!res.query.results){
+						this.geoError({code: '1', message: 'No results returned'});
+						return;
+					}
+
+					console.log(res);
+					const condition = res.query.results.channel.item.condition;
+					console.log(condition);
+					if(condition.code === '3200'){
+						this.temp = '';
+						this.weather = 'nice';
+						return;
+					}
+
+					// <img src="http://l.yimg.com/a/i/us/we/52/{{ code }}.gif">
+
+					this.temp = `${condition.temp} and`;
+					this.weather = condition.text.toLowerCase();
+
+
+
+				}).catch(err => this.geoError(err));
+
+
+
+
+
+
 
 				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
 					console.log(res);
@@ -720,9 +759,9 @@ const app = new Vue({
 					console.log(moment.utc().isBetween(sunrise, sunset));
 
 					if(moment.utc().isBetween(sunrise, sunset)){
-						this.dayOrNight = 'day';
+						this.dayOrNight = 'today';
 					} else {
-						this.dayOrNight = 'night';
+						this.dayOrNight = 'tonight';
 					}
 
 				}).catch(err => this.geoError(err));
