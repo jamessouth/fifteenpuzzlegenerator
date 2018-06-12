@@ -111,6 +111,16 @@ footer p{
   color: #2f2928;
 }
 
+aside{
+  margin-top: 4px;
+}
+
+aside p{
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .greenBackground{
   background-color: #0f8000;
 }
