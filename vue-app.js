@@ -1,7 +1,7 @@
 
 
 const Sunset = {
-	props: ['coords'],
+	props: ['coords', 'yahooLink'],
 	computed: {
 		gMapsURL: function(){
 			return `https://www.google.com/maps/@${this.coords.lat},${this.coords.long},18z`;
@@ -11,9 +11,9 @@ const Sunset = {
 		},
 	},
 	template: `<div :style="{ marginTop: '4em' }">
-							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps) </a>.&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.</p>
+							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps) </a>.&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" :href="yahooLink" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/> </a></p>
 
-							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.</p>
+							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/> </a></p>
 
 						 </div>`
 }
@@ -668,13 +668,20 @@ const app = new Vue({
 		userSunrise: null,
 		userSunset: null,
 		showLocBtn: true,
+		// showWeatherImg: false,
+		weatherImg: '',
+		weatherLink: '',
 		weather: '[weather]',
 		temp: '[temp] and',
 		geoPlace: '[place]',
 		dayOrNight: '[time]',
-		showLocPara: true
+		showLocPara: true,
+		clauses: ['a great time to use a....', 'how about a....', 'a lovely day for a....']
 	},
 	methods: {
+		getRandomNo: function(){
+			return Math.floor(Math.random() * this.clauses.length);
+		},
 		checkForGeoLocSupport: function(){
 			if(navigator.geolocation){
 				console.log('geoloc supported');
@@ -708,7 +715,7 @@ const app = new Vue({
 				console.log(day, sdate);
 
 				// error test
-				fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
+				fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description, link from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
 					console.log(res);
 					if(res.error){
 						this.geoError({code: '2', message: res.error.description});
@@ -721,14 +728,20 @@ const app = new Vue({
 
 					console.log(res);
 					const condition = res.query.results.channel.item.condition;
+
 					console.log(condition);
+
+					this.weatherLink = res.query.results.channel.link.split('*')[1];
+					// this.showWeatherImg = true;
+					this.weatherImg = res.query.results.channel.item.description.split('\n')[0].match(/h[\S]+\.\w+(?=")/)[0];
+					console.log(this.weatherLink);
+
 					if(condition.code === '3200'){
 						this.temp = '';
 						this.weather = 'nice';
 						return;
 					}
 
-					// <img src="http://l.yimg.com/a/i/us/we/52/{{ code }}.gif">
 
 					this.temp = `${condition.temp} and`;
 					this.weather = condition.text.toLowerCase();
@@ -802,6 +815,9 @@ const app = new Vue({
 		}
 	},
 	computed: {
+		getClause: function(){
+			return this.clauses[this.getRandomNo()];
+		},
 		showAside: function(){
 			return this.$route.fullPath === '/';
 		},

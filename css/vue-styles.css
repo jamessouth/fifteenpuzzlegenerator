@@ -45,9 +45,11 @@ h3{
   max-width: 90%;
 }
 
+.yahoo img{
+  vertical-align: bottom;
+}
 
-
-p > a, h2 a, h3 a{
+p > a:not(.yahoo), h2 a, h3 a{
   text-decoration: underline;
   font-family: sans-serif;
   font-size: 14px;
@@ -55,7 +57,7 @@ p > a, h2 a, h3 a{
   color: #700080;
 }
 
-p > a:hover, h2 a:hover, h3 a:hover{
+p > a:hover:not(.yahoo), h2 a:hover, h3 a:hover{
   color: #e1e1e1;
   background-color: #700080;
 }
@@ -119,6 +121,10 @@ aside p{
   font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   line-height: 1.6;
+}
+
+aside p img{
+  vertical-align: middle;
 }
 
 .greenBackground{

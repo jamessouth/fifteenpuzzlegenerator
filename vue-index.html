@@ -15,11 +15,11 @@
     <div id="app">
 
 			<aside v-cloak v-if="showLocParaFinal">
-				<p id="loc">It's {{temp}} {{weather}} {{dayOrNight}} in {{geoPlace}}, a great time to use a....<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+				<p id="loc">It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
 			</aside>
 
 
-			<router-view :coords="coords"></router-view>
+			<router-view :yahoo-link="weatherLink" :coords="coords"></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
