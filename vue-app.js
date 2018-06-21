@@ -143,11 +143,15 @@ const Demo = {
 			return [solArray.concat([this.canvArray.length - 1]), randos.concat([this.canvArray.length - 1])];
 		},
 		saveGame: function(arr){
-			let savedGame = JSON.stringify(arr);
-			sessionStorage.setItem('boardOrder', savedGame);
-			// sessionStorage.setItem('gameOver', this.gameOver);
+			if(this.gameOver){
+				sessionStorage.setItem('gameOver', this.gameOver);
+			} else {
+				let savedGame = JSON.stringify(arr);
+				sessionStorage.setItem('boardOrder', savedGame);
+			}
 		},
 		swapTiles: function(e){
+			console.log(this.gameOver);
 			if(this.gameOver){return;}
 			let x = e.offsetX;
 			let y = e.offsetY;
@@ -260,6 +264,7 @@ const Demo = {
 			}
 		},
 		getSavedGame: function(){
+			console.log('get');
 			let game;
 			if(sessionStorage.getItem('boardOrder')){
 				try{
@@ -281,16 +286,36 @@ const Demo = {
 	},
 	mounted: function(){
 
-		if(this.getSavedGame){
-			let drawOrder = [];
-			this.getSavedGame.forEach((x,i) => {
-				drawOrder[x] = i;
-			});
-			this.useCanvas(drawOrder);
-		} else {
-			this.useCanvas(this.doable[1]);
+		let gameAlreadyWon;
+		if(sessionStorage.getItem('gameOver')){
+			try{
+				gameAlreadyWon = sessionStorage.getItem('gameOver');
+			} catch(e){
+				sessionStorage.removeItem('gameOver');
+			}
 		}
 
+		if(gameAlreadyWon){
+			console.log(this.gameOver);
+			this.gameOver = true;
+			console.log(this.gameOver);
+			this.pic.onload = () => {
+
+				this.ctx.drawImage(this.pic, 0, 0, 410, 574, 0, 0, 410, 574);
+
+			}
+			this.pic.src = "images/mucha.jpg";
+		} else {
+			if(this.getSavedGame){
+				let drawOrder = [];
+				this.getSavedGame.forEach((x,i) => {
+					drawOrder[x] = i;
+				});
+				this.useCanvas(drawOrder);
+			} else {
+				this.useCanvas(this.doable[1]);
+			}
+		}
 
 	}
 }
@@ -300,8 +325,9 @@ const Home = {
 
 				<header>
 					<h1 id="mainh1">15 Puzzle Generator</h1>
-					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
+					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle </a>.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
 				</header>
+
 
 
 				<main>
@@ -511,7 +537,7 @@ const router = new VueRouter({
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South | <a href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Weather info</router-link></p>
+  	<p>&copy; 2018 James South | <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Weather info</router-link></p>
   </footer>`
 });
 
