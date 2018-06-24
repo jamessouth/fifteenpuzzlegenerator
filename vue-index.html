@@ -15,7 +15,23 @@
     <div id="app">
 
 			<aside v-cloak v-if="showLocParaFinal">
-				<p id="loc">It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+				<p id="loc"><a @click="showPhotoHold = !showPhotoHold">(Use photo....)</a> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+
+				<transition name="expand">
+					<div class="photo-hold" v-if="showPhotoHold">
+						<div class="camera">
+							<video>Stream not available</video>
+							<button id="videobutton">Take photo</button>
+						</div>
+
+						<canvas id="videocanvas"></canvas>
+
+
+						<div class="video-output">
+							<img id="photo" alt="screen capture" />
+						</div>
+					</div>
+				</transition>
 			</aside>
 
 

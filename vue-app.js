@@ -50,11 +50,14 @@ const Artwork = {
 const Demo = {
 	template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
 	  <div :style="[holderStylesC, holderStylesD]">
+			<div v-if="gameOver" :style="maskStyles" id="mask">
+				<button @click="resetGame" type="button">Reset</button>
+			</div>
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
         Your browser does not support canvas.
       </canvas>
 			<div :style="innerDivStyles">
-				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
+				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" type="button" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
 				<img :style="helpImgStyles" v-show="helpOpen" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
 			</div>
 		</div>
@@ -65,6 +68,7 @@ const Demo = {
 			isActive: false,
 			holderStylesD: {
 				display: 'flex',
+				position: 'relative',
 				flexDirection: 'column',
 				justifyContent: 'space-around',
 				alignItems: 'center'
@@ -91,6 +95,14 @@ const Demo = {
 		}
 	},
 	methods: {
+		resetGame: function(e){
+			console.log(e);
+			sessionStorage.clear();
+			this.ctx.clearRect(0, 0, 410, 574);
+			this.useCanvas(this.doable[1]);
+
+			this.gameOver = false;
+		},
 		activeHandler: function(){
 			this.isActive = !this.isActive;
 		},
@@ -145,6 +157,9 @@ const Demo = {
 		saveGame: function(arr){
 			if(this.gameOver){
 				sessionStorage.setItem('gameOver', this.gameOver);
+				if(sessionStorage.getItem('boardOrder')){
+					sessionStorage.removeItem('boardOrder');
+				}
 			} else {
 				let savedGame = JSON.stringify(arr);
 				sessionStorage.setItem('boardOrder', savedGame);
@@ -196,6 +211,11 @@ const Demo = {
 				} else {
 					return { height: this.helpOpen ? '1100px' : '800px' }
 				}
+		},
+		maskStyles: function(){
+			return {
+				top: this.helpOpen ? '37px' : '33px'
+			}
 		},
 		innerDivStyles: function(){
 			let ht = this.helpOpen ? '380px' : 'auto';
@@ -278,7 +298,12 @@ const Demo = {
 	},
 	beforeDestroy: function(){
 		console.log('destroy');
-		this.saveGame(this.boardOrder);
+		if(this.gameOver){
+			this.saveGame();
+		} else {
+			console.log(this.boardOrder);
+			this.saveGame(this.boardOrder);
+		}
 	},
 	created: function(){
 		this.tabMQ.addListener(this.handleTabMQ);
@@ -301,7 +326,7 @@ const Demo = {
 			console.log(this.gameOver);
 			this.pic.onload = () => {
 
-				this.ctx.drawImage(this.pic, 0, 0, 410, 574, 0, 0, 410, 574);
+				this.ctx.drawImage(this.pic, 0, 0);
 
 			}
 			this.pic.src = "images/mucha.jpg";
@@ -694,7 +719,7 @@ const app = new Vue({
 		userSunrise: null,
 		userSunset: null,
 		showLocBtn: true,
-		// showWeatherImg: false,
+		showPhotoHold: false,
 		weatherImg: '',
 		weatherLink: '',
 		weather: '[weather]',
@@ -758,7 +783,7 @@ const app = new Vue({
 					console.log(condition);
 
 					this.weatherLink = res.query.results.channel.link.split('*')[1];
-					// this.showWeatherImg = true;
+
 					this.weatherImg = res.query.results.channel.item.description.split('\n')[0].match(/h[\S]+\.\w+(?=")/)[0];
 					console.log(this.weatherLink);
 
