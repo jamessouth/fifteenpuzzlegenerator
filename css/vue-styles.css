@@ -130,8 +130,8 @@ aside p img{
 
 
 .photo-hold{
-  width: 300px;
-  height: 500px;
+  width: 320px;
+  height: 650px;
   background: red;
   margin: 6.5em auto 0;
   display: flex;
@@ -141,28 +141,63 @@ aside p img{
 }
 
 
+
+
 .expand-enter, .expand-leave-to{
   height: 0px;
   margin-top: 0;
 }
 .expand-enter-active, .expand-leave-active{
-  transition: all 1s cubic-bezier(0.24, 1, 0.8, 1.44);
+  transition: all 1.2s cubic-bezier(1, .03, .6, .96);
 }
+
+
 
 
 .camera, .video-output{
-  width: 90%;
-  height: 45%;
+  width: 300px;
+  height: 300px;
   background: blue;
-  /* margin: auto; */
 }
+
+.camera{
+  position: relative;
+}
+
+
+.grow-enter, .grow-leave-to{
+  opacity: 0;
+}
+.grow-enter-active, .grow-leave-active{
+  transition: all 1.3s cubic-bezier(0, .96, .6, .96);
+}
+
+
 
 
 #videocanvas{
   display: none;
 }
 
+#videobutton{
+  position: absolute;
+  background: green;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
+#videoclose{
+  position: absolute;
+  background: crimson;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 20px;
+  font-size: 31px;
+  line-height: 0;
+  filter: none;
+}
 
 
 

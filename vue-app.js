@@ -720,6 +720,8 @@ const app = new Vue({
 		userSunset: null,
 		showLocBtn: true,
 		showPhotoHold: false,
+		showCameraHold: false,
+		videoStreaming: false,
 		weatherImg: '',
 		weatherLink: '',
 		weather: '[weather]',
@@ -730,6 +732,56 @@ const app = new Vue({
 		clauses: ['a great time to use a....', 'how about a....', 'a lovely day for a....']
 	},
 	methods: {
+		takePicture: function(){
+			const canv = this.$refs.videocanvas;
+			const ctxt = canv.getContext('2d');
+			ctxt.drawImage(this.$refs.video, 0, 0, 300, 300);
+
+			const data = canv.toDataURL('image/png');
+			this.$refs.photo.setAttribute('src', data);
+
+
+		},
+		videoListener: function(e){
+			console.log('vid', e);
+			if(!this.videoStreaming){
+				this.videoStreaming = true;
+			}
+		},
+		videoButtonListener: function(e){
+			console.log('butt', e);
+			this.takePicture();
+			e.preventDefault();
+		},
+		afterLeave: function(){
+			this.showPhotoHold = false;
+		},
+		afterEnter: function(){
+			this.showCameraHold = true;
+		},
+		clearPhoto: function(){
+			const canv = this.$refs.videocanvas;
+			const ctxt = canv.getContext('2d');
+			ctxt.fillStyle = "#aaa";
+			ctxt.fillRect(0, 0, canv.width, canv.height);
+
+			const data = canv.toDataURL('image/png');
+			this.$refs.photo.setAttribute('src', data);
+
+		},
+		startCamera: function(){
+			console.log('start cam');
+			navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+				.then(stream => {
+					this.$refs.video.srcObject = stream;
+					this.$refs.video.play();
+				})
+				.catch(err => console.log('Error! ' + err));
+
+
+			this.clearPhoto();
+
+		},
 		getRandomNo: function(){
 			return Math.floor(Math.random() * this.clauses.length);
 		},
@@ -866,6 +918,7 @@ const app = new Vue({
 		}
 	},
 	computed: {
+
 		getClause: function(){
 			return this.clauses[this.getRandomNo()];
 		},
