@@ -15,19 +15,19 @@
     <div id="app">
 
 			<aside v-cloak v-if="showLocParaFinal">
-				<p id="loc"><a v-if="!showPhotoHold" @click="showPhotoHold = !showPhotoHold">(Use photo....)</a> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<a v-if="showLocBtn" @click="getLocation">(Fill in with my location)</a></p>
+				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Use photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
 
 				<transition @after-enter="afterEnter" name="expand">
 					<div class="photo-hold" v-if="showPhotoHold">
 						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
 							<div v-if="showCameraHold" class="camera">
-								<video @canplay="videoListener" ref="video" width="300" height="300">Stream not available</video>
+								<video @canplay="videoListener" ref="video">Stream not available</video>
 								<button type="button" @click="videoButtonListener" ref="videobutton" id="videobutton">Take photo</button>
-								<button type="button" @click="showCameraHold = !showCameraHold" id="videoclose">X</button>
+								<button type="button" @click="handleVideoClose" id="videoclose">X</button>
 
 							</div>
 						</transition>
-						<canvas ref="videocanvas" width="300" height="300" id="videocanvas"></canvas>
+						<canvas ref="videocanvas" id="videocanvas"></canvas>
 
 						<transition name="grow">
 							<div v-if="showCameraHold" class="video-output">

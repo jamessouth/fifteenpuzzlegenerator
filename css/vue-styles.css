@@ -132,8 +132,9 @@ aside p img{
 .photo-hold{
   width: 320px;
   height: 650px;
-  background: red;
+  background-image: url("../images/painting.jpg");
   margin: 6.5em auto 0;
+  border: 1px solid #3a3a3a;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -157,7 +158,12 @@ aside p img{
 .camera, .video-output{
   width: 300px;
   height: 300px;
-  background: blue;
+  background: #bdbdbd79;
+  border: 1px solid #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .camera{
@@ -181,20 +187,30 @@ aside p img{
 
 #videobutton{
   position: absolute;
-  background: green;
-  bottom: 10px;
+  font-family: 'Poiret One', cursive;
+  background: #0f8000;
+  bottom: 3px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  width: 110px;
+  font-size: 18px;
+  height: 30px;
+  color: #fbfbfb;
+  border: 1px solid #fbfbfb;
+  filter: none;
   left: 50%;
   transform: translateX(-50%);
 }
 
 #videoclose{
   position: absolute;
-  background: crimson;
+  background: #80000f;
+  color: #fbfbfb;
   top: 0;
   right: 0;
-  width: 16px;
-  height: 20px;
-  font-size: 31px;
+  width: 20px;
+  height: 26px;
+  font-size: 36px;
   line-height: 0;
   filter: none;
 }
@@ -431,6 +447,25 @@ button{
 
 }
 
+#loc button{
+  filter: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #700080;
+  background-color: #e1e1e1;
+}
+
+#loc button:hover, #loc button:focus{
+  background-color: #700080;
+  color: #e1e1e1;
+}
+
+#loc button:disabled{
+  color: #70008050;
+  pointer-events: none;
+}
+
+
 #lang-select button:hover{
   filter: brightness(110%) drop-shadow(0px 0px 7px #fff);
 }
@@ -646,10 +681,7 @@ button{
     margin: 0 auto;
   }
 
-  li:last-of-type{
-    grid-column: 1 / -1;
-    position: relative;
-  }
+
 
   #code{
     max-width: 90%;
@@ -688,9 +720,25 @@ button{
   }
 }
 
+@media screen and (min-width: 734px) and (max-width: 1111px){
+
+  li:last-of-type{
+    grid-column: 1 / -1;
+  }
+
+}
+
 
 
 @media screen and (min-width: 768px) {
+
+  .photo-hold{
+    width: 650px;
+    height: 320px;
+    background-image: url("../images/cycles.jpg");
+    flex-direction: row;
+  }
+
 
   #lang-select{
     grid: ". larrow ctext ctext rarrow ." 60% ". . lcopy remail . ." 40% / 10% 52px 1fr 1fr 52px 10%;
@@ -745,15 +793,21 @@ button{
 
 
 
-@media screen and (min-width: 1489px) and (max-width: 2244px){
+/* @media screen and (min-width: 1489px) and (max-width: 2244px){
 
   li:last-of-type{
     grid-column: auto;
   }
 
+} */
+
+@media screen and (min-width: 1489px) and (max-width: 1866px){
+
+  li:last-of-type{
+    grid-column: 1 / -1;
+  }
+
 }
-
-
 
 
 
