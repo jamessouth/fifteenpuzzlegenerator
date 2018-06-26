@@ -37,9 +37,11 @@ const Artwork = {
 				{src: "images/champenois.jpg", alt: "Alfons Mucha - 1898 - Rêverie (F. Champenois Calendar 1898)", title: "Rêverie (F. Champenois Calendar 1898)", year: "(1898)"},
 				{src: "images/bouquet.jpg", alt: "Alfons Mucha - 1900 - The Seasons: Spring (detail)", title: "The Seasons: Spring (detail)", year: "(1900)"},
 				{src: "images/four_seasons.jpg", alt: "Alfons Mucha - 1897 - The Seasons (detail)", title: "The Seasons (detail)", year: "(1897)"},
-				{src: "images/fruit.jpg", alt: "Alfons Mucha - 1897 - Fruit", title: "Fruit", year: "(1897)"},
+				{src: "images/trappistine.jpg", alt: "Alfons Mucha - 1897 - La Trappistine (detail)", title: "Poster for La Trappistine (detail)", year: "(1897)"},
 				{src: "images/champagne.jpg", alt: "Alfons Mucha - 1896 - Biscuits Champagne Lefèvre-Utile", title: "Poster for Biscuits Champagne Lefèvre-Utile", year: "(1896)"},
-				{src: "images/trappistine.jpg", alt: "Alfons Mucha - 1897 - La Trappistine", title: "Poster for La Trappistine", year: "(1897)"}
+				{src: "images/painting_small.jpg", alt: "Alfons Mucha - 1898 - The Arts: Painting", title: "The Arts: Painting", year: "(1898)"},
+				{src: "images/fruit.jpg", alt: "Alfons Mucha - 1897 - Fruit", title: "Fruit", year: "(1897)"},
+				{src: "images/cycles_small.jpg", alt: "Alfons Mucha - 1902 - Cycles Perfecta", title: "Poster for Cycles Perfecta", year: "(1902)"}
 			]
 		}
 	}
@@ -721,7 +723,14 @@ const app = new Vue({
 		showLocBtn: true,
 		showPhotoHold: false,
 		showCameraHold: false,
+
 		videoStreaming: false,
+		vidWidth: 300,
+		vidHeight: 0,
+
+
+
+
 		weatherImg: '',
 		weatherLink: '',
 		weather: '[weather]',
@@ -732,19 +741,42 @@ const app = new Vue({
 		clauses: ['a great time to use a....', 'how about a....', 'a lovely day for a....']
 	},
 	methods: {
+		handleVideoClose: function(){
+			this.showCameraHold = !this.showCameraHold;
+			this.videoStreaming = false;
+			this.vidHeight = 0;
+
+		},
 		takePicture: function(){
 			const canv = this.$refs.videocanvas;
 			const ctxt = canv.getContext('2d');
-			ctxt.drawImage(this.$refs.video, 0, 0, 300, 300);
 
-			const data = canv.toDataURL('image/png');
-			this.$refs.photo.setAttribute('src', data);
+			if(this.vidWidth && this.vidHeight){
+				canv.width = this.vidWidth;
+				canv.height = this.vidHeight;
 
+				ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
+				const data = canv.toDataURL('image/png');
+				this.$refs.photo.setAttribute('src', data);
+			} else {
+				this.clearPhoto();
+			}
 
 		},
 		videoListener: function(e){
 			console.log('vid', e);
+			const canv = this.$refs.videocanvas;
+			const vid = this.$refs.video;
+
 			if(!this.videoStreaming){
+				this.vidHeight = vid.videoHeight / (vid.videoWidth / this.vidWidth);
+
+				vid.setAttribute('width', this.vidWidth);
+				vid.setAttribute('height', this.vidHeight);
+				canv.setAttribute('width', this.vidWidth);
+				canv.setAttribute('height', this.vidHeight);
+
+
 				this.videoStreaming = true;
 			}
 		},
