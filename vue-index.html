@@ -15,7 +15,13 @@
     <div id="app">
 
 			<aside v-cloak v-if="showLocParaFinal">
-				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Use photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
+				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
+
+				<!-- <transition name="pic"> -->
+				<div id="userpic" v-if="!!userPhoto">
+					<img ref="userpic" alt="user photo" />
+				</div>
+				<!-- </transition> -->
 
 				<transition @after-enter="afterEnter" name="expand">
 					<div class="photo-hold" v-if="showPhotoHold">
