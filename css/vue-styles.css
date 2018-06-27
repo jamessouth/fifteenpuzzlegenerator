@@ -196,7 +196,7 @@ aside p img{
   font-size: 18px;
   height: 30px;
   color: #fbfbfb;
-  border: 1px solid #fbfbfb;
+  border: 2px solid #fbfbfb;
   filter: none;
   left: 50%;
   transform: translateX(-50%);
@@ -208,11 +208,24 @@ aside p img{
   color: #fbfbfb;
   top: 0;
   right: 0;
-  width: 20px;
-  height: 26px;
+  border: 2px solid #fbfbfb;
+  width: 26px;
+  height: 36px;
   font-size: 36px;
   line-height: 0;
   filter: none;
+}
+
+
+#userpic{
+  margin: 1em auto;
+  width: 160px;
+  height: 120px;
+}
+
+#userpic img{
+  width: 160px;
+  height: 120px;
 }
 
 
@@ -732,11 +745,23 @@ button{
 
 @media screen and (min-width: 768px) {
 
+  #videoclose{
+    right: -324px;
+  }
+
   .photo-hold{
     width: 650px;
     height: 320px;
     background-image: url("../images/cycles.jpg");
     flex-direction: row;
+  }
+
+  .expand-enter, .expand-leave-to{
+    height: 0px;
+    margin-top: 0;
+  }
+  .expand-enter-active, .expand-leave-active{
+    transition: all 1.2s cubic-bezier(1, .03, .6, .96);
   }
 
 
@@ -761,7 +786,7 @@ button{
 
   fieldset:nth-of-type(2){
     margin-top: 0;
-    border-left: 1px solid #000;
+    border-left: 1px solid #3a3a3a;
   }
 
   header{

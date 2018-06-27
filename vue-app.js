@@ -727,7 +727,7 @@ const app = new Vue({
 		videoStreaming: false,
 		vidWidth: 300,
 		vidHeight: 0,
-
+		userPhoto: null,
 
 
 
@@ -745,7 +745,7 @@ const app = new Vue({
 			this.showCameraHold = !this.showCameraHold;
 			this.videoStreaming = false;
 			this.vidHeight = 0;
-
+			this.$refs.userpic.setAttribute('src', this.userPhoto);
 		},
 		takePicture: function(){
 			const canv = this.$refs.videocanvas;
@@ -756,8 +756,9 @@ const app = new Vue({
 				canv.height = this.vidHeight;
 
 				ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
-				const data = canv.toDataURL('image/png');
-				this.$refs.photo.setAttribute('src', data);
+				this.userPhoto = canv.toDataURL('image/png');
+				this.$refs.photo.setAttribute('src', this.userPhoto);
+
 			} else {
 				this.clearPhoto();
 			}
@@ -808,8 +809,14 @@ const app = new Vue({
 					this.$refs.video.srcObject = stream;
 					this.$refs.video.play();
 				})
-				.catch(err => console.log('Error! ' + err));
-
+				.catch(err => {
+					if(err.name.includes('Readable')){
+						alert(`Error! ${err}.  Activate your camera and allow apps to use it, then try again.`);
+					} else {
+						alert(`Error! ${err}.  Try again.`);
+					}
+					this.handleVideoClose();
+				});
 
 			this.clearPhoto();
 
