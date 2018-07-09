@@ -11,9 +11,9 @@ const Sunset = {
 		},
 	},
 	template: `<div :style="{ marginTop: '4em' }">
-							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps) </a>.&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" :href="yahooLink" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/> </a></p>
+							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps).</a>&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" :href="yahooLink" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
 
-							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API </a>.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/> </a></p>
+							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
 
 						 </div>`
 }
@@ -50,7 +50,12 @@ const Artwork = {
 
 
 const Demo = {
-	template: `<div><img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
+	props: ['userPhoto'],
+	template: `<div>
+		<div v-if="!!userPhoto" :style="{ margin: '.5em auto', width: '200px', height: '150px' }">
+			<img :style="{ width: '200px', borderRadius: '5%' }" :src="this.userPhoto" alt="user photo"/>
+		</div>
+		<img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
 	  <div :style="[holderStylesC, holderStylesD]">
 			<div v-if="gameOver" :style="maskStyles" id="mask">
 				<button @click="resetGame" type="button">Reset</button>
@@ -348,9 +353,10 @@ const Demo = {
 }
 
 const Home = {
+	props: ['cameraOpen'],
 	template: `<div>
 
-				<header>
+				<header :style="addlLinkStyles">
 					<h1 id="mainh1">15 Puzzle Generator</h1>
 					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle </a>.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
 				</header>
@@ -439,7 +445,7 @@ const Home = {
 
 					</div>
 				</main>
-				<app-footer></app-footer>
+				<app-footer :style="addlLinkStyles"></app-footer>
 				</div>`,
   data: function(){
     return {
@@ -506,6 +512,11 @@ const Home = {
 
 	},
 	computed: {
+		addlLinkStyles: function(){
+			return {
+				pointerEvents: this.cameraOpen ? 'none' : 'auto'
+			}
+		},
 		currentLang: function(){
 			return this.languages[this.currentLangInd % this.languages.length];
 		},
@@ -723,11 +734,16 @@ const app = new Vue({
 		showLocBtn: true,
 		showPhotoHold: false,
 		showCameraHold: false,
+		showUserImage: false,
 
 		videoStreaming: false,
 		vidWidth: 300,
 		vidHeight: 0,
 		userPhoto: null,
+
+
+		photoHold: 'photo-hold',
+		adjMargTop: 'adjMargTop',
 
 
 
@@ -743,9 +759,12 @@ const app = new Vue({
 	methods: {
 		handleVideoClose: function(){
 			this.showCameraHold = !this.showCameraHold;
+			if(this.userPhoto == null){
+				this.showUserImage = false;
+			}
 			this.videoStreaming = false;
 			this.vidHeight = 0;
-			this.$refs.userpic.setAttribute('src', this.userPhoto);
+
 		},
 		takePicture: function(){
 			const canv = this.$refs.videocanvas;
@@ -758,6 +777,7 @@ const app = new Vue({
 				ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
 				this.userPhoto = canv.toDataURL('image/png');
 				this.$refs.photo.setAttribute('src', this.userPhoto);
+				this.$refs.userpict.setAttribute('src', this.userPhoto);
 
 			} else {
 				this.clearPhoto();
@@ -777,7 +797,6 @@ const app = new Vue({
 				canv.setAttribute('width', this.vidWidth);
 				canv.setAttribute('height', this.vidHeight);
 
-
 				this.videoStreaming = true;
 			}
 		},
@@ -791,6 +810,7 @@ const app = new Vue({
 		},
 		afterEnter: function(){
 			this.showCameraHold = true;
+			this.showUserImage = true;
 		},
 		clearPhoto: function(){
 			const canv = this.$refs.videocanvas;
@@ -800,6 +820,12 @@ const app = new Vue({
 
 			const data = canv.toDataURL('image/png');
 			this.$refs.photo.setAttribute('src', data);
+			if(this.userPhoto == null){
+				this.$refs.userpict.setAttribute('src', data);
+			} else {
+
+			}
+
 
 		},
 		startCamera: function(){
@@ -814,6 +840,9 @@ const app = new Vue({
 						alert(`Error! ${err}.  Activate your camera and allow apps to use it, then try again.`);
 					} else {
 						alert(`Error! ${err}.  Try again.`);
+					}
+					if(this.userPhoto == null){
+						this.showUserImage = false;
 					}
 					this.handleVideoClose();
 				});
@@ -957,7 +986,22 @@ const app = new Vue({
 		}
 	},
 	computed: {
-
+		addPosAbs: function(){
+			if(!!this.userPhoto){
+				return {};
+			} else {
+				return {
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)'
+				};
+			}
+		},
+		addPosRel: function(){
+			return {
+				position: !!this.userPhoto ? 'static' : 'relative'
+			}
+		},
 		getClause: function(){
 			return this.clauses[this.getRandomNo()];
 		},

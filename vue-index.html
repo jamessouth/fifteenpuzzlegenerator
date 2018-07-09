@@ -14,17 +14,17 @@
   <body>
     <div id="app">
 
-			<aside v-cloak v-if="showLocParaFinal">
+			<aside :style="addPosRel" v-cloak v-if="showLocParaFinal">
 				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
 
-				<!-- <transition name="pic"> -->
-				<div id="userpic" v-if="!!userPhoto">
-					<img ref="userpic" alt="user photo" />
-				</div>
-				<!-- </transition> -->
+				<transition name="grow">
+					<div :style="addPosAbs" class="userpic" v-if="showUserImage">
+						<img :src="userPhoto" ref="userpict" alt="user photo" />
+					</div>
+				</transition>
 
 				<transition @after-enter="afterEnter" name="expand">
-					<div class="photo-hold" v-if="showPhotoHold">
+					<div :class="[!!userPhoto ? adjMargTop : '', photoHold]" v-if="showPhotoHold">
 						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
 							<div v-if="showCameraHold" class="camera">
 								<video @canplay="videoListener" ref="video">Stream not available</video>
@@ -45,7 +45,7 @@
 			</aside>
 
 
-			<router-view :yahoo-link="weatherLink" :coords="coords"></router-view>
+			<router-view :camera-open="showPhotoHold" :user-photo="userPhoto" :yahoo-link="weatherLink" :coords="coords"></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
