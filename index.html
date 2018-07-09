@@ -4,190 +4,52 @@
 		<meta charset="utf-8">
 		<title>15 Puzzle Generator</title>
 		<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0">
+		<script async src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="css/styles.css">
 		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Limelight" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
 	</head>
   <body>
-		<header>
+    <div id="app">
 
-    	<h1 id="mainh1">15 Puzzle Generator</h1>
-		</header>
+			<aside :style="addPosRel" v-cloak v-if="showLocParaFinal">
+				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
 
-    <p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle</a>.&nbsp;&nbsp;Demo <a href="demo.html">here</a>.</p>
-
-    <main>
-
-			<form>
-				<div>
-					<fieldset id="basics">
-						<legend>Basic Puzzle</legend>
-						<label>Color for the blank tile: <input type="color" value="#0f8000"></label>
-		        <label>Image Width in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-		        <label>Image Height in pixels: <input class="num" form="form" placeholder="Enter a number" min="0" type="number"/></label>
-						<p id="puzz">Puzzle Dimensions:</p>
-						<label>Width in tiles:
-							<select>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-								<option>8</option>
-							</select>
-						</label>
-
-						<label>Height in tiles:
-							<select>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-								<option>8</option>
-							</select>
-						</label>
-						<p>The canvas will have the same dimensions as the image you use.&nbsp;&nbsp;Edit your image as necessary such that each tile will be the same size with no remainder pixels.</p>
-					</fieldset>
-					<hr>
-					<fieldset id="extras">
-						<legend>Additional Features</legend>
-						<label>Relative path to your image: <input placeholder="Optional" type="text"/></label>
-						<label>Add helper image: <input type="checkbox" name="help" value="image"/></label>
-
-					</fieldset>
-				</div>
-				<p id="error"></p>
-
-				<button id="submit">Submit</button>
-			</form>
-
-
-<!-- data-clipboard-target="#code" -->
-
-			<!-- <div> -->
-				<div id="buttons">
-					<div id="copiedPopup">copied!</div>
-					<button class="selected">HTML</button>
-					<button>CSS</button>
-					<button>JS</button>
-					<div id="icons">
-						<button id="copy"></button>
-						<a href="mailto:?subject=Code%20for%20the%2015%20puzzle"><button id="email"></button></a>
+				<transition name="grow">
+					<div :style="addPosAbs" class="userpic" v-if="showUserImage">
+						<img :src="userPhoto" ref="userpict" alt="user photo" />
 					</div>
-				</div>
+				</transition>
 
-	      <div id="code">
-					<pre id="html"><code>&lt;<span class="gy">canvas</span> <span class="blue">width</span>="</code><span class="red">%</span><code>" <span class="blue">height</span>="</code><span class="red">%</span><code>"&gt;
-						&nbsp;&nbsp;Your browser does not support canvas.
-						&lt;/<span class="gy">canvas</span>&gt;</code><pre id="helphtml"><code >&lt;<span class="gy">img</span> <span class="blue">src</span>="</code><span class="pathhtml">[path to your image]</span><code >" <span class="blue">alt</span>=""/&gt;</code></pre></pre>
+				<transition @after-enter="afterEnter" name="expand">
+					<div :class="[!!userPhoto ? adjMargTop : '', photoHold]" v-if="showPhotoHold">
+						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
+							<div v-if="showCameraHold" class="camera">
+								<video @canplay="videoListener" ref="video">Stream not available</video>
+								<button type="button" @click="videoButtonListener" ref="videobutton" id="videobutton">Take photo</button>
+								<button type="button" @click="handleVideoClose" id="videoclose">X</button>
 
+							</div>
+						</transition>
+						<canvas ref="videocanvas" id="videocanvas"></canvas>
 
-					<pre id="css"><code>canvas{
-						&nbsp;&nbsp;background-color: <span>%</span>;
-						&nbsp;&nbsp;min-width: </code><span>%</span><code>px;
-						}</code><pre id="helpcss"><code>img{
-							&nbsp;&nbsp;width: <span class="halfwidth">%</span>;
-							}</code></pre></pre>
-
-					<pre id="js"><code>const canvas = document.querySelector('canvas');
-						let ctx = canvas.getContext('2d');
-						let canvArray = [], pic = new Image();
-						for(let i = 0; i < </code><span class="info3">%</span><code>; i++){
-						&nbsp;&nbsp;for(let j = 0; j < </code><span class="info2">%</span><code>; j++){
-						&nbsp;&nbsp;&nbsp;&nbsp;canvArray.push([j * </code><span class="tileSize">%</span><code>, i * </code><span class="tileSize">%</span><code>]);
-						&nbsp;&nbsp;}
-						}
-
-						<span class="peach">function</span> getRands(amt){
-						&nbsp;&nbsp;let nums = new Set();
-						&nbsp;&nbsp;while(nums.size < amt){
-						&nbsp;&nbsp;&nbsp;&nbsp;let n = Math.floor(Math.random() * amt);
-						&nbsp;&nbsp;&nbsp;&nbsp;nums.add(n);
-						&nbsp;&nbsp;}
-						&nbsp;&nbsp;return [...nums];
-						}
-
-						<span class="peach">function</span> getInversions(arr){
-						&nbsp;&nbsp;let inversions = 0;
-						&nbsp;&nbsp;for(let i = 0; i < arr.length; i++){
-						&nbsp;&nbsp;&nbsp;&nbsp;if(arr[i] == null){continue;}
-						&nbsp;&nbsp;&nbsp;&nbsp;for(let j = 0; j < arr.length; j++){
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(arr[i] > arr[j + i]){
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inversions++;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-						&nbsp;&nbsp;&nbsp;&nbsp;}
-						&nbsp;&nbsp;}
-						&nbsp;&nbsp;return inversions;
-						}
-
-						<span class="peach">function</span> checkBoard(){
-						&nbsp;&nbsp;let randos = getRands(canvArray.length - 1);
-						&nbsp;&nbsp;let solArray = [];
-						&nbsp;&nbsp;randos.forEach((x,i) => {
-						&nbsp;&nbsp;&nbsp;&nbsp;solArray[x] = i;
-						&nbsp;&nbsp;});
-						&nbsp;&nbsp;return [solArray.concat([canvArray.length - 1]), randos.concat([canvArray.length - 1])];
-						}
-
-						let doable = checkBoard();
-						while(getInversions(doable[0]) % 2 !== 0){
-						&nbsp;&nbsp;doable = checkBoard();
-						}
-						let boardOrder = doable[0].slice();
-
-						pic.onload = () => {
-						&nbsp;&nbsp;for(let i = 0; i < canvArray.length - 1; i++){
-						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, canvArray[i][0], canvArray[i][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[doable[1][i]][0], canvArray[doable[1][i]][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;}
-						}
-
-						pic.src = '<span class="pathjs">[path to your image]</span>';
-
-						<span class="peach">function</span> swapTiles(x, y){
-						&nbsp;&nbsp;if(canvArray.length === 0){return;}
-						&nbsp;&nbsp;let tileClicked = (Math.floor(y / </code><span class="tileSize">%</span><code>) * </code><span class="info2">%</span><code>) + Math.floor(x / </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;let blank = boardOrder.indexOf(canvArray.length - 1);
-						&nbsp;&nbsp;let finalCheck;
-						&nbsp;&nbsp;let brdInd = boardOrder[tileClicked];
-						&nbsp;&nbsp;if(![1, </code><span class="info2">%</span><code>].includes(Math.abs(tileClicked - blank))){
-						&nbsp;&nbsp;&nbsp;&nbsp;return;
-						&nbsp;&nbsp;}
-						&nbsp;&nbsp;ctx.clearRect(canvArray[tileClicked][0], canvArray[tileClicked][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;ctx.drawImage(pic, canvArray[brdInd][0], canvArray[brdInd][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, canvArray[blank][0], canvArray[blank][1], </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;[boardOrder[tileClicked], boardOrder[blank]] = [boardOrder[blank], boardOrder[tileClicked]];
-						&nbsp;&nbsp;if(boardOrder[0] === 0 && boardOrder[</code><span class="info2-1">%</span><code>] === </code><span class="info2-1">%</span><code> && boardOrder[</code><span class="info2xinfo3-1-1">%</span><code>] === </code><span class="info2xinfo3-1-1">%</span><code> && boardOrder[</code><span class="info2xinfo3-2">%</span><code>] === </code><span class="info2xinfo3-2">%</span><code>){
-						&nbsp;&nbsp;&nbsp;&nbsp;finalCheck = true;
-						&nbsp;&nbsp;&nbsp;&nbsp;for(let f = 0; f < boardOrder.length; f++){
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(boardOrder[f] !== f){
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finalCheck = false;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-						&nbsp;&nbsp;&nbsp;&nbsp;}
-						&nbsp;&nbsp;}
-						&nbsp;&nbsp;if(finalCheck){
-						&nbsp;&nbsp;&nbsp;&nbsp;ctx.drawImage(pic, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="info2-1xtileSize">%</span><code>, </code><span class="info3-1xtileSize">%</span><code>, </code><span class="tileSize">%</span><code>, </code><span class="tileSize">%</span><code>);
-						&nbsp;&nbsp;&nbsp;&nbsp;canvArray = [];
-						&nbsp;&nbsp;}
-						}
-
-						canvas.addEventListener('click', e => {
-						&nbsp;&nbsp;let x = e.offsetX;
-						&nbsp;&nbsp;let y = e.offsetY;
-						&nbsp;&nbsp;swapTiles(x,y);
-						});</code></pre>
+						<transition name="grow">
+							<div v-if="showCameraHold" class="video-output">
+								<img ref="photo" id="photo" alt="screen capture" />
+							</div>
+						</transition>
+					</div>
+				</transition>
+			</aside>
 
 
-	      </div>
-			<!-- </div> -->
-    </main>
-
-		<footer>
-			<p>&copy; 2018 James South&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://jamessouth.github.io/Project-12/">Portfolio</a></p>
-		</footer>
-
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+			<router-view :camera-open="showPhotoHold" :user-photo="userPhoto" :yahoo-link="weatherLink" :coords="coords"></router-view>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+		<script src="vue-clipboard.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
