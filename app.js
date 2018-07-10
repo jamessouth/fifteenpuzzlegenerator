@@ -47,7 +47,7 @@ const Artwork = {
 	}
 }
 
-
+// [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,33]
 
 const Demo = {
 	props: ['userPhoto'],
@@ -57,7 +57,10 @@ const Demo = {
 		</div>
 		<img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
 	  <div :style="[holderStylesC, holderStylesD]">
-			<div v-if="gameOver" :style="maskStyles" id="mask">
+			<div v-if="gameOver && !tabMQOn" :style="maskStyles" id="mask">
+				<button @click="resetGame" type="button">Reset</button>
+			</div>
+			<div v-if="gameOver && tabMQOn" :style="resetStyles" id="reset">
 				<button @click="resetGame" type="button">Reset</button>
 			</div>
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
@@ -98,17 +101,40 @@ const Demo = {
 				width: '205px'
 			},
 			gameOver: false,
-			helpOpen: false
+			helpOpen: false,
+			boardOrder: null,
+			board: null
 		}
 	},
 	methods: {
+
+		getBoard: function(){
+			console.log('do');
+			let brd = this.checkBoard();
+			while(this.getInversions(brd[0]) % 2 !== 0){
+				brd = this.checkBoard();
+			}
+			this.board = brd;
+		},
+
+		getBoardOrder: function(){
+			console.log('order');
+			if(this.getSavedGame){
+				this.boardOrder = this.getSavedGame;
+			} else {
+				this.boardOrder = this.board[0].slice();
+			}
+		},
+
 		resetGame: function(e){
 			console.log(e);
 			sessionStorage.clear();
 			this.ctx.clearRect(0, 0, 410, 574);
-			this.useCanvas(this.doable[1]);
+			this.useCanvas(this.board[1]);
+
 
 			this.gameOver = false;
+			console.log(this.board, this.boardOrder);
 		},
 		activeHandler: function(){
 			this.isActive = !this.isActive;
@@ -173,7 +199,7 @@ const Demo = {
 			}
 		},
 		swapTiles: function(e){
-			console.log(this.gameOver);
+			// console.log(this.gameOver);
 			if(this.gameOver){return;}
 			let x = e.offsetX;
 			let y = e.offsetY;
@@ -246,7 +272,7 @@ const Demo = {
 				bordCol = 'transparent';
 			}
 			return {
-				width: '200px',
+				width: '205px',
 				height: '54px',
 				marginBottom: this.helpOpen ? '0' : '3em',
 				background: 'linear-gradient(to bottom, #f6a87a 0%, #a54121 100%)',
@@ -274,22 +300,8 @@ const Demo = {
 			}
 			return arr;
 		},
-		doable: function(){
-			console.log('do');
-			let brd = this.checkBoard();
-			while(this.getInversions(brd[0]) % 2 !== 0){
-				brd = this.checkBoard();
-			}
-			return brd;
-		},
-		boardOrder: function(){
-			console.log('order');
-			if(this.getSavedGame){
-				return this.getSavedGame;
-			} else {
-				return this.doable[0].slice();
-			}
-		},
+
+
 		getSavedGame: function(){
 			console.log('get');
 			let game;
@@ -345,7 +357,9 @@ const Demo = {
 				});
 				this.useCanvas(drawOrder);
 			} else {
-				this.useCanvas(this.doable[1]);
+				this.getBoard();
+				this.getBoardOrder();
+				this.useCanvas(this.board[1]);
 			}
 		}
 
