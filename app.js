@@ -49,25 +49,39 @@ const Artwork = {
 
 // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,33]
 
+
+
 const Demo = {
 	props: ['userPhoto'],
 	template: `<div>
 		<div v-if="!!userPhoto" :style="{ margin: '.5em auto', width: '200px', height: '150px' }">
 			<img :style="{ width: '200px', borderRadius: '5%' }" :src="this.userPhoto" alt="user photo"/>
 		</div>
+
 		<img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
+
 	  <div :style="[holderStylesC, holderStylesD]">
 			<div v-if="gameOver && !tabMQOn" :style="maskStyles" id="mask">
 				<button @click="resetGame" type="button">Reset</button>
 			</div>
-			<div v-if="gameOver && tabMQOn" :style="resetStyles" id="reset">
-				<button @click="resetGame" type="button">Reset</button>
-			</div>
+
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
         Your browser does not support canvas.
       </canvas>
+
+
+
 			<div :style="innerDivStyles">
 				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" type="button" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
+
+
+				<transition name="swing">
+					<div v-if="gameOver && tabMQOn" :style="resetStylesDiv">
+						<button @click="resetGame" type="button" :style="resetStylesBtn">Reset</button>
+					</div>
+				</transition>
+
+
 				<img :style="helpImgStyles" v-show="helpOpen" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
 			</div>
 		</div>
@@ -85,13 +99,7 @@ const Demo = {
 			},
 			tabMQ: window.matchMedia("(min-width: 768px)"),
 			tabMQOn: null,
-			demoH1Styles: {
-				marginLeft: 'auto',
-				marginRight: 'auto',
-				marginTop: '6em',
-				marginBottom: '2em',
-				display: 'block'
-			},
+
 			canvasStyles: {
 				backgroundColor: '#154a6a',
 				minWidth: '410px'
@@ -103,10 +111,13 @@ const Demo = {
 			gameOver: false,
 			helpOpen: false,
 			boardOrder: null,
-			board: null
+			board: null,
+			timer: 2500
 		}
 	},
 	methods: {
+
+
 
 		getBoard: function(){
 			console.log('do');
@@ -119,21 +130,22 @@ const Demo = {
 
 		getBoardOrder: function(){
 			console.log('order');
-			if(this.getSavedGame){
-				this.boardOrder = this.getSavedGame;
-			} else {
-				this.boardOrder = this.board[0].slice();
-			}
+
+			this.boardOrder = this.board[0].slice();
+
 		},
 
 		resetGame: function(e){
 			console.log(e);
+			this.gameOver = false;
 			sessionStorage.clear();
 			this.ctx.clearRect(0, 0, 410, 574);
+
+
+			this.getBoard();
+			this.getBoardOrder();
 			this.useCanvas(this.board[1]);
 
-
-			this.gameOver = false;
 			console.log(this.board, this.boardOrder);
 		},
 		activeHandler: function(){
@@ -145,12 +157,10 @@ const Demo = {
 		handleTabMQ: function(evt){
 			if(evt.matches){
 				this.tabMQOn = true;
-				this.demoH1Styles.marginBottom = '5em';
 				this.holderStylesD.flexDirection = 'row';
 				this.holderStylesD.alignItems = 'flex-start';
 			} else {
 				this.tabMQOn = false;
-				this.demoH1Styles.marginBottom = '2em';
 				this.holderStylesD.flexDirection = 'column';
 				this.holderStylesD.alignItems = 'center';
 			}
@@ -189,10 +199,8 @@ const Demo = {
 		},
 		saveGame: function(arr){
 			if(this.gameOver){
+				sessionStorage.clear();
 				sessionStorage.setItem('gameOver', this.gameOver);
-				if(sessionStorage.getItem('boardOrder')){
-					sessionStorage.removeItem('boardOrder');
-				}
 			} else {
 				let savedGame = JSON.stringify(arr);
 				sessionStorage.setItem('boardOrder', savedGame);
@@ -238,6 +246,16 @@ const Demo = {
 		}
 	},
 	computed: {
+
+		demoH1Styles: function(){
+			return {
+				display: 'block',
+				margin: '6em auto',
+				marginBottom: this.tabMQOn ? '6em' : '3em'
+			}
+		},
+
+
 		holderStylesC: function(){
 				if(this.tabMQOn){
 					return { height: '650px' }
@@ -250,14 +268,56 @@ const Demo = {
 				top: this.helpOpen ? '37px' : '33px'
 			}
 		},
+
+		resetStylesDiv: function(){
+			return {
+				width: '154px',
+				height: '54px',
+				display: 'flex',
+				margin: 'auto',
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				position: 'absolute',
+				top: '54px',
+				transformOrigin: 'center top 0px'
+				// transform: 'rotateX(-150deg)'
+			}
+		},
+		resetStylesBtn: function(){
+			return {
+				background: 'linear-gradient(41deg, #bf2b1d 16%, #380c00 113%)',
+				filter: 'none',
+				height: '100%',
+				width: '100%',
+				color: '#fbfbfb',
+				letterSpacing: '5px',
+				fontSize: '44px',
+				fontFamily: "'Limelight', cursive"
+			}
+		},
 		innerDivStyles: function(){
-			let ht = this.helpOpen ? '380px' : 'auto';
+			let ht;
+
+			if(this.helpOpen && !this.tabMQOn){
+				ht = '380px';
+			} else if(this.helpOpen && this.tabMQOn){
+				ht = '410px';
+			} else {
+				ht = 'auto';
+			}
+
+
 			return {
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'space-between',
 				alignItems: 'center',
-				height: ht
+				height: ht,
+
+				position: 'relative',
+				transformStyle: 'preserve-3d',
+				perspective: '500px'
+				// width: '154px',
 			}
 		},
 		helpBtnStyles: function(){
@@ -351,6 +411,7 @@ const Demo = {
 			this.pic.src = "images/mucha.jpg";
 		} else {
 			if(this.getSavedGame){
+				this.boardOrder = this.getSavedGame;
 				let drawOrder = [];
 				this.getSavedGame.forEach((x,i) => {
 					drawOrder[x] = i;
