@@ -510,7 +510,7 @@ button{
   font-family: 'Limelight', cursive;
   font-size: 64px;
   filter: none;
-  animation: 5s 2s reset ease-in-out forwards;
+  animation: 4s 1s reset ease-in-out forwards;
 }
 
 #mask button:hover, #mask button:focus{
@@ -727,6 +727,46 @@ button{
 
 
 @media screen and (min-width: 768px) {
+
+
+
+  .swing-enter-active {
+    animation: swing-in 2.5s ease-in-out forwards;
+  }
+
+  /* .swing-leave-active {
+    animation: swing-in 2.5s reverse;
+  } */
+
+  @keyframes swing-in {
+    0% {
+      transform: rotateX(-120deg);
+    }
+    16.66% {
+      transform: rotateX(74deg);
+    }
+    33.33% {
+      transform: rotateX(-48deg);
+    }
+    50% {
+      transform: rotateX(33deg);
+    }
+    66.66% {
+      transform: rotateX(-23deg);
+    }
+    83.33% {
+      transform: rotateX(17deg);
+    }
+
+
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
+
+
+
+
 
   #videoclose{
     right: -324px;
