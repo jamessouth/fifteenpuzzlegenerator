@@ -5,11 +5,6 @@
     font-style: normal;
 }
 
-:root{
-  --smallFileName: url("../images/bgsmall1.jpg");
-  --medFileName: url("../images/bgmed1.jpg");
-  --bigFileName: url("../images/bgbig1.jpg");
-}
 
 *{
 	margin: 0;
@@ -690,7 +685,7 @@ button{
   header{
     margin-bottom: 13.5em;
     height: 3em;
-    background: var(--smallFileName) 50% no-repeat;
+    background: url("../images/bgsmall1.jpg") 50% no-repeat;
   }
 
   header:before{
@@ -814,7 +809,7 @@ button{
 
   header{
     height: 5em;
-    background: var(--medFileName) 50% no-repeat;
+    background: url("../images/bgmed1.jpg") 50% no-repeat;
   }
 
   header:before{
@@ -825,12 +820,22 @@ button{
 }
 
 
+@media screen and (min-width: 900px) {
+
+  header{
+    height: 5em;
+    background: url("../images/bgmed2.jpg") 50% no-repeat;
+  }
+
+
+}
+
 
 @media screen and (min-width: 1080px) {
 
   header{
     height: 9em;
-    background: var(--bigFileName) 50% no-repeat;
+    background: url("../images/bgbig1.jpg") 50% no-repeat;
   }
 
   header:before{
@@ -839,7 +844,15 @@ button{
   }
 }
 
+@media screen and (min-width: 1400px) {
 
+  header{
+    height: 9em;
+    background: url("../images/bgbig2.jpg") 50% no-repeat;
+  }
+
+
+}
 
 @media screen and (min-width: 1489px) and (max-width: 1866px){
 

@@ -536,8 +536,7 @@ const Home = {
 				helperImage: false
 			},
 			breakpoints: {
-				JSBreakpoint: window.matchMedia("(min-width: 510px)"),
-				H1BackgroundLarge: window.matchMedia("(min-width: 768px)")
+				JSBreakpoint: window.matchMedia("(min-width: 510px)")
 			},
 			languages: ['HTML', 'CSS', 'JS'],
 			currentLangInd: 0
@@ -551,7 +550,7 @@ const Home = {
 				alert('Copied');
 				console.log(e);
 			}, function (e) {
-				alert('Can not copy');
+				alert('Cannot copy');
 				console.log(e);
 			});
 		},
@@ -572,18 +571,6 @@ const Home = {
 				this.$set(this.languages, 2, 'JS');
 			}
 		},
-		getRandomNo: function(){
-			return Math.floor(Math.random() * 2) + 1;
-		},
-		handleH1BG: function(evt){
-			if(evt.matches){
-				let medfile = `../images/bgmed${this.getRandomNo()}.jpg`;
-				let bigfile = `../images/bgbig${this.getRandomNo()}.jpg`;
-				document.documentElement.style.setProperty('--medFileName', `url(${medfile})`);
-				document.documentElement.style.setProperty('--bigFileName', `url(${bigfile})`);
-			}
-		},
-
 
 	},
 	computed: {
@@ -620,8 +607,7 @@ const Home = {
 	created: function(){
 		this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
 		this.handleJSExpand(this.breakpoints.JSBreakpoint);
-		this.breakpoints.H1BackgroundLarge.addListener(this.handleH1BG);
-		this.handleH1BG(this.breakpoints.H1BackgroundLarge);
+
 
 	}
 }
