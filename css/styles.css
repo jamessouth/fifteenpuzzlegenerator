@@ -411,7 +411,7 @@ pre code{
   height: 160px;
   margin-bottom: 4em;
   background: url('../images/langbanner.jpg') no-repeat center;
-  background-attachment: fixed;
+
   background-size: cover;
 }
 
@@ -611,6 +611,12 @@ button{
   color: whitesmoke;
   font-size: 72px;
   font-family: uppereastsideregular;
+}
+
+@media screen and (pointer: fine) and (hover: hover) {
+  #lang-select{
+      background-attachment: fixed;
+  }
 }
 
 @media screen and (min-width: 510px) {

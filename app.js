@@ -433,7 +433,7 @@ const Home = {
 
 				<header :style="addlLinkStyles">
 					<h1 id="mainh1">15 Puzzle Generator</h1>
-					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle </a>.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
+					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle </a>, a type of sliding block or sliding tile puzzle.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
 				</header>
 
 
@@ -608,7 +608,16 @@ const Home = {
 		this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
 		this.handleJSExpand(this.breakpoints.JSBreakpoint);
 
-
+		let ggg = [...'BasicPuzzle', ...'AdditionalFeatures', ...'HTMLCSSJS', ...'Pleaseclearthevalidationerrorsabove', ...'ResetJavaScript'].reduce((a,b) => {
+			if(!a[b]){
+				a[b] = 0;
+			}
+			a[b]++;
+			return a;
+		},{});
+		console.log(ggg,Object.keys(ggg).sort((m,n) => {
+			return m > n ? 1 : -1;
+		}).join(''));
 	}
 }
 
