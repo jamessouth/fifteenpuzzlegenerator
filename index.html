@@ -37,21 +37,23 @@
 
 				<transition @after-enter="afterEnter" name="expand">
 					<div :class="[!!userPhoto ? adjMargTop : '', photoHold]" v-if="showPhotoHold">
+						<button type="button" @click="handleVideoClose" id="videoclose">X</button>
 						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
-							<div v-if="showCameraHold" class="camera">
+
+							<div :style="vidHt" v-if="showCameraHold" class="camera">
 								<video @canplay="videoListener" ref="video">Stream not available</video>
 								<button type="button" @click="videoButtonListener" ref="videobutton" id="videobutton">Take photo</button>
-								<button type="button" @click="handleVideoClose" id="videoclose">X</button>
+
 
 							</div>
 						</transition>
 						<canvas ref="videocanvas" id="videocanvas"></canvas>
 
-						<transition name="grow">
+						<!-- <transition name="grow">
 							<div v-if="showCameraHold" class="video-output">
 								<img ref="photo" id="photo" alt="screen capture" />
 							</div>
-						</transition>
+						</transition> -->
 					</div>
 				</transition>
 			</aside>

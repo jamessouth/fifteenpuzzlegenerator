@@ -846,7 +846,7 @@ const app = new Vue({
 
 				ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
 				this.userPhoto = canv.toDataURL('image/png');
-				this.$refs.photo.setAttribute('src', this.userPhoto);
+				// this.$refs.photo.setAttribute('src', this.userPhoto);
 				this.$refs.userpict.setAttribute('src', this.userPhoto);
 
 			} else {
@@ -858,10 +858,10 @@ const app = new Vue({
 			console.log('vid', e);
 			const canv = this.$refs.videocanvas;
 			const vid = this.$refs.video;
-
+			console.log(vid);
 			if(!this.videoStreaming){
 				this.vidHeight = vid.videoHeight / (vid.videoWidth / this.vidWidth);
-
+				console.log(this.vidHeight, vid.videoHeight, vid.videoWidth, this.vidWidth);
 				vid.setAttribute('width', this.vidWidth);
 				vid.setAttribute('height', this.vidHeight);
 				canv.setAttribute('width', this.vidWidth);
@@ -889,7 +889,7 @@ const app = new Vue({
 			ctxt.fillRect(0, 0, canv.width, canv.height);
 
 			const data = canv.toDataURL('image/png');
-			this.$refs.photo.setAttribute('src', data);
+			// this.$refs.photo.setAttribute('src', data);
 			if(this.userPhoto == null){
 				this.$refs.userpict.setAttribute('src', data);
 			} else {
@@ -1065,6 +1065,11 @@ const app = new Vue({
 					left: '50%',
 					transform: 'translateX(-50%)'
 				};
+			}
+		},
+		vidHt: function(){
+			return {
+				height: `${this.vidHeight + 75}px`
 			}
 		},
 		addPosRel: function(){
