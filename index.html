@@ -11,7 +11,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Limelight&text=ABCFHJLMPRSTabcdehilnoprstuvz" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet"> -->
 		<link rel="canonical" href="https://jamessouth.github.io/fifteenpuzzlegenerator/#/">
 		<noscript>
 			<style>
@@ -30,14 +30,16 @@
 				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
 
 				<transition name="grow">
-					<div :style="addPosAbs" class="userpic" v-if="showUserImage">
-						<img :src="userPhoto" ref="userpict" alt="user photo" />
+					<div :style="[addPosAbs, imgSize]" class="userpic" v-if="showUserImage">
+						<img :style="imgSize" :src="userPhoto" ref="userpict" alt="user photo" />
 					</div>
 				</transition>
 
 				<transition @after-enter="afterEnter" name="expand">
 					<div :class="[!!userPhoto ? adjMargTop : '', photoHold]" v-if="showPhotoHold">
+
 						<button type="button" @click="handleVideoClose" id="videoclose">X</button>
+
 						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
 
 							<div :style="vidHt" v-if="showCameraHold" class="camera">
@@ -59,7 +61,7 @@
 			</aside>
 
 
-			<router-view :camera-open="showPhotoHold" :user-photo="userPhoto" :yahoo-link="weatherLink" :coords="coords"></router-view>
+			<router-view :img-wd="imgWidth" :img-ht="imgHeight" :camera-open="showPhotoHold" :user-photo="userPhoto" :yahoo-link="weatherLink" :coords="coords"></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>

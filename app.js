@@ -52,36 +52,26 @@ const Artwork = {
 
 
 const Demo = {
-	props: ['userPhoto'],
+	props: ['userPhoto', 'imgWd', 'imgHt'],
 	template: `<div>
-		<div v-if="!!userPhoto" :style="{ margin: '.5em auto', width: '200px', height: '150px' }">
-			<img :style="{ width: '200px', borderRadius: '5%' }" :src="this.userPhoto" alt="user photo"/>
+		<div v-if="!!userPhoto" :style="{ margin: '.5em auto 0', width: userImWd, height: userImHt }">
+			<img :style="{ width: userImWd, height: userImHt, borderRadius: '5%' }" :src="this.userPhoto" alt="user photo"/>
 		</div>
-
 		<img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
-
 	  <div :style="[holderStylesC, holderStylesD]">
 			<div v-if="gameOver && !tabMQOn" :style="maskStyles" id="mask">
 				<button @click="resetGame" type="button">Reset</button>
 			</div>
-
       <canvas @click="swapTiles" ref="cnvs" :style="canvasStyles" width="410" height="574">
         Your browser does not support canvas.
       </canvas>
-
-
-
 			<div :style="innerDivStyles">
 				<button @blur="focusHandler" @focus="focusHandler" @mouseup="activeHandler" @mousedown="activeHandler" @click="helpBtnHandler" type="button" :style="helpBtnStyles" id="showHelp"><img alt="help" :style="{ verticalAlign: 'bottom' }" :src="btnImg"/></button>
-
-
 				<transition name="swing">
 					<div v-if="gameOver && tabMQOn" :style="resetStylesDiv">
 						<button @click="resetGame" type="button" :style="resetStylesBtn">Reset</button>
 					</div>
 				</transition>
-
-
 				<img :style="helpImgStyles" v-show="helpOpen" src="images/mucha.jpg" alt="Alfons Mucha - 1896 - Biscuits Champagne-Lefèvre-Utile.jpg"/>
 			</div>
 		</div>
@@ -246,7 +236,12 @@ const Demo = {
 		}
 	},
 	computed: {
-
+		userImWd: function(){
+			return `${this.imgWd}px`;
+		},
+		userImHt: function(){
+			return `${this.imgHt}px`;
+		},
 		demoH1Styles: function(){
 			return {
 				display: 'block',
@@ -810,7 +805,8 @@ const app = new Vue({
 		vidWidth: 300,
 		vidHeight: 0,
 		userPhoto: null,
-
+		imgWidth: 0,
+		imgHeight: 0,
 
 		photoHold: 'photo-hold',
 		adjMargTop: 'adjMargTop',
@@ -861,7 +857,11 @@ const app = new Vue({
 			console.log(vid);
 			if(!this.videoStreaming){
 				this.vidHeight = vid.videoHeight / (vid.videoWidth / this.vidWidth);
+
 				console.log(this.vidHeight, vid.videoHeight, vid.videoWidth, this.vidWidth);
+
+				[this.imgWidth, this.imgHeight] = [this.vidWidth * (4/5), this.vidHeight * (4/5)];
+
 				vid.setAttribute('width', this.vidWidth);
 				vid.setAttribute('height', this.vidHeight);
 				canv.setAttribute('width', this.vidWidth);
@@ -1065,6 +1065,12 @@ const app = new Vue({
 					left: '50%',
 					transform: 'translateX(-50%)'
 				};
+			}
+		},
+		imgSize: function(){
+			return {
+				width: `${this.imgWidth}px`,
+				height: `${this.imgHeight}px`
 			}
 		},
 		vidHt: function(){

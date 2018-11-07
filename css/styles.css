@@ -113,8 +113,8 @@ aside{
 }
 
 aside p{
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 14px;
+  /* font-family: 'Nunito Sans', sans-serif; */
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -129,7 +129,7 @@ aside p img{
   width: 320px;
   height: 650px;
   background-image: url("../images/painting.jpg");
-  margin: 13.5em auto 0;
+  margin: 15.4em auto 0;
   border: 1px solid #3a3a3a;
   display: flex;
   justify-content: space-around;
@@ -172,15 +172,15 @@ aside p img{
 
 .userpic{
   margin: 1em auto;
-  width: 200px;
-  height: 150px;
+  /* width: 200px;
+  height: 150px; */
   background-color: #80000f;
 }
 
 
 .userpic img{
-  width: 200px;
-  height: 150px;
+  /* width: 200px;
+  height: 150px; */
   border-radius: 5%;
 }
 
@@ -190,7 +190,6 @@ aside p img{
 .grow-enter-active, .grow-leave-active{
   transition: all 1.1s cubic-bezier(0, .96, .6, .96);
 }
-
 
 
 
@@ -770,15 +769,15 @@ button{
 
 
 
-  #videoclose{
+  /* #videoclose{
     right: -324px;
-  }
+  } */
 
   .photo-hold{
-    width: 650px;
-    height: 320px;
+    /* width: 650px;
+    height: 320px; */
     background-image: url("../images/cycles.jpg");
-    flex-direction: row;
+    /* flex-direction: row; */
   }
 
   .expand-enter, .expand-leave-to{
