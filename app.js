@@ -809,7 +809,7 @@ const app = new Vue({
 		imgHeight: 0,
 
 		photoHold: 'photo-hold',
-		adjMargTop: 'adjMargTop',
+		// adjMargTop: 'adjMargTop',
 
 
 
@@ -1056,9 +1056,22 @@ const app = new Vue({
 		}
 	},
 	computed: {
+		adjMargTop: function(){
+			if(!!this.userPhoto){
+				return {
+					marginTop: `${this.imgHeight * (1/4)}px`
+				};
+			} else {
+				return {
+					marginTop: `calc(1em + ${this.vidHeight}px)`
+				};
+			}
+		},
 		addPosAbs: function(){
 			if(!!this.userPhoto){
-				return {};
+				return {
+					backgroundColor: '#12345600'
+				};
 			} else {
 				return {
 					position: 'absolute',
