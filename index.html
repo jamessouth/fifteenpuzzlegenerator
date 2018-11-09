@@ -43,7 +43,7 @@
 						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
 
 							<div :style="vidHt" v-if="showCameraHold" class="camera">
-								<video @canplay="videoListener" ref="video">Stream not available</video>
+								<video autoplay playsinline @canplay="videoListener" ref="video">Stream not available</video>
 								<button type="button" @click="videoButtonListener" ref="videobutton" id="videobutton">Take photo</button>
 
 
