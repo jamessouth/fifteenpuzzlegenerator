@@ -203,11 +203,21 @@ const Demo = {
 			let y = e.offsetY;
 			let tileClicked = (Math.floor(y / 82) * 5) + Math.floor(x / 82);
 			let blank = this.boardOrder.indexOf(this.canvArray.length - 1);
+			if (blank % 5 === 0) {
+	      if (![-5, 1, 5].includes(tileClicked - blank)) {
+	        return;
+	      }
+	    } else if ((blank + 1) % 5 === 0) {
+	      if (![-5, -1, 5].includes(tileClicked - blank)) {
+	        return;
+	      }
+	    } else {
+	      if (![1, 5].includes(Math.abs(tileClicked - blank))) {
+	        return;
+	      }
+	    }
 			let finalCheck;
 			let brdInd = this.boardOrder[tileClicked];
-			if(![1, 5].includes(Math.abs(tileClicked - blank))){
-				return;
-			}
 			this.ctx.clearRect(this.canvArray[tileClicked][0], this.canvArray[tileClicked][1], 82, 82);
 			this.ctx.drawImage(this.pic, this.canvArray[brdInd][0], this.canvArray[brdInd][1], 82, 82, this.canvArray[blank][0], this.canvArray[blank][1], 82, 82);
 			[this.boardOrder[tileClicked], this.boardOrder[blank]] = [this.boardOrder[blank], this.boardOrder[tileClicked]];
@@ -751,11 +761,21 @@ Vue.component('code-js', {
   	          &nbsp;&nbsp;if(canvArray.length === 0){return;}
   	          &nbsp;&nbsp;let tileClicked = (Math.floor(y / {{tileSize}}) * {{tilesWide}}) + Math.floor(x / {{tileSize}});
   	          &nbsp;&nbsp;let blank = boardOrder.indexOf(canvArray.length - 1);
-  	          &nbsp;&nbsp;let finalCheck;
-  	          &nbsp;&nbsp;let brdInd = boardOrder[tileClicked];
-  	          &nbsp;&nbsp;if(![1, {{tilesWide}}].includes(Math.abs(tileClicked - blank))){
-  	          &nbsp;&nbsp;&nbsp;&nbsp;return;
-  	          &nbsp;&nbsp;}
+							&nbsp;&nbsp;if(blank % {{tilesWide}} === 0) {
+					    &nbsp;&nbsp;&nbsp;&nbsp;if(![-{{tilesWide}}, 1, {{tilesWide}}].includes(tileClicked - blank)) {
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+					    &nbsp;&nbsp;&nbsp;&nbsp;}
+					    &nbsp;&nbsp;} else if((blank + 1) % {{tilesWide}} === 0) {
+					    &nbsp;&nbsp;&nbsp;&nbsp;if(![-{{tilesWide}}, -1, {{tilesWide}}].includes(tileClicked - blank)) {
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+					    &nbsp;&nbsp;&nbsp;&nbsp;}
+					    &nbsp;&nbsp;} else {
+					    &nbsp;&nbsp;&nbsp;&nbsp;if(![1, {{tilesWide}}].includes(Math.abs(tileClicked - blank))) {
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+					    &nbsp;&nbsp;&nbsp;&nbsp;}
+					    &nbsp;&nbsp;}
+							&nbsp;&nbsp;let finalCheck;
+							&nbsp;&nbsp;let brdInd = boardOrder[tileClicked];
   	          &nbsp;&nbsp;ctx.clearRect(canvArray[tileClicked][0], canvArray[tileClicked][1], {{tileSize}}, {{tileSize}});
   	          &nbsp;&nbsp;ctx.drawImage(pic, canvArray[brdInd][0], canvArray[brdInd][1], {{tileSize}}, {{tileSize}}, canvArray[blank][0], canvArray[blank][1], {{tileSize}}, {{tileSize}});
   	          &nbsp;&nbsp;[boardOrder[tileClicked], boardOrder[blank]] = [boardOrder[blank], boardOrder[tileClicked]];
