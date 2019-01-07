@@ -832,9 +832,6 @@ const app = new Vue({
 		// adjMargTop: 'adjMargTop',
 
 
-
-		weatherImg: '',
-		weatherLink: '',
 		weather: '[weather]',
 		temp: '[temp] and',
 		geoPlace: '[place]',
@@ -977,7 +974,7 @@ const app = new Vue({
 
 				// error test
 				fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description, link from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
-					console.log(res);
+
 					if(res.error){
 						this.geoError({code: '2', message: res.error.description});
 						return;
@@ -987,33 +984,10 @@ const app = new Vue({
 						return;
 					}
 
-					console.log(res);
-					const condition = res.query.results.channel.item.condition;
-
-					console.log(condition);
-
-					this.weatherLink = res.query.results.channel.link.split('*')[1];
-
-					this.weatherImg = res.query.results.channel.item.description.split('\n')[0].match(/h[\S]+\.\w+(?=")/)[0];
-					console.log(this.weatherLink);
-
-					if(condition.code === '3200'){
-						this.temp = '';
-						this.weather = 'nice';
-						return;
-					}
-
-
-					this.temp = `${condition.temp} and`;
-					this.weather = condition.text.toLowerCase();
 
 
 
 				}).catch(err => this.geoError(err));
-
-
-
-
 
 
 

@@ -27,7 +27,7 @@
     <div id="app">
 
 			<aside :style="addPosRel" v-cloak v-if="showLocParaFinal">
-				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img v-if="!!weatherImg" :alt="weather" :src="weatherImg"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
+				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img :alt="weather"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
 
 				<transition name="grow">
 					<div :style="[addPosAbs, imgSize]" class="userpic" v-if="showUserImage">
@@ -61,7 +61,7 @@
 			</aside>
 
 
-			<router-view :img-wd="imgWidth" :img-ht="imgHeight" :camera-open="showPhotoHold" :user-photo="userPhoto" :yahoo-link="weatherLink" :coords="coords"></router-view>
+			<router-view :img-wd="imgWidth" :img-ht="imgHeight" :camera-open="showPhotoHold" :user-photo="userPhoto" :coords="coords"></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
