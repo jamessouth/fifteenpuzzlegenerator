@@ -1,22 +1,22 @@
 
 
-const Sunset = {
-	props: ['coords', 'yahooLink'],
-	computed: {
-		gMapsURL: function(){
-			return `https://www.google.com/maps/@${this.coords.lat},${this.coords.long},18z`;
-		},
-		showFull: function(){
-			return !!this.coords.sunset;
-		},
-	},
-	template: `<div :style="{ marginTop: '4em' }">
-							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps).</a>&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" :href="yahooLink" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
-
-							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
-
-						 </div>`
-}
+// const Sunset = {
+// 	props: ['coords', 'yahooLink'],
+// 	computed: {
+// 		gMapsURL: function(){
+// 			return `https://www.google.com/maps/@${this.coords.lat},${this.coords.long},18z`;
+// 		},
+// 		showFull: function(){
+// 			return !!this.coords.sunset;
+// 		},
+// 	},
+// 	template: `<div :style="{ marginTop: '4em' }">
+// 							<p v-if="showFull">The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;You are within {{coords.acc}} meters (with 95% confidence) of latitude {{coords.lat}}, longitude {{coords.long}} <a class="newwindow" rel="noopener noreferrer" target="_blank" :href="gMapsURL">(see on Google Maps).</a>&nbsp;&nbsp;Your local sunrise time is {{coords.sunrise.local().format('h:mm:ss A')}} and your local sunset time is {{coords.sunset.local().format('h:mm:ss A')}}.&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" :href="yahooLink" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
+//
+// 							<p v-else>The sunset and sunrise information used to determine whether it is day or night at your location is provided by the <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://sunrise-sunset.org/api">sunset and sunrise times API.</a>&nbsp;&nbsp;Weather data<a class="yahoo" rel="noopener noreferrer" href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29" alt="powered by Yahoo"/> </a></p>
+//
+// 						 </div>`
+// }
 
 
 
@@ -613,22 +613,22 @@ const Home = {
 		this.breakpoints.JSBreakpoint.addListener(this.handleJSExpand);
 		this.handleJSExpand(this.breakpoints.JSBreakpoint);
 
-		let ggg = [...'BasicPuzzle', ...'AdditionalFeatures', ...'HTMLCSSJS', ...'Pleaseclearthevalidationerrorsabove', ...'ResetJavaScript'].reduce((a,b) => {
-			if(!a[b]){
-				a[b] = 0;
-			}
-			a[b]++;
-			return a;
-		},{});
-		console.log(ggg,Object.keys(ggg).sort((m,n) => {
-			return m > n ? 1 : -1;
-		}).join(''));
+		// let ggg = [...'BasicPuzzle', ...'AdditionalFeatures', ...'HTMLCSSJS', ...'Pleaseclearthevalidationerrorsabove', ...'ResetJavaScript'].reduce((a,b) => {
+		// 	if(!a[b]){
+		// 		a[b] = 0;
+		// 	}
+		// 	a[b]++;
+		// 	return a;
+		// },{});
+		// console.log(ggg,Object.keys(ggg).sort((m,n) => {
+		// 	return m > n ? 1 : -1;
+		// }).join(''));
 	}
 }
 
 const routes = [
 	{ path: '/artwork', component: Artwork },
-	{ path: '/sunset', component: Sunset },
+	// { path: '/sunset', component: Sunset },
 	{ path: '/demo', component: Demo },
   { path: '/', component: Home }
 ]
@@ -650,7 +650,7 @@ const router = new VueRouter({
 
 Vue.component('app-footer', {
   template: `<footer>
-  	<p>&copy; 2018 James South | <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link> | <router-link to="/sunset">Sunrise/Weather info</router-link></p>
+  	<p>&copy; 2018 James South | <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://jamessouth.github.io/Project-12/">Portfolio</a> | <router-link to="/artwork">Artwork</router-link></p>
   </footer>`
 });
 
