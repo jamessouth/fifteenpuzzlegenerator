@@ -52,11 +52,8 @@ const Artwork = {
 
 
 const Demo = {
-	props: ['userPhoto', 'imgWd', 'imgHt'],
+	// props: ['userPhoto', 'imgWd', 'imgHt'],
 	template: `<div>
-		<div v-if="!!userPhoto" :style="{ margin: '.5em auto 0', width: userImWd, height: userImHt }">
-			<img :style="{ width: userImWd, height: userImHt, borderRadius: '5%' }" :src="this.userPhoto" alt="user photo"/>
-		</div>
 		<img :style="demoH1Styles" alt="demo" src="images/demo.png"/>
 	  <div :style="[holderStylesC, holderStylesD]">
 			<div v-if="gameOver && !tabMQOn" :style="maskStyles" id="mask">
@@ -246,12 +243,12 @@ const Demo = {
 		}
 	},
 	computed: {
-		userImWd: function(){
-			return `${this.imgWd}px`;
-		},
-		userImHt: function(){
-			return `${this.imgHt}px`;
-		},
+		// userImWd: function(){
+		// 	return `${this.imgWd}px`;
+		// },
+		// userImHt: function(){
+		// 	return `${this.imgHt}px`;
+		// },
 		demoH1Styles: function(){
 			return {
 				display: 'block',
@@ -433,10 +430,9 @@ const Demo = {
 }
 
 const Home = {
-	props: ['cameraOpen'],
 	template: `<div>
 
-				<header :style="addlLinkStyles">
+				<header>
 					<h1 id="mainh1">15 Puzzle Generator</h1>
 					<p>This app will generate HTML, CSS and JS for you to paste into your project files to add an HTML canvas-based <a class="newwindow" rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/15_puzzle">15 puzzle </a>, a type of sliding block or sliding tile puzzle.&nbsp;&nbsp;Demo <router-link to="/demo">here</router-link>.&nbsp;&nbsp;Just fill out the form and the code below will live-update!</p>
 				</header>
@@ -525,7 +521,7 @@ const Home = {
 
 					</div>
 				</main>
-				<app-footer :style="addlLinkStyles"></app-footer>
+				<app-footer></app-footer>
 				</div>`,
   data: function(){
     return {
@@ -579,11 +575,6 @@ const Home = {
 
 	},
 	computed: {
-		addlLinkStyles: function(){
-			return {
-				pointerEvents: this.cameraOpen ? 'none' : 'auto'
-			}
-		},
 		currentLang: function(){
 			return this.languages[this.currentLangInd % this.languages.length];
 		},
@@ -807,300 +798,300 @@ Vue.component('code-js', {
 const app = new Vue({
   el: '#app',
   router,
-	created: function(){
-		this.checkForGeoLocSupport();
-	},
+	// created: function(){
+	// 	this.checkForGeoLocSupport();
+	// },
 	data: {
-		geoAccuracy: null,
-		userLatitude: null,
-		userLongitude: null,
-		userSunrise: null,
-		userSunset: null,
-		showLocBtn: true,
-		showPhotoHold: false,
-		showCameraHold: false,
-		showUserImage: false,
+		// geoAccuracy: null,
+		// userLatitude: null,
+		// userLongitude: null,
+		// userSunrise: null,
+		// userSunset: null,
+		// showLocBtn: true,
+		// showPhotoHold: false,
+		// showCameraHold: false,
+		// showUserImage: false,
 
-		videoStreaming: false,
-		vidWidth: 300,
-		vidHeight: 0,
-		userPhoto: null,
-		imgWidth: 0,
-		imgHeight: 0,
+		// videoStreaming: false,
+		// vidWidth: 300,
+		// vidHeight: 0,
+		// userPhoto: null,
+		// imgWidth: 0,
+		// imgHeight: 0,
 
-		photoHold: 'photo-hold',
+		// photoHold: 'photo-hold',
 		// adjMargTop: 'adjMargTop',
 
 
-		weather: '[weather]',
-		temp: '[temp] and',
-		geoPlace: '[place]',
-		dayOrNight: '[time]',
-		showLocPara: true,
-		clauses: ['a great time to use a....', 'how about a....', 'a lovely day for a....']
+		// weather: '[weather]',
+		// temp: '[temp] and',
+		// geoPlace: '[place]',
+		// dayOrNight: '[time]',
+		// showLocPara: true,
+		// clauses: ['a great time to use a....', 'how about a....', 'a lovely day for a....']
 	},
 	methods: {
-		handleVideoClose: function(){
-			this.showCameraHold = !this.showCameraHold;
-			if(this.userPhoto == null){
-				this.showUserImage = false;
-			}
-			this.videoStreaming = false;
-			this.vidHeight = 0;
-
-		},
-		takePicture: function(){
-			const canv = this.$refs.videocanvas;
-			const ctxt = canv.getContext('2d');
-
-			if(this.vidWidth && this.vidHeight){
-				canv.width = this.vidWidth;
-				canv.height = this.vidHeight;
-
-				ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
-				this.userPhoto = canv.toDataURL('image/png');
-				// this.$refs.photo.setAttribute('src', this.userPhoto);
-				this.$refs.userpict.setAttribute('src', this.userPhoto);
-
-			} else {
-				this.clearPhoto();
-			}
-
-		},
-		videoListener: function(e){
-			console.log('vid', e);
-			const canv = this.$refs.videocanvas;
-			const vid = this.$refs.video;
-			console.log(vid);
-			if(!this.videoStreaming){
-				this.vidHeight = vid.videoHeight / (vid.videoWidth / this.vidWidth);
-
-				console.log(this.vidHeight, vid.videoHeight, vid.videoWidth, this.vidWidth);
-
-				[this.imgWidth, this.imgHeight] = [this.vidWidth * (4/5), this.vidHeight * (4/5)];
-
-				vid.setAttribute('width', this.vidWidth);
-				vid.setAttribute('height', this.vidHeight);
-				canv.setAttribute('width', this.vidWidth);
-				canv.setAttribute('height', this.vidHeight);
-
-				this.videoStreaming = true;
-			}
-		},
-		videoButtonListener: function(e){
-			console.log('butt', e);
-			this.takePicture();
-			e.preventDefault();
-		},
-		afterLeave: function(){
-			this.showPhotoHold = false;
-		},
-		afterEnter: function(){
-			this.showCameraHold = true;
-			this.showUserImage = true;
-		},
-		clearPhoto: function(){
-			const canv = this.$refs.videocanvas;
-			const ctxt = canv.getContext('2d');
-			ctxt.fillStyle = "#aaa";
-			ctxt.fillRect(0, 0, canv.width, canv.height);
-
-			const data = canv.toDataURL('image/png');
-			// this.$refs.photo.setAttribute('src', data);
-			if(this.userPhoto == null){
-				this.$refs.userpict.setAttribute('src', data);
-			} else {
-
-			}
-
-
-		},
-		startCamera: function(){
-			console.log('start cam');
-			navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-				.then(stream => {
-					this.$refs.video.srcObject = stream;
-					this.$refs.video.play();
-				})
-				.catch(err => {
-					if(err.name.includes('Readable')){
-						alert(`Error! ${err}.  Activate your camera and allow apps to use it, then try again.`);
-					} else {
-						alert(`Error! ${err}.  Try again.`);
-					}
-					if(this.userPhoto == null){
-						this.showUserImage = false;
-					}
-					this.handleVideoClose();
-				});
-
-			this.clearPhoto();
-
-		},
+		// handleVideoClose: function(){
+		// 	this.showCameraHold = !this.showCameraHold;
+		// 	if(this.userPhoto == null){
+		// 		this.showUserImage = false;
+		// 	}
+		// 	this.videoStreaming = false;
+		// 	this.vidHeight = 0;
+		//
+		// },
+		// takePicture: function(){
+		// 	const canv = this.$refs.videocanvas;
+		// 	const ctxt = canv.getContext('2d');
+		//
+		// 	if(this.vidWidth && this.vidHeight){
+		// 		canv.width = this.vidWidth;
+		// 		canv.height = this.vidHeight;
+		//
+		// 		ctxt.drawImage(this.$refs.video, 0, 0, this.vidWidth, this.vidHeight);
+		// 		this.userPhoto = canv.toDataURL('image/png');
+		// 		// this.$refs.photo.setAttribute('src', this.userPhoto);
+		// 		this.$refs.userpict.setAttribute('src', this.userPhoto);
+		//
+		// 	} else {
+		// 		this.clearPhoto();
+		// 	}
+		//
+		// },
+		// videoListener: function(e){
+		// 	console.log('vid', e);
+		// 	const canv = this.$refs.videocanvas;
+		// 	const vid = this.$refs.video;
+		// 	console.log(vid);
+		// 	if(!this.videoStreaming){
+		// 		this.vidHeight = vid.videoHeight / (vid.videoWidth / this.vidWidth);
+		//
+		// 		console.log(this.vidHeight, vid.videoHeight, vid.videoWidth, this.vidWidth);
+		//
+		// 		[this.imgWidth, this.imgHeight] = [this.vidWidth * (4/5), this.vidHeight * (4/5)];
+		//
+		// 		vid.setAttribute('width', this.vidWidth);
+		// 		vid.setAttribute('height', this.vidHeight);
+		// 		canv.setAttribute('width', this.vidWidth);
+		// 		canv.setAttribute('height', this.vidHeight);
+		//
+		// 		this.videoStreaming = true;
+		// 	}
+		// },
+		// videoButtonListener: function(e){
+		// 	console.log('butt', e);
+		// 	this.takePicture();
+		// 	e.preventDefault();
+		// },
+		// afterLeave: function(){
+		// 	this.showPhotoHold = false;
+		// },
+		// afterEnter: function(){
+		// 	this.showCameraHold = true;
+		// 	this.showUserImage = true;
+		// },
+		// clearPhoto: function(){
+		// 	const canv = this.$refs.videocanvas;
+		// 	const ctxt = canv.getContext('2d');
+		// 	ctxt.fillStyle = "#aaa";
+		// 	ctxt.fillRect(0, 0, canv.width, canv.height);
+		//
+		// 	const data = canv.toDataURL('image/png');
+		// 	// this.$refs.photo.setAttribute('src', data);
+		// 	if(this.userPhoto == null){
+		// 		this.$refs.userpict.setAttribute('src', data);
+		// 	} else {
+		//
+		// 	}
+		//
+		//
+		// },
+		// startCamera: function(){
+		// 	console.log('start cam');
+		// 	navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+		// 		.then(stream => {
+		// 			this.$refs.video.srcObject = stream;
+		// 			this.$refs.video.play();
+		// 		})
+		// 		.catch(err => {
+		// 			if(err.name.includes('Readable')){
+		// 				alert(`Error! ${err}.  Activate your camera and allow apps to use it, then try again.`);
+		// 			} else {
+		// 				alert(`Error! ${err}.  Try again.`);
+		// 			}
+		// 			if(this.userPhoto == null){
+		// 				this.showUserImage = false;
+		// 			}
+		// 			this.handleVideoClose();
+		// 		});
+		//
+		// 	this.clearPhoto();
+		//
+		// },
 		getRandomNo: function(){
 			return Math.floor(Math.random() * this.clauses.length);
 		},
-		checkForGeoLocSupport: function(){
-			if(navigator.geolocation){
-				console.log('geoloc supported');
-			} else {
-				console.log('geoloc NOT supported');
-				this.showLocPara = false;
-			}
-		},
-		getLocation: function(){
-			navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
-				enableHighAccuracy: false,
-				maximumAge: 120000,
-				timeout: 15000
-			});
-			this.showLocBtn = false;
-		},
-		geoSuccess: function(pos){
-			this.geoAccuracy = pos.coords.accuracy;
-			this.userLatitude = pos.coords.latitude.toFixed(6);
-			this.userLongitude = pos.coords.longitude.toFixed(6);
-
-			try{
-
-				let sdate;
-				let day = new Date();
-				if(pos.coords.longitude < 0){
-					sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
-				} else {
-					sdate = 'today';
-				}
-				console.log(day, sdate);
-
-				// error test
-				fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description, link from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
-
-					if(res.error){
-						this.geoError({code: '2', message: res.error.description});
-						return;
-					}
-					if(!res.query.results){
-						this.geoError({code: '1', message: 'No results returned'});
-						return;
-					}
-
-
-
-
-				}).catch(err => this.geoError(err));
-
-
-
-				fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
-					console.log(res);
-					if(res.status !== 'OK'){
-						this.geoError({code: '', message: res.status});
-						return;
-					}
-					let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
-
-					console.log(sunrise, sunset);
-
-					this.userSunrise = sunrise;
-					this.userSunset = sunset;
-
-					console.log(moment.utc().isBetween(sunrise, sunset));
-
-					if(moment.utc().isBetween(sunrise, sunset)){
-						this.dayOrNight = 'today';
-					} else {
-						this.dayOrNight = 'tonight';
-					}
-
-				}).catch(err => this.geoError(err));
-
-
-				fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
-					console.log(res, Date.now());
-					if(res.error){
-						this.geoError({code: res.error.code, message: res.error.description});
-						return;
-					}
-					let cntry = ' ' + res.country;
-					if(res.country && res.region && Object.keys(res.region).length !== 0){
-						if(res.region.includes(res.country)){
-							this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
-						} else {
-							this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-						}
-
-
-					} else if(res.country && res.region){
-						this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
-					} else {
-						this.geoPlace = res.city.trim().toUpperCase();
-					}
-
-					console.log(this.geoAccuracy, this.geoPlace);
-				}).catch(err => this.geoError(err));
-
-			} catch(e){
-				this.geoError(e);
-			}
-
-		},
-		geoError: function(err){
-			alert(`There was an error (code ${err.code}): ${err.message}`);
-			this.showLocPara = false;
-		}
+		// checkForGeoLocSupport: function(){
+		// 	if(navigator.geolocation){
+		// 		console.log('geoloc supported');
+		// 	} else {
+		// 		console.log('geoloc NOT supported');
+		// 		this.showLocPara = false;
+		// 	}
+		// },
+		// getLocation: function(){
+		// 	navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, {
+		// 		enableHighAccuracy: false,
+		// 		maximumAge: 120000,
+		// 		timeout: 15000
+		// 	});
+		// 	this.showLocBtn = false;
+		// },
+		// geoSuccess: function(pos){
+		// 	this.geoAccuracy = pos.coords.accuracy;
+		// 	this.userLatitude = pos.coords.latitude.toFixed(6);
+		// 	this.userLongitude = pos.coords.longitude.toFixed(6);
+		//
+		// 	try{
+		//
+		// 		let sdate;
+		// 		let day = new Date();
+		// 		if(pos.coords.longitude < 0){
+		// 			sdate = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+		// 		} else {
+		// 			sdate = 'today';
+		// 		}
+		// 		console.log(day, sdate);
+		//
+		// 		// error test
+		// 		fetch(`https://query.yahooapis.com/v1/public/yql?q=select item.condition, item.description, link from weather.forecast where woeid in (select woeid from geo.places(1) where text="(${pos.coords.latitude},${pos.coords.longitude})")&format=json`).then(res => res = res.json()).then(res => {
+		//
+		// 			if(res.error){
+		// 				this.geoError({code: '2', message: res.error.description});
+		// 				return;
+		// 			}
+		// 			if(!res.query.results){
+		// 				this.geoError({code: '1', message: 'No results returned'});
+		// 				return;
+		// 			}
+		//
+		//
+		//
+		//
+		// 		}).catch(err => this.geoError(err));
+		//
+		//
+		//
+		// 		fetch(`https://api.sunrise-sunset.org/json?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&date=${sdate}&formatted=0`).then(res => res = res.json()).then(res => {
+		// 			console.log(res);
+		// 			if(res.status !== 'OK'){
+		// 				this.geoError({code: '', message: res.status});
+		// 				return;
+		// 			}
+		// 			let sunrise = moment.utc(res.results.sunrise), sunset = moment.utc(res.results.sunset);
+		//
+		// 			console.log(sunrise, sunset);
+		//
+		// 			this.userSunrise = sunrise;
+		// 			this.userSunset = sunset;
+		//
+		// 			console.log(moment.utc().isBetween(sunrise, sunset));
+		//
+		// 			if(moment.utc().isBetween(sunrise, sunset)){
+		// 				this.dayOrNight = 'today';
+		// 			} else {
+		// 				this.dayOrNight = 'tonight';
+		// 			}
+		//
+		// 		}).catch(err => this.geoError(err));
+		//
+		//
+		// 		fetch(`https://geocode.xyz/${pos.coords.latitude},${pos.coords.longitude}?json=1`).then(res => res = res.json()).then(res => {
+		// 			console.log(res, Date.now());
+		// 			if(res.error){
+		// 				this.geoError({code: res.error.code, message: res.error.description});
+		// 				return;
+		// 			}
+		// 			let cntry = ' ' + res.country;
+		// 			if(res.country && res.region && Object.keys(res.region).length !== 0){
+		// 				if(res.region.includes(res.country)){
+		// 					this.geoPlace = `${res.city.trim()}, ${res.region.trim().replace(cntry, ',' + cntry)}`.toUpperCase();
+		// 				} else {
+		// 					this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+		// 				}
+		//
+		//
+		// 			} else if(res.country && res.region){
+		// 				this.geoPlace = `${res.city.trim()}, ${res.country.trim()}`.toUpperCase();
+		// 			} else {
+		// 				this.geoPlace = res.city.trim().toUpperCase();
+		// 			}
+		//
+		// 			// console.log(this.geoAccuracy, this.geoPlace);
+		// 		}).catch(err => this.geoError(err));
+		//
+		// 	} catch(e){
+		// 		this.geoError(e);
+		// 	}
+		//
+		// },
+		// geoError: function(err){
+		// 	alert(`There was an error (code ${err.code}): ${err.message}`);
+		// 	this.showLocPara = false;
+		// }
 	},
 	computed: {
-		adjMargTop: function(){
-			if(!!this.userPhoto){
-				return {
-					marginTop: `${this.imgHeight * (1/4)}px`
-				};
-			} else {
-				return {
-					marginTop: `calc(1em + ${this.vidHeight}px)`
-				};
-			}
-		},
-		addPosAbs: function(){
-			if(!!this.userPhoto){
-				return {
-					backgroundColor: '#12345600'
-				};
-			} else {
-				return {
-					position: 'absolute',
-					left: '50%',
-					transform: 'translateX(-50%)'
-				};
-			}
-		},
-		imgSize: function(){
-			return {
-				width: `${this.imgWidth}px`,
-				height: `${this.imgHeight}px`
-			}
-		},
-		vidHt: function(){
-			return {
-				height: `${this.vidHeight + 75}px`
-			}
-		},
-		addPosRel: function(){
-			return {
-				position: !!this.userPhoto ? 'static' : 'relative'
-			}
-		},
-		getClause: function(){
-			return this.clauses[this.getRandomNo()];
-		},
-		showAside: function(){
-			return this.$route.fullPath === '/';
-		},
-		showLocParaFinal: function(){
-			return this.showLocPara && this.showAside;
-		},
-		coords: function(){
-			return { lat: this.userLatitude, long: this.userLongitude, acc: this.geoAccuracy, sunrise: this.userSunrise, sunset: this.userSunset };
-		}
+		// adjMargTop: function(){
+		// 	if(!!this.userPhoto){
+		// 		return {
+		// 			marginTop: `${this.imgHeight * (1/4)}px`
+		// 		};
+		// 	} else {
+		// 		return {
+		// 			marginTop: `calc(1em + ${this.vidHeight}px)`
+		// 		};
+		// 	}
+		// },
+		// addPosAbs: function(){
+		// 	if(!!this.userPhoto){
+		// 		return {
+		// 			backgroundColor: '#12345600'
+		// 		};
+		// 	} else {
+		// 		return {
+		// 			position: 'absolute',
+		// 			left: '50%',
+		// 			transform: 'translateX(-50%)'
+		// 		};
+		// 	}
+		// },
+		// imgSize: function(){
+		// 	return {
+		// 		width: `${this.imgWidth}px`,
+		// 		height: `${this.imgHeight}px`
+		// 	}
+		// },
+		// vidHt: function(){
+		// 	return {
+		// 		height: `${this.vidHeight + 75}px`
+		// 	}
+		// },
+		// addPosRel: function(){
+		// 	return {
+		// 		position: !!this.userPhoto ? 'static' : 'relative'
+		// 	}
+		// },
+		// getClause: function(){
+		// 	return this.clauses[this.getRandomNo()];
+		// },
+		// showAside: function(){
+		// 	return this.$route.fullPath === '/';
+		// },
+		// showLocParaFinal: function(){
+		// 	return this.showLocPara && this.showAside;
+		// },
+		// coords: function(){
+		// 	return { lat: this.userLatitude, long: this.userLongitude, acc: this.geoAccuracy, sunrise: this.userSunrise, sunset: this.userSunset };
+		// }
 	}
 });
