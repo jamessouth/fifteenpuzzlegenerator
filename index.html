@@ -6,12 +6,10 @@
 		<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0">
 		<meta name="author" content="james south">
 		<meta name="description" content="Generates code for a 15 puzzle (sliding block puzzle) to be added to the user's website; includes demo">
-		<!-- <script async src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script> -->
 		<link rel="stylesheet" href="css/styles.css">
 		<link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Limelight&text=ABCFHJLMPRSTabcdehilnoprstuvz" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
-		<!-- <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet"> -->
 		<link rel="canonical" href="https://jamessouth.github.io/fifteenpuzzlegenerator/#/">
 		<noscript>
 			<style>
@@ -25,48 +23,11 @@
 	</head>
   <body>
     <div id="app">
-
-			<!-- <aside :style="addPosRel" v-cloak v-if="showLocParaFinal">
-				<p id="loc"><button :disabled="showPhotoHold" @click="showPhotoHold = !showPhotoHold" type="button">(Take photo....)</button> It's {{ temp }} {{ weather }} <img :alt="weather"/> {{ dayOrNight }} in {{ geoPlace }}, {{ getClause }}<button v-if="showLocBtn" @click="getLocation" type="button">(Fill in with my location)</button></p>
-
-				<transition name="grow">
-					<div :style="[addPosAbs, imgSize]" class="userpic" v-if="showUserImage">
-						<img :style="imgSize" :src="userPhoto" ref="userpict" alt="user photo" />
-					</div>
-				</transition>
-
-				<transition @after-enter="afterEnter" name="expand">
-					<div :style="adjMargTop" :class="photoHold" v-if="showPhotoHold">
-
-						<button type="button" @click="handleVideoClose" id="videoclose">X</button>
-
-						<transition @after-enter="startCamera" @after-leave="afterLeave" name="grow">
-
-							<div :style="vidHt" v-if="showCameraHold" class="camera">
-								<video autoplay playsinline @canplay="videoListener" ref="video">Stream not available</video>
-								<button type="button" @click="videoButtonListener" ref="videobutton" id="videobutton">Take photo</button>
-
-
-							</div>
-						</transition>
-						<canvas ref="videocanvas" id="videocanvas"></canvas>
-
-						<transition name="grow">
-							<div v-if="showCameraHold" class="video-output">
-								<img ref="photo" id="photo" alt="screen capture" />
-							</div>
-						</transition>
-					</div>
-				</transition>
-			</aside> -->
-
-
 			<router-view></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 		<script async src="vue-clipboard.min.js"></script>
-		<!-- <script async src="adapter.js"></script> -->
     <script src="app.js"></script>
   </body>
 </html>
