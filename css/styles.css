@@ -435,7 +435,7 @@ button{
     font-size: 72px;
   }
 }
-@media screen and (min-width: 734px) and (max-width: 1111px){
+@media screen and (min-width: 734px) and (max-width: 1111px) {
   li:last-of-type{
     grid-column: 1 / -1;
   }
@@ -518,7 +518,10 @@ button{
     background: url("../images/bgbig2.jpg") 50% no-repeat;
   }
 }
-@media screen and (min-width: 1489px) and (max-width: 1866px){
+@media screen and (min-width: 1489px) {
+  ul{
+    grid-template-columns: repeat(4, 1fr);
+  }
   li:last-of-type{
     grid-column: 1 / -1;
   }
